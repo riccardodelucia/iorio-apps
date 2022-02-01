@@ -20,10 +20,6 @@ import AppsCard from "@/components/AppsCard";
 export default {
   name: "ViewDashboard",
   components: { AppsCard },
-  created() {
-    const notification = { type: "success", message: "Success!!!" };
-    this.$store.dispatch("notification/add", notification);
-  },
   data() {
     return {
       tools: [
