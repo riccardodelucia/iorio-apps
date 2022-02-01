@@ -41,7 +41,7 @@ export const submitJobMachine = createMachine(
     initial: "idle",
     states: {
       idle: {
-        //entry: "resetContext",
+        entry: "resetContext",
         on: { SUBMIT: { target: "submitting", cond: "confirmSubmission" } },
       },
       submitting: {
@@ -51,7 +51,7 @@ export const submitJobMachine = createMachine(
           },
           // resolved promise
           onDone: {
-            target: "submitted",
+            target: "idle",
             actions: ["assignSubmittedJob", "sendSuccessNotification"],
           },
           // rejected promise
@@ -60,9 +60,6 @@ export const submitJobMachine = createMachine(
             actions: "sendErrorNotification",
           },
         },
-      },
-      submitted: {
-        on: { NEWJOB: { target: "idle" } },
       },
     },
   },

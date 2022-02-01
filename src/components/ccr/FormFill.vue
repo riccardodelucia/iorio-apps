@@ -119,6 +119,7 @@ export default {
       initialValues: {
         normMinReads: 30,
         nControls: 1,
+        email: null,
       },
     });
 
@@ -136,15 +137,15 @@ export default {
       emit("nav", {
         event: "SUBMIT",
         payload: {
-          title,
-          email,
-          label,
-          library: libraries[library],
-          normMinReads,
-          nControls,
-          method,
-          fileCounts,
-          notes,
+          title: title.value,
+          email: email.value,
+          label: label.value,
+          library: library.value,
+          normMinReads: normMinReads.value,
+          nControls: nControls.value,
+          method: method.value,
+          fileCounts: fileCounts.value,
+          notes: notes.value,
           resultsUrl: null,
         },
       });
