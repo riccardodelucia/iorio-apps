@@ -11,14 +11,24 @@ export const mutations = {
   },
   DELETE(state, notificationToRemove) {
     state.notifications = state.notifications.filter(
-      (notification) => notification.id != notificationToRemove.id
+      (notification) => notification.id !== notificationToRemove.id
     );
   },
 };
 
+export const getters = {
+  getLastNotification: (state) => {
+    return state.notifications[state.notifications.length - 1];
+  },
+};
+
 export const actions = {
-  add({ commit }, notification) {
+  add({ commit, getters }, notification) {
     commit("PUSH", notification);
+    const notificationWithID = getters.getLastNotification;
+    setTimeout(() => {
+      commit("DELETE", notificationWithID);
+    }, 5000);
   },
   remove({ commit }, notificationToRemove) {
     commit("DELETE", notificationToRemove);
