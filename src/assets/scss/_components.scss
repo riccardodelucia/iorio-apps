@@ -1,0 +1,244 @@
+//////////////////////////////////////////////////////
+// FORM
+.form {
+  &__group {
+    display: grid;
+    grid-template-rows: repeat(2, min-content) 2rem;
+
+    label {
+      grid-row: 1 / 2;
+      margin-bottom: 0.4em;
+    }
+
+    input,
+    textarea,
+    .select {
+      grid-row: 2 / 3;
+      margin-bottom: 0.4em;
+    }
+
+    small {
+      grid-row: 3 / 4;
+    }
+  }
+}
+
+///////////////////////////////////////////////
+// INPUT ELEMENTS
+.input {
+  font-family: inherit;
+  color: inherit;
+  font-size: 1.6rem;
+  background-color: var(--color-grey-light);
+  padding: 1rem 1.5rem;
+  border: none;
+  border: 2px solid transparent;
+  resize: vertical;
+  min-height: 4.5rem;
+  position: relative;
+
+  &:focus {
+    outline: none;
+    border-bottom: 2px solid var(--color-blue-lighter);
+    border-radius: 2px;
+  }
+
+  &[type="file"] {
+    display: none;
+  }
+
+  &--file {
+    width: 10rem;
+    display: inline-block;
+    margin-right: 0.3em;
+  }
+
+  &__label {
+    color: var(--color-text-dark-blue);
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  &__error {
+    color: red;
+  }
+}
+
+.select {
+  position: relative;
+  outline: none;
+
+  &__selection {
+    border: none;
+    border: 2px solid transparent;
+    min-height: 4.5rem;
+
+    cursor: pointer;
+    user-select: none;
+
+    font-family: inherit;
+    color: inherit;
+    font-size: 1.6rem;
+    background-color: var(--color-grey-light);
+    padding: 1rem 1.5rem;
+    padding-bottom: calc(1.5rem - 5px); //
+
+    &--empty {
+      color: var(--color-grey-text);
+    }
+
+    &--open {
+      border-bottom: 2px solid var(--color-blue-lighter);
+      border-radius: 2px;
+    }
+
+    &:after {
+      position: absolute;
+      content: "";
+      top: 22px;
+      right: 1em;
+      width: 0;
+      height: 0;
+      border: 5px solid transparent;
+      border-color: var(--color-grey-darker) transparent transparent transparent;
+    }
+  }
+
+  &__options {
+    overflow: hidden;
+
+    position: absolute;
+    background-color: var(--color-grey-lighter);
+    width: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1;
+
+    div {
+      padding: 0.5em;
+      padding-left: 1em;
+
+      cursor: pointer;
+      user-select: none;
+    }
+
+    div:hover {
+      background-color: var(--color-blue-lighter);
+    }
+  }
+}
+
+///////////////////////////////////////////////
+//} BUTTON
+.button {
+  display: inline-flex;
+  justify-content: space-around;
+  align-items: center;
+
+  outline: none;
+  border-radius: 100px;
+  cursor: pointer;
+
+  font-weight: bold;
+  transition: all 0.3s ease-out;
+
+  &--large {
+    height: 5rem;
+    padding: 0.5em 1.4em;
+    font-size: 1.8rem;
+  }
+  &--small {
+    height: 3rem;
+    padding: 1.2em 1.3em;
+    font-size: 1.5rem;
+  }
+
+  &--primary {
+    background-color: var(--color-blue-lighter);
+    border: 2px solid var(--color-blue-lighter);
+    color: white;
+    //border: none;
+    &:hover {
+      background-color: var(--color-blue-light);
+      border-color: var(--color-blue-light);
+    }
+
+    &:active {
+      background-color: var(--color-blue-medium);
+      border-color: var(--color-blue-medium);
+    }
+  }
+
+  &--secondary {
+    background-color: var(--color-green-lighter);
+    border: 2px solid var(--color-green-lighter);
+    color: white;
+    &:hover {
+      background-color: var(--color-green-light);
+      border-color: var(--color-green-light);
+    }
+
+    &:active {
+      background-color: var(--color-green);
+      border-color: var(--color-green);
+    }
+  }
+
+  &--ghost {
+    background-color: transparent;
+
+    border: 2px solid var(--color-teal-lighter);
+    color: var(--color-teal-lighter);
+
+    &:hover {
+      background-color: var(--color-teal-light);
+      border-color: var(--color-teal-light);
+      color: white;
+    }
+
+    &:active {
+      background-color: var(--color-teal);
+      border-color: var(--color-teal);
+      color: white;
+    }
+  }
+}
+
+/////////////////////////////////////////////////////
+// BASE THUMBNAIL
+.thumbnail {
+  overflow: hidden;
+  background-color: white;
+  padding: 0.5rem;
+
+  border-radius: 8px;
+  box-shadow: var(--shadow-1);
+
+  transition: all 0.5s;
+
+  cursor: pointer;
+  &:hover {
+    transform: translateY(-0.3em);
+  }
+
+  &__img {
+    height: 30rem;
+    width: 30rem;
+    object-fit: contain;
+    margin-bottom: auto;
+    //border-bottom: 1px solid red;
+  }
+
+  &__caption {
+    text-align: center;
+    color: black;
+    font-weight: 400;
+    padding: 0.6em 0.3em;
+
+    &:active,
+    &:link,
+    &:visited {
+      text-decoration: none;
+    }
+  }
+}
