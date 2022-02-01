@@ -8,7 +8,7 @@ import ViewCRISPRcleanRSubmitJob from "@/views/ccr/ViewCRISPRcleanRSubmitJob.vue
 import ViewCRISPRcleanRResultsList from "@/views/ccr/ViewCRISPRcleanRResultsList.vue";
 import ViewCRISPRcleanRResultsByID from "@/views/ccr/ViewCRISPRcleanRResultsByID.vue";
 
-import ViewNetworkError from "@/views/ViewNetworkError.vue";
+import ViewNotFound from "@/views/ViewNotFound.vue";
 
 import CcrAPI from "@/api/ccr.js";
 import { keycloak, authorize } from "@/authentication.js";
@@ -113,10 +113,15 @@ const routes = [
         });
     },
   },
-  {
+  /*   {
     path: "/network-error",
     name: "network-error",
     component: ViewNetworkError,
+  }, */
+  {
+    path: "/:catchAll(.*)",
+    name: "404",
+    component: ViewNotFound,
   },
 ];
 

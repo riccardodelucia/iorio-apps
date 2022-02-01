@@ -1,27 +1,46 @@
-import { Machine, assign } from "xstate";
+import { createMachine, assign } from "xstate";
 import CcrAPI from "@/api/ccr.js";
+import { sendNotification } from "@/composables/notification.js";
 
 const assignSubmittedJob = assign({
   submittedJob: (context, event) => {
     return event.data.data;
   },
+  resultsUrl: (context, event) => {
+    return `${document.location.origin}/ccr/results/${event.data.data.jobId}`;
+  },
 });
 
 const resetContext = assign({
   submittedJob: () => ({}),
+  resultsUrl: () => "",
 });
 
-export const submitJobMachine = Machine(
+const sendErrorNotification = (context, event) => {
+  sendNotification({
+    type: "error",
+    message: "Error during form submission: " + event.data.message,
+  });
+};
+
+const sendSuccessNotification = () => {
+  sendNotification({
+    type: "success",
+    message: "Job Submitted!",
+  });
+};
+
+export const submitJobMachine = createMachine(
   {
     id: "submitJob",
     context: {
       submittedJob: {},
-      resultsUrl: `${document.location.origin}/ccr/results/`,
+      resultsUrl: "",
     },
     initial: "idle",
     states: {
       idle: {
-        entry: "resetContext",
+        //entry: "resetContext",
         on: { SUBMIT: { target: "submitting", cond: "confirmSubmission" } },
       },
       submitting: {
@@ -32,16 +51,14 @@ export const submitJobMachine = Machine(
           // resolved promise
           onDone: {
             target: "submitted",
-            actions: "assignSubmittedJob",
+            actions: ["assignSubmittedJob", "sendSuccessNotification"],
           },
           // rejected promise
           onError: {
-            target: "error",
+            target: "idle",
+            actions: "sendErrorNotification",
           },
         },
-      },
-      error: {
-        on: { NEWJOB: { target: "idle" } },
       },
       submitted: {
         on: { NEWJOB: { target: "idle" } },
@@ -56,6 +73,8 @@ export const submitJobMachine = Machine(
     actions: {
       assignSubmittedJob,
       resetContext,
+      sendErrorNotification,
+      sendSuccessNotification,
     },
   }
 );

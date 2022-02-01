@@ -1,24 +1,42 @@
 <template>
-  <main class="main">
-    <BaseError
+  <div class="not-found">
+    <BaseMessage
       :title="'Not found 🔍'"
-      :msg="'The content you\'re looking for is not there.'"
+      :message="'The content you\'re looking for is not there.'"
     />
-    <!--  <h2 class="u-text-align-center u-margin-bottom-small">Not found 🔍</h2>
-    <p class="u-text-align-center u-margin-bottom-medium">
-      The content you're looking for is not there.
-    </p> -->
-    <div class="u-center-content">
-      <router-link :to="{ name: 'dashboard' }" style="text-decoration: none">
-        <BaseButton type="button">Back to Dashboard</BaseButton>
-      </router-link>
-    </div>
-  </main>
+    <button
+      class="button button--primary button--large"
+      type="button"
+      @click="$router.push({ name: 'dashboard' })"
+    >
+      Back to Dashboard
+    </button>
+  </div>
 </template>
 
 <script>
 export default {
-  //title: "404 | Not Found",
   name: "ViewNotFound",
 };
 </script>
+
+<style lang="scss">
+.not-found {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  background-image: linear-gradient(
+    to right,
+    var(--color-gradient-blue-0) 0%,
+    var(--color-gradient-blue-100) 5%,
+    var(--color-gradient-green-0) 95%,
+    var(--color-gradient-green-100) 100%
+  );
+
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+</style>

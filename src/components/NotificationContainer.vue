@@ -22,14 +22,14 @@ export default {
 <style lang="scss">
 .notification {
   position: fixed;
-  bottom: 0;
+  top: 0;
   right: 0;
 
   &__bar {
     padding: 1em 2em;
     width: 30vw;
     margin-right: 1em;
-    margin-bottom: 1em;
+    margin-top: 1em;
 
     &--success {
       background-color: rgb(121, 230, 121);

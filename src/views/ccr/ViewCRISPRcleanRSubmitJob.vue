@@ -8,18 +8,36 @@
         @nav="updateService($event)"
         :config="$route.params.config"
       />
-      <img
+      <p v-else-if="currentState === 'submitting'">Submitting...</p>
+      <!--       <img
         v-else-if="currentState === 'submitting'"
         width="400px"
         src="@/assets/img/loader.gif"
         alt="Loading..."
-      />
+      /> -->
+      <div v-else-if="currentState === 'error'">
+        <h3>Something Went Wrong</h3>
+        <p>Could Not Submit the Job</p>
+        <button
+          class="button button--primary button--small"
+          type="button"
+          @click="$emit('nav', { event: 'NEWJOB' })"
+        >
+          Submit Another Job
+        </button>
+      </div>
       <div v-else-if="currentState === 'submitted'" class="submitted">
         <h3>Job Submitted!</h3>
         <p>Your results will be available here:</p>
         <a :href="jobResultsUrl">{{ jobResultsUrl }}</a>
-
-        <div class="u-margin-top-small u-center-content">
+        <button
+          class="button button--primary button--small"
+          type="button"
+          @click="$emit('nav', { event: 'NEWJOB' })"
+        >
+          Submit Another Job
+        </button>
+        <!-- <div class="u-margin-top-small u-center-content">
           <button
             class="button button--primary button--small"
             type="button"
@@ -27,7 +45,7 @@
           >
             Submit Another Job
           </button>
-        </div>
+        </div> -->
       </div>
     </div>
   </BaseLayoutApp>
