@@ -1,5 +1,6 @@
 <template>
   <div class="notification__bar" :class="notificationClass">
+    <a class="notification__close" @click="onClick"></a>
     <p>{{ notification.message }}</p>
   </div>
 </template>
@@ -15,6 +16,11 @@ export default {
   computed: {
     notificationClass() {
       return `notification__bar--${this.notification.type}`;
+    },
+  },
+  methods: {
+    onClick() {
+      this.$store.dispatch("notification/remove", this.notification);
     },
   },
 };

@@ -1,6 +1,6 @@
 export const namespaced = true;
 export const state = {
-  notifications: [],
+  notifications: [{ type: "success", message: "test", id: 0 }],
 };
 
 let nextId = 1;
@@ -26,9 +26,10 @@ export const actions = {
   add({ commit, getters }, notification) {
     commit("PUSH", notification);
     const notificationWithID = getters.getLastNotification;
-    setTimeout(() => {
-      commit("DELETE", notificationWithID);
-    }, 5000);
+    notificationWithID?.timeout &&
+      setTimeout(() => {
+        commit("DELETE", notificationWithID);
+      }, 5000);
   },
   remove({ commit }, notificationToRemove) {
     commit("DELETE", notificationToRemove);

@@ -23,6 +23,7 @@ keycloak.onAuthSuccess = function () {
       sendNotification({
         type: "success",
         message: "You've successfully logged in!",
+        timeout: 3,
       });
     })
     .catch((error) => {
@@ -30,6 +31,7 @@ keycloak.onAuthSuccess = function () {
       sendNotification({
         type: "error",
         message: "Unable to log in: " + error.message,
+        timeout: 5,
       });
     });
 };

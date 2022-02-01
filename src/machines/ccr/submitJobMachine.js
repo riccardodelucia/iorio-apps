@@ -20,13 +20,14 @@ const sendErrorNotification = (context, event) => {
   sendNotification({
     type: "error",
     message: "Error during form submission: " + event.data.message,
+    timeout: 5,
   });
 };
 
-const sendSuccessNotification = () => {
+const sendSuccessNotification = (context) => {
   sendNotification({
     type: "success",
-    message: "Job Submitted!",
+    message: `Job Submitted! Please find your results here: ${context.resultsUrl}`,
   });
 };
 

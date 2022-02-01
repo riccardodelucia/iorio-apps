@@ -30,6 +30,7 @@ export default {
     width: 30vw;
     margin-right: 1em;
     margin-top: 1em;
+    position: relative;
 
     &--success {
       background-color: rgb(121, 230, 121);
@@ -41,6 +42,33 @@ export default {
       background-color: rgb(255, 168, 168);
       border: 1px solid red;
       color: red;
+    }
+  }
+
+  &__close {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    width: 1.5rem;
+    height: 1.5rem;
+    opacity: 0.3;
+
+    &:hover {
+      opacity: 1;
+    }
+    &:before,
+    &:after {
+      position: absolute;
+      content: " ";
+      height: 20px;
+      width: 2px;
+      background-color: #333;
+    }
+    &:before {
+      transform: rotate(45deg);
+    }
+    &:after {
+      transform: rotate(-45deg);
     }
   }
 }
