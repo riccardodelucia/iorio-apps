@@ -20,11 +20,11 @@ keycloak.onAuthSuccess = function () {
     .loadUserProfile()
     .then((profile) => {
       store.commit("user/SET_USER", profile);
-      sendNotification({
+      /* sendNotification({
         type: "success",
         message: "You've successfully logged in!",
         timeout: 3,
-      });
+      }); */
     })
     .catch((error) => {
       store.commit("user/SET_USER", {});
