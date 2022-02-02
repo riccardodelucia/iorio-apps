@@ -105,14 +105,14 @@ export default {
   setup(props, { emit }) {
     const validationSchema = object({
       title: string().required(),
-      email: string().email(),
+      email: string().email().nullable(),
       label: string().required(),
       library: string().required(),
       normMinReads: number().required(),
       nControls: number().required(),
       fileCounts: mixed().required(),
       method: string().required(),
-      notes: undefined,
+      notes: string(),
     });
     const { handleSubmit, errors } = useForm({
       validationSchema,
@@ -120,6 +120,7 @@ export default {
         normMinReads: 30,
         nControls: 1,
         email: null,
+        notes: "",
       },
     });
 
@@ -146,7 +147,6 @@ export default {
           method: method.value,
           fileCounts: fileCounts.value,
           notes: notes.value,
-          resultsUrl: null,
         },
       });
     });

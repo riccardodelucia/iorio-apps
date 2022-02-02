@@ -73,19 +73,17 @@ export default {
     method,
     notes,
     fileCounts,
-    resultsUrl,
   }) {
     const bodyFormData = new FormData();
     bodyFormData.append("title", title);
-    bodyFormData.append("email", email);
+    email && bodyFormData.append("email", email);
     bodyFormData.append("label", label);
     bodyFormData.append("library", library);
     bodyFormData.append("norm_min_reads", normMinReads);
     bodyFormData.append("n_controls", nControls);
     bodyFormData.append("method", method);
-    bodyFormData.append("notes", notes);
+    notes && bodyFormData.append("notes", notes);
     bodyFormData.append("file_counts", fileCounts);
-    bodyFormData.append("results_url", resultsUrl);
 
     return instance.post(`jobs/`, bodyFormData, {
       headers: {

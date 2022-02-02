@@ -6,11 +6,13 @@ const assignSubmittedJob = assign({
   submittedJob: (context, event) => {
     return event.data.data;
   },
+  resultsUrl: (context, event) => {
+    return `${document.location.origin}/ccr/results/${event.data.data.id}`;
+  },
 });
 
 const resetContext = assign({
   submittedJob: () => ({}),
-  resultsUrl: () => "",
 });
 
 const sendErrorNotification = (context, event) => {
@@ -26,7 +28,7 @@ const sendErrorNotification = (context, event) => {
 const sendSuccessNotification = (context) => {
   sendNotification({
     type: "success",
-    message: `Job Submitted! Please find your results here: ${document.location.origin}/ccr/results/${context.submittedJob.id}`,
+    message: `Job Submitted! Please find your results here: ${context.resultsUrl}`,
   });
 };
 
@@ -35,11 +37,12 @@ export const submitJobMachine = createMachine(
     id: "submitJob",
     context: {
       submittedJob: {},
+      resultsUrl: "",
     },
     initial: "idle",
     states: {
       idle: {
-        entry: "resetContext",
+        //entry: "resetContext", // if enabled, send success notification reads an undefined id...
         on: { SUBMIT: { target: "submitting", cond: "confirmSubmission" } },
       },
       submitting: {
