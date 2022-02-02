@@ -35,7 +35,7 @@
     <div class="form__group">
       <BaseSelect
         label="Library"
-        :options="Object.keys(libraries)"
+        :options="Object.keys(config.libraries)"
         v-model="library"
         :error="errors.library"
       >
@@ -141,7 +141,7 @@ export default {
           title: title.value,
           email: email.value,
           label: label.value,
-          library: library.value,
+          library: props.config.libraries[library.value],
           normMinReads: normMinReads.value,
           nControls: nControls.value,
           method: method.value,
@@ -152,12 +152,12 @@ export default {
     });
 
     // Computed properties
-    const libraries = computed(() =>
+    /*     const libraries = computed(() =>
       props.config?.libraries.reduce((acc, item) => {
         acc[item.label] = item.value;
         return acc;
       }, {})
-    );
+    ); */
 
     const methods = computed(() =>
       props.config?.methods.reduce((acc, item) => {
@@ -172,7 +172,7 @@ export default {
       emailChange,
       label,
       library,
-      libraries,
+      //libraries,
       normMinReads,
       nControls,
       fileCounts,

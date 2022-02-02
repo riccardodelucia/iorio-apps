@@ -37,7 +37,6 @@ export default {
     const inputFile = ref(null);
 
     const onClick = () => {
-      console.log("click!");
       inputFile.value.click();
     };
     const updateFile = (event) => {

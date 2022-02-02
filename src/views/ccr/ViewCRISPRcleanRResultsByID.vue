@@ -117,8 +117,6 @@ const closeModal = () => {
 };
 
 const onClick = (file, id) => {
-  console.log("onClick ", id);
-
   CcrAPI.getFile({ id, fileUri: file })
     .then((response) => {
       download(response.data, file);
