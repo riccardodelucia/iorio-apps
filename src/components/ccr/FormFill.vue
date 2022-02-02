@@ -151,14 +151,6 @@ export default {
       });
     });
 
-    // Computed properties
-    /*     const libraries = computed(() =>
-      props.config?.libraries.reduce((acc, item) => {
-        acc[item.label] = item.value;
-        return acc;
-      }, {})
-    ); */
-
     const methods = computed(() =>
       props.config?.methods.reduce((acc, item) => {
         acc[item.label] = item.value;
@@ -172,7 +164,6 @@ export default {
       emailChange,
       label,
       library,
-      //libraries,
       normMinReads,
       nControls,
       fileCounts,

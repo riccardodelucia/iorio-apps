@@ -57,6 +57,7 @@ export const actions = {
       }
     });
     return Promise.all(imageListWithURL).then((imageList) => {
+      console.log("imageList ", imageList);
       commit("SET_VALUE", { keyPath: "imageList", value: imageList });
       return imageList;
     });

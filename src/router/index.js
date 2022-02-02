@@ -8,7 +8,7 @@ import ViewCRISPRcleanRSubmitJob from "@/views/ccr/ViewCRISPRcleanRSubmitJob.vue
 import ViewCRISPRcleanRResultsList from "@/views/ccr/ViewCRISPRcleanRResultsList.vue";
 import ViewCRISPRcleanRResultsByID from "@/views/ccr/ViewCRISPRcleanRResultsByID.vue";
 
-import ViewNotFound from "@/views/ViewNotFound.vue";
+import ViewMessagePage from "@/views/ViewMessagePage.vue";
 
 import CcrAPI from "@/api/ccr.js";
 import { keycloak, authorize } from "@/authentication.js";
@@ -46,8 +46,7 @@ const routes = [
           next();
         })
         .catch((error) => {
-          console.log(error);
-          next({ name: "network-error" });
+          next({ name: "error", params: { message: error } });
         });
     },
   },
@@ -68,19 +67,7 @@ const routes = [
           next();
         })
         .catch((error) => {
-          console.error("error: ", error);
-          if (error.response) {
-            switch (error.response.status) {
-              case 404:
-                next({ name: "404", params: { resource: "event" } });
-                break;
-              case 403:
-                next({ name: "forbidden" });
-                break;
-              default:
-                next({ name: "error" });
-            }
-          } else next({ name: "error" });
+          next({ name: "error", params: { message: error } });
         });
     },
   },
@@ -93,35 +80,50 @@ const routes = [
     },
     props: true,
     beforeEnter(to, from, next) {
-      Promise.all([
-        store.dispatch("ccr/fetchResultByID", to.params.id),
-        store.dispatch("ccr/fetchImages", to.params.id),
-      ])
+      store
+        .dispatch("ccr/fetchResultByID", to.params.id)
+        .then((result) => {
+          to.params.result = result;
+          return store.dispatch("ccr/fetchImages", to.params.id);
+        })
         .then((values) => {
-          // there is no easy way to distinguish results from Promise.all, here we rely on type
-          values.forEach((value) => {
-            if (Array.isArray(value)) to.params.imageList = value;
-            else to.params.result = value;
-          });
+          to.params.imageList = values;
           next();
         })
         .catch((error) => {
-          console.error("vue router: ", error.message);
-          if (error.response && error.response.status === 404)
-            next({ name: "404", params: { resource: "event" } });
-          else next({ name: "error" });
+          if (error.response) {
+            switch (error.response.status) {
+              case 404:
+                next("/404");
+                break;
+              default:
+                next({ name: "error" });
+                break;
+            }
+          } else next({ name: "error" });
         });
     },
   },
-  /*   {
-    path: "/network-error",
-    name: "network-error",
-    component: ViewNetworkError,
-  }, */
+  {
+    path: "/error",
+    name: "error",
+    component: ViewMessagePage,
+    beforeEnter(to) {
+      to.params.title = "Something went wrong... 💥";
+      return;
+    },
+    props: true,
+  },
   {
     path: "/:catchAll(.*)",
     name: "404",
-    component: ViewNotFound,
+    component: ViewMessagePage,
+    beforeEnter(to) {
+      to.params.title = "Not found 🔍";
+      to.params.message = "The content you're looking for is not there.";
+      return;
+    },
+    props: true,
   },
 ];
 

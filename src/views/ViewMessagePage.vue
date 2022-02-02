@@ -1,9 +1,6 @@
 <template>
-  <div class="not-found">
-    <BaseMessage
-      :title="'Not found 🔍'"
-      :message="'The content you\'re looking for is not there.'"
-    />
+  <div class="message-page">
+    <BaseMessage :title="title" :message="message" />
     <button
       class="button button--primary button--large"
       type="button"
@@ -16,12 +13,20 @@
 
 <script>
 export default {
-  name: "ViewNotFound",
+  title: "Network Error",
+  name: "ViewNetworkError",
+  props: {
+    title: { type: String, default: "" },
+    message: {
+      type: String,
+      default: "",
+    },
+  },
 };
 </script>
 
 <style lang="scss">
-.not-found {
+.message-page {
   display: flex;
   flex-direction: column;
   justify-content: center;
