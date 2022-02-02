@@ -1,6 +1,6 @@
 <template>
   <div class="notification__bar" :class="notificationClass">
-    <a class="notification__close" @click="onClick"></a>
+    <div class="notification__close" @click="onClick"></div>
     <p>{{ notification.message }}</p>
   </div>
 </template>

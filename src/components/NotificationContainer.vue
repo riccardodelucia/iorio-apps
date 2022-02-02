@@ -36,12 +36,29 @@ export default {
       background-color: rgb(121, 230, 121);
       border: 1px solid green;
       color: green;
+
+      &__close {
+        border-color: green;
+      }
+      .notification__close:before,
+      .notification__close:after {
+        background-color: green;
+      }
     }
 
     &--error {
       background-color: rgb(255, 168, 168);
       border: 1px solid red;
       color: red;
+
+      &__close {
+        border-color: red;
+      }
+
+      .notification__close:before,
+      .notification__close:after {
+        background-color: red;
+      }
     }
   }
 
@@ -49,20 +66,29 @@ export default {
     position: absolute;
     right: 5px;
     top: 5px;
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 2.4rem;
+    height: 2.4rem;
     opacity: 0.3;
+    background-color: white;
+    border: 1px solid;
+    border-radius: 100%;
+    cursor: pointer;
+    transition: all 0.1s ease-in;
 
     &:hover {
       opacity: 1;
     }
+
     &:before,
     &:after {
       position: absolute;
+      left: 10px;
+      top: 5px;
       content: " ";
-      height: 20px;
+      height: 12px;
       width: 2px;
-      background-color: #333;
+      //background-color: black;
+      opacity: 0.7;
     }
     &:before {
       transform: rotate(45deg);
