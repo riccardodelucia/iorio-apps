@@ -69,6 +69,7 @@ export default {
         this.currentState = state.value;
         // Update the context component data property with the updated context
         this.context = state.context;
+        console.log("current state: ", this.currentState);
       })
       .start();
   },

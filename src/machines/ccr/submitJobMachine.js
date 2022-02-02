@@ -6,9 +6,6 @@ const assignSubmittedJob = assign({
   submittedJob: (context, event) => {
     return event.data.data;
   },
-  resultsUrl: (context, event) => {
-    return `${document.location.origin}/ccr/results/${event.data.data.jobId}`;
-  },
 });
 
 const resetContext = assign({
@@ -17,6 +14,8 @@ const resetContext = assign({
 });
 
 const sendErrorNotification = (context, event) => {
+  console.log("sendErrorNotification: ", context);
+
   sendNotification({
     type: "error",
     message: "Error during form submission: " + event.data.message,
@@ -27,7 +26,7 @@ const sendErrorNotification = (context, event) => {
 const sendSuccessNotification = (context) => {
   sendNotification({
     type: "success",
-    message: `Job Submitted! Please find your results here: ${context.resultsUrl}`,
+    message: `Job Submitted! Please find your results here: ${document.location.origin}/ccr/results/${context.submittedJob.id}`,
   });
 };
 
@@ -36,7 +35,6 @@ export const submitJobMachine = createMachine(
     id: "submitJob",
     context: {
       submittedJob: {},
-      resultsUrl: "",
     },
     initial: "idle",
     states: {
@@ -51,15 +49,22 @@ export const submitJobMachine = createMachine(
           },
           // resolved promise
           onDone: {
-            target: "idle",
-            actions: ["assignSubmittedJob", "sendSuccessNotification"],
+            target: "success",
+            actions: "assignSubmittedJob",
           },
           // rejected promise
           onError: {
-            target: "idle",
-            actions: "sendErrorNotification",
+            target: "error",
           },
         },
+      },
+      success: {
+        entry: "sendSuccessNotification",
+        always: { target: "idle" },
+      },
+      error: {
+        entry: "sendErrorNotification",
+        always: { target: "idle" },
       },
     },
   },
