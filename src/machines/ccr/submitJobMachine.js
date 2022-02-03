@@ -1,9 +1,13 @@
-import { Machine, assign } from "xstate";
+import { createMachine, assign } from "xstate";
 import CcrAPI from "@/api/ccr.js";
+import { sendNotification } from "@/composables/notification.js";
 
 const assignSubmittedJob = assign({
   submittedJob: (context, event) => {
     return event.data.data;
+  },
+  resultsUrl: (context, event) => {
+    return `${document.location.origin}/ccr/results/${event.data.data.id}`;
   },
 });
 
@@ -11,17 +15,34 @@ const resetContext = assign({
   submittedJob: () => ({}),
 });
 
-export const submitJobMachine = Machine(
+const sendErrorNotification = (context, event) => {
+  console.log("sendErrorNotification: ", context);
+
+  sendNotification({
+    type: "error",
+    message: "Error during form submission: " + event.data.message,
+    timeout: 5,
+  });
+};
+
+const sendSuccessNotification = (context) => {
+  sendNotification({
+    type: "success",
+    message: `Job Submitted! Please find your results here: ${context.resultsUrl}`,
+  });
+};
+
+export const submitJobMachine = createMachine(
   {
     id: "submitJob",
     context: {
       submittedJob: {},
-      resultsUrl: `${document.location.origin}/ccr/results/`,
+      resultsUrl: "",
     },
     initial: "idle",
     states: {
       idle: {
-        entry: "resetContext",
+        //entry: "resetContext", // if enabled, send success notification reads an undefined id...
         on: { SUBMIT: { target: "submitting", cond: "confirmSubmission" } },
       },
       submitting: {
@@ -31,7 +52,7 @@ export const submitJobMachine = Machine(
           },
           // resolved promise
           onDone: {
-            target: "submitted",
+            target: "success",
             actions: "assignSubmittedJob",
           },
           // rejected promise
@@ -40,11 +61,13 @@ export const submitJobMachine = Machine(
           },
         },
       },
-      error: {
-        on: { NEWJOB: { target: "idle" } },
+      success: {
+        entry: "sendSuccessNotification",
+        always: { target: "idle" },
       },
-      submitted: {
-        on: { NEWJOB: { target: "idle" } },
+      error: {
+        entry: "sendErrorNotification",
+        always: { target: "idle" },
       },
     },
   },
@@ -56,6 +79,8 @@ export const submitJobMachine = Machine(
     actions: {
       assignSubmittedJob,
       resetContext,
+      sendErrorNotification,
+      sendSuccessNotification,
     },
   }
 );

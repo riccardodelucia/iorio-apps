@@ -35,7 +35,7 @@
     <div class="form__group">
       <BaseSelect
         label="Library"
-        :options="Object.keys(libraries)"
+        :options="Object.keys(config.libraries)"
         v-model="library"
         :error="errors.library"
       >
@@ -105,20 +105,22 @@ export default {
   setup(props, { emit }) {
     const validationSchema = object({
       title: string().required(),
-      email: string().email(),
+      email: string().email().nullable(),
       label: string().required(),
       library: string().required(),
       normMinReads: number().required(),
       nControls: number().required(),
       fileCounts: mixed().required(),
       method: string().required(),
-      notes: undefined,
+      notes: string(),
     });
     const { handleSubmit, errors } = useForm({
       validationSchema,
       initialValues: {
         normMinReads: 30,
         nControls: 1,
+        email: null,
+        notes: "",
       },
     });
 
@@ -136,27 +138,18 @@ export default {
       emit("nav", {
         event: "SUBMIT",
         payload: {
-          title,
-          email,
-          label,
-          library: libraries[library],
-          normMinReads,
-          nControls,
-          method,
-          fileCounts,
-          notes,
-          resultsUrl: null,
+          title: title.value,
+          email: email.value,
+          label: label.value,
+          library: props.config.libraries[library.value],
+          normMinReads: normMinReads.value,
+          nControls: nControls.value,
+          method: method.value,
+          fileCounts: fileCounts.value,
+          notes: notes.value,
         },
       });
     });
-
-    // Computed properties
-    const libraries = computed(() =>
-      props.config?.libraries.reduce((acc, item) => {
-        acc[item.label] = item.value;
-        return acc;
-      }, {})
-    );
 
     const methods = computed(() =>
       props.config?.methods.reduce((acc, item) => {
@@ -171,7 +164,6 @@ export default {
       emailChange,
       label,
       library,
-      libraries,
       normMinReads,
       nControls,
       fileCounts,
