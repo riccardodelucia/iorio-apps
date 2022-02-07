@@ -15,6 +15,13 @@
       <g :transform="`translate(0, ${innerHeight})`">
         <D3Axis :scale="xScale" position="bottom" />
       </g>
+      <line
+        class="chart__line chart__line--dashed"
+        :x1="xScale(0)"
+        :y1="0"
+        :x2="xScale(0)"
+        :y2="innerHeight"
+      />
       <MarksCurve
         :points="chartData"
         :xScale="xScale"
@@ -110,4 +117,12 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.chart__line {
+  stroke: rgb(255, 0, 0);
+  stroke-width: 2;
+  &--dashed {
+    stroke-dasharray: 4 2;
+  }
+}
+</style>
