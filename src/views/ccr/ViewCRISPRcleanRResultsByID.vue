@@ -31,6 +31,7 @@
             {{ file }}&nbsp;<span><BaseIcon name="download" /></span>
           </button>
         </div>
+        <GeneSignatures> </GeneSignatures>
 
         <h3 class="u-margin-bottom-small">Normalization</h3>
         <div class="results-container">
@@ -89,6 +90,7 @@ import ComingSoon from "@/components/ComingSoon.vue";
 import ChromosomeMultichart from "@/components/ccr/charts/chromosome/ChromosomeMultichart.vue";
 import LineChartROC from "@/components/ccr/charts/linechart/LineChartROC.vue";
 import LineChartPrRc from "@/components/ccr/charts/linechart/LineChartPrRc.vue";
+import GeneSignatures from "@/components/ccr/charts/gene_signatures/GeneSignatures.vue";
 
 import { download } from "@/composables/download.js";
 
@@ -134,6 +136,7 @@ export default {
     LineChartROC,
     LineChartPrRc,
     ComingSoon,
+    GeneSignatures,
   },
   props: {
     id: {
