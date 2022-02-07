@@ -27,7 +27,7 @@ export default {
 
   &__bar {
     padding: 1em 2em;
-    width: 30vw;
+    min-width: 30vw;
     margin-right: 1em;
     margin-top: 1em;
     position: relative;
