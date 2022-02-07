@@ -88,6 +88,10 @@ const routes = [
         })
         .then((values) => {
           to.params.imageList = values;
+          return store.dispatch("ccr/fetchGeneSignatures", to.params.id);
+        })
+        .then((result) => {
+          to.params.genesSignatures = result;
           next();
         })
         .catch((error) => {

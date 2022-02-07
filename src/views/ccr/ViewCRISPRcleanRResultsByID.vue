@@ -31,8 +31,8 @@
             {{ file }}&nbsp;<span><BaseIcon name="download" /></span>
           </button>
         </div>
-        <GeneSignatures> </GeneSignatures>
-
+        <h3 class="u-margin-bottom-small">Genes Signatures</h3>
+        <GeneSignatures :data="genesSignatures"> </GeneSignatures>
         <h3 class="u-margin-bottom-small">Normalization</h3>
         <div class="results-container">
           <BaseThumbnail
@@ -150,6 +150,7 @@ export default {
       type: Object,
       required: true,
     },
+    genesSignatures: { type: Object, required: true },
   },
   setup(props) {
     const normImages = computed(() => {

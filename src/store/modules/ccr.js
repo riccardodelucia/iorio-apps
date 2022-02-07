@@ -6,6 +6,7 @@ export const state = {
   results: [],
   result: {},
   imageList: [],
+  gene_signatures: {},
 };
 
 export const mutations = {
@@ -60,5 +61,18 @@ export const actions = {
       commit("SET_VALUE", { keyPath: "imageList", value: imageList });
       return imageList;
     });
+  },
+  fetchGeneSignatures({ commit }, id) {
+    return CcrAPI.getChart({ id, chart: "genes_signatures" })
+      .then((response) => {
+        commit("SET_VALUE", {
+          keyPath: "genes_signatures",
+          value: response.data,
+        });
+        return response.data;
+      })
+      .catch((error) => {
+        throw error;
+      });
   },
 };
