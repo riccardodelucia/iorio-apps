@@ -6,6 +6,9 @@
     :cx="xScale(point.x)"
     :cy="yScale(point.y)"
     :r="pointRadius"
+    @mouseover="$emit('tooltip-mouseover', { event: $event, data: point })"
+    @mousemove="$emit('tooltip-mousemove', { event: $event, data: point })"
+    @mouseleave="$emit('tooltip-mouseleave')"
   ></circle>
 </template>
 
@@ -35,6 +38,10 @@ export default {
 .genes_signatures {
   &__points {
     fill: black;
+
+    &:hover {
+      fill: red;
+    }
   }
 }
 </style>

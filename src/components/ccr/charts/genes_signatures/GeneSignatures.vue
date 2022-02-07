@@ -1,4 +1,9 @@
 <template>
+  <Tooltip
+    v-show="tooltipShow"
+    :tooltipCoords="tooltipCoords"
+    :data="tooltipData"
+  ></Tooltip>
   <svg
     ref="svg"
     :width="width"
@@ -14,6 +19,9 @@
         :points="chartData"
         :xScale="xScale"
         :yScale="yScale"
+        @tooltipMouseover="onMouseOver"
+        @tooltipMousemove="onMouseMove"
+        @tooltipMouseleave="onMouseLeave"
       ></MarksCurve>
     </g>
   </svg>
@@ -24,6 +32,8 @@ import { extent, scaleLinear } from "d3";
 import { getInnerChartSizes } from "@/composables/chart.js";
 import D3Axis from "@/components/ccr/charts/D3Axis.vue";
 import MarksCurve from "@/components/ccr/charts/genes_signatures/MarksCurve.vue";
+import Tooltip from "@/components/ccr/charts/Tooltip.vue";
+import { getTooltip } from "@/composables/chart.js";
 
 const setupChart = (data) => {
   const chartData = data.curve
@@ -46,7 +56,7 @@ export default {
       required: true,
     },
   },
-  components: { D3Axis, MarksCurve },
+  components: { D3Axis, MarksCurve, Tooltip },
   setup(props) {
     const width = 500;
     const height = 500;
@@ -64,6 +74,15 @@ export default {
       margin
     );
 
+    const {
+      onMouseOver,
+      onMouseMove,
+      onMouseLeave,
+      tooltipCoords,
+      tooltipData,
+      tooltipShow,
+    } = getTooltip();
+
     const { chartData, xDomain, yDomain } = setupChart(props.data);
     const xScale = scaleLinear()
       .domain(xDomain)
@@ -80,6 +99,12 @@ export default {
       yScale,
       innerWidth,
       innerHeight,
+      onMouseOver,
+      onMouseMove,
+      onMouseLeave,
+      tooltipCoords,
+      tooltipData,
+      tooltipShow,
     };
   },
 };
