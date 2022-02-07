@@ -10,6 +10,11 @@
       <g :transform="`translate(0, ${innerHeight})`">
         <D3Axis :scale="xScale" position="bottom" />
       </g>
+      <MarksCurve
+        :points="chartData"
+        :xScale="xScale"
+        :yScale="yScale"
+      ></MarksCurve>
     </g>
   </svg>
 </template>
@@ -18,6 +23,7 @@
 import { extent, scaleLinear } from "d3";
 import { getInnerChartSizes } from "@/composables/chart.js";
 import D3Axis from "@/components/ccr/charts/D3Axis.vue";
+import MarksCurve from "@/components/ccr/charts/genes_signatures/MarksCurve.vue";
 
 const setupChart = (data) => {
   const chartData = data.curve
@@ -40,7 +46,7 @@ export default {
       required: true,
     },
   },
-  components: { D3Axis },
+  components: { D3Axis, MarksCurve },
   setup(props) {
     const width = 500;
     const height = 500;
