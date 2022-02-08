@@ -226,7 +226,6 @@
     width: 30rem;
     object-fit: contain;
     margin-bottom: auto;
-    //border-bottom: 1px solid red;
   }
 
   &__caption {
@@ -241,4 +240,11 @@
       text-decoration: none;
     }
   }
+}
+
+///////////////////////////////////////////////
+// CARD
+.card {
+  box-shadow: var(--shadow-1);
+  padding: 1.5em 1.5em;
 }

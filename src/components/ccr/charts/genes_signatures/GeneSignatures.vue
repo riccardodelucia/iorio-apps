@@ -32,11 +32,18 @@
         </text>
       </g>
       <line
-        class="chart__line chart__line--dashed"
+        class="chart__line chart__line--dashed chart__line--black"
         :x1="xScale(0)"
         :y1="0"
         :x2="xScale(0)"
         :y2="innerHeight"
+      />
+      <line
+        class="chart__line chart__line--dashed chart__line--red"
+        :x1="0"
+        :y1="yScale(threshold)"
+        :x2="innerWidth"
+        :y2="yScale(threshold)"
       />
       <MarksCurve
         :points="chartData"
@@ -68,8 +75,17 @@ const setupChart = (data) => {
 
   const xDomain = extent(chartData.map((item) => item.x));
   const yDomain = extent(chartData.map((item) => item.y));
+  const xInterval = xDomain[0] - xDomain[1];
+  const xThreshold = data?.metrics[0]?.threshod * xInterval; // typo from the files
+  const { idx: thresholdCandidateIdx } = chartData
+    .map((item, idx) => ({
+      dist: Math.abs(item.x - xThreshold),
+      idx,
+    }))
+    .sort((a, b) => a.dist - b.dist)[0];
+  const threshold = chartData[thresholdCandidateIdx].y;
 
-  return { chartData, xDomain, yDomain };
+  return { chartData, xDomain, yDomain, threshold };
 };
 export default {
   name: "GeneSignatures",
@@ -106,7 +122,7 @@ export default {
       tooltipShow,
     } = getTooltip();
 
-    const { chartData, xDomain, yDomain } = setupChart(props.data);
+    const { chartData, xDomain, yDomain, threshold } = setupChart(props.data);
     const xScale = scaleLinear()
       .domain(xDomain)
       .range([0, innerWidth * 0.5]);
@@ -121,6 +137,7 @@ export default {
       xAxisLabelOffset: 30,
       yScale,
       yAxisLabelOffset: 35,
+      threshold,
       innerWidth,
       innerHeight,
       onMouseOver,
@@ -136,10 +153,15 @@ export default {
 
 <style lang="scss" scoped>
 .chart__line {
-  stroke: black;
   stroke-width: 1;
   &--dashed {
     stroke-dasharray: 4 2;
+  }
+  &--black {
+    stroke: black;
+  }
+  &--red {
+    stroke: red;
   }
 }
 .axis-label {

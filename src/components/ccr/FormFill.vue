@@ -1,5 +1,5 @@
 <template>
-  <form class="ccr-form" ref="form" @submit="submit">
+  <form class="card ccr-form" ref="form" @submit="submit">
     <div class="form__group">
       <BaseInput
         label="Title"
@@ -182,8 +182,9 @@ export default {
   width: 100%;
 }
 .ccr-form {
+  max-width: 50rem;
   display: flex;
   flex-direction: column;
-  gap: 2em;
+  gap: 1em;
 }
 </style>
