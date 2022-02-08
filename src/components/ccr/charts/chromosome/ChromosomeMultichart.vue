@@ -139,6 +139,7 @@ export default {
 <style lang="scss" scoped>
 .controls-container {
   margin: 0 2em;
+  margin-bottom: 1em;
   display: grid;
   grid-template-columns: repeat(2, max-content) 1fr repeat(2, max-content);
   grid-gap: 2em;

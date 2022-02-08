@@ -41,6 +41,8 @@ export default {
 
     &:hover {
       fill: red;
+      stroke: red;
+      stroke-width: 8;
     }
   }
 }

@@ -11,9 +11,25 @@
     :viewBox="[0, 0, width, height].join(' ')"
   >
     <g ref="chart" :transform="`translate(${margin.left}, ${margin.top})`">
+      <text
+        :transform="`translate(${-yAxisLabelOffset}, ${
+          innerHeight / 2
+        }) rotate(-90)`"
+        class="axis-label"
+      >
+        Depletion Rank
+      </text>
       <D3Axis :scale="yScale" position="left" />
       <g :transform="`translate(0, ${innerHeight})`">
         <D3Axis :scale="xScale" position="bottom" />
+        <text
+          :transform="`translate(${
+            (innerWidth * 0.5) / 2
+          }, ${xAxisLabelOffset})`"
+          class="axis-label"
+        >
+          Log FC
+        </text>
       </g>
       <line
         class="chart__line chart__line--dashed"
@@ -35,7 +51,7 @@
 </template>
 
 <script>
-import { extent, scaleLinear } from "d3";
+import { extent, scaleLinear, scaleLog } from "d3";
 import { getInnerChartSizes } from "@/composables/chart.js";
 import D3Axis from "@/components/ccr/charts/D3Axis.vue";
 import MarksCurve from "@/components/ccr/charts/genes_signatures/MarksCurve.vue";
@@ -71,7 +87,7 @@ export default {
     const margin = {
       top: 20,
       right: 20,
-      bottom: 20,
+      bottom: 40,
       left: 60,
     };
 
@@ -94,8 +110,7 @@ export default {
     const xScale = scaleLinear()
       .domain(xDomain)
       .range([0, innerWidth * 0.5]);
-    const yScale = scaleLinear().domain(yDomain).range([0, innerHeight]);
-    console.log(yDomain);
+    const yScale = scaleLog().domain(yDomain).range([0, innerHeight]);
 
     return {
       width,
@@ -103,7 +118,9 @@ export default {
       margin,
       chartData,
       xScale,
+      xAxisLabelOffset: 30,
       yScale,
+      yAxisLabelOffset: 35,
       innerWidth,
       innerHeight,
       onMouseOver,
@@ -119,10 +136,16 @@ export default {
 
 <style lang="scss" scoped>
 .chart__line {
-  stroke: rgb(255, 0, 0);
-  stroke-width: 2;
+  stroke: black;
+  stroke-width: 1;
   &--dashed {
     stroke-dasharray: 4 2;
   }
+}
+.axis-label {
+  text-anchor: middle;
+  font-family: sans-serif;
+  font-size: 15px;
+  color: black;
 }
 </style>

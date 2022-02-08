@@ -5,9 +5,10 @@
         <rect :width="innerWidth" :height="innerHeight" />
       </clipPath>
     </defs>
-    <D3Axis :scale="yScale" orientation="y" :tickSize="-innerWidth" />
+    <D3Axis :scale="yScale" position="left" :tickSize="-innerWidth" />
+
     <g :transform="`translate(0, ${innerHeight})`">
-      <D3Axis :scale="xScale" orientation="x" />
+      <D3Axis :scale="xScale" position="bottom" />
     </g>
     <!-- Segments are clipped through a clip path, instead of filtering data. This is 
     convenient, since segments are very lightweight to manage, and the filtering algorithm would have
