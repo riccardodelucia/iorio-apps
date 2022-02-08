@@ -210,9 +210,10 @@
   overflow: hidden;
   background-color: white;
   padding: 0.5rem;
+  //border: 1px solid black;
 
-  border-radius: 8px;
-  box-shadow: var(--shadow-1);
+  //border-radius: 8px;
+  //box-shadow: var(--shadow-1);
 
   transition: all 0.5s;
 
@@ -245,6 +246,6 @@
 ///////////////////////////////////////////////
 // CARD
 .card {
-  box-shadow: var(--shadow-1);
+  box-shadow: var(--shadow-2);
   padding: 1.5em 1.5em;
 }

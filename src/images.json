@@ -48,14 +48,6 @@
     "component": "LineChartROC"
   },
   {
-    "imgUri": "thumb/genes_signatures.png",
-    "chart": "genes_signatures",
-    "filename": "genes_signatures",
-    "section": "qc",
-    "label": "Genes Signatures",
-    "component": "ComingSoon"
-  },
-  {
     "imgUri": "thumb/1.png",
     "chart": "1",
     "filename": "1",
