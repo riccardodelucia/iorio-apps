@@ -41,7 +41,43 @@
             <li v-if="result.notes"><b>Notes: </b>{{ result.notes }}</li>
           </ul>
         </div>
-        <div
+        <BaseAccordion
+          class="card ccr-results__thumbnails ccr-results__thumbnails--color1"
+        >
+          <template v-slot:title>Normalization</template>
+          <template v-slot:content
+            ><BaseThumbnail
+              v-for="item in normImages"
+              :key="item.filename"
+              @click="openModal(item, id)"
+              :img="item"
+            ></BaseThumbnail></template
+        ></BaseAccordion>
+        <BaseAccordion
+          class="card ccr-results__thumbnails ccr-results__thumbnails--color2"
+        >
+          <template v-slot:title>Chromosome Charts</template>
+          <template v-slot:content>
+            <BaseThumbnail
+              v-for="item in chrImages"
+              :key="item.filename"
+              @click="openModal(item, id)"
+              :img="item"
+            ></BaseThumbnail></template
+        ></BaseAccordion>
+        <BaseAccordion
+          class="card ccr-results__thumbnails ccr-results__thumbnails--color3"
+        >
+          <template v-slot:title>QC Assessment</template>
+          <template v-slot:content>
+            <BaseThumbnail
+              v-for="item in qcImages"
+              :key="item.filename"
+              @click="openModal(item, id)"
+              :img="item"
+            ></BaseThumbnail></template
+        ></BaseAccordion>
+        <!--  <div
           class="card ccr-results__thumbnails ccr-results__thumbnails--color1"
         >
           <h3 class="u-margin-bottom-small">Main Charts</h3>
@@ -59,8 +95,8 @@
               :img="item"
             ></BaseThumbnail>
           </div>
-        </div>
-        <div
+        </div> -->
+        <!--         <div
           class="card ccr-results__thumbnails ccr-results__thumbnails--color2"
         >
           <h3 class="u-margin-bottom-small">Chromosome Charts</h3>
@@ -72,7 +108,7 @@
               :img="item"
             ></BaseThumbnail>
           </div>
-        </div>
+        </div> -->
       </div>
 
       <template v-if="result.status === 'success'">
@@ -233,36 +269,20 @@ export default {
 </script>
 
 <style lang="scss">
-/* .downloads-container {
-  margin-bottom: 1em;
-  display: flex;
-  gap: 1em;
-  flex-wrap: wrap;
-}
- */
-/* .results-container {
-  display: grid;
-  grid-gap: 2rem;
-  grid-template-columns: repeat(auto-fit, 32rem);
-  margin-bottom: 2em;
-} */
-
 .ccr-results {
   display: grid;
   grid-template-columns: repeat(8, minmax(min-content, 14rem)) 1fr;
   grid-column-gap: 1.2em;
   grid-row-gap: 1.5em;
   margin-bottom: 2em;
-  //grid-template-rows: repeat()
 
   &__details {
-    //justify-self: left;
-    grid-column: 4 / 8;
+    grid-column: 1 / 5;
     grid-row: 1 / 2;
   }
 
   &__downloads {
-    grid-column: 4 / 8;
+    grid-column: 1 / 4;
     grid-row: 2 / 3;
 
     div {
@@ -273,20 +293,21 @@ export default {
     }
   }
   &__genes-signatures {
-    grid-column: 1 / 4;
+    grid-column: 5 / 9;
     grid-row: 1 / 3;
   }
 
   &__thumbnails {
     grid-column: 1/ -1;
-    //width: min-content;
-    //justify-self: left;
 
     &--color1 {
       background-color: rgb(232, 232, 253);
     }
     &--color2 {
       background-color: rgb(212, 255, 208);
+    }
+    &--color3 {
+      background-color: rgb(163, 210, 253);
     }
 
     div {
