@@ -1,89 +1,74 @@
 <template>
   <div class="accordion">
-    <div class="accordion__label" @click="isOpen = !isOpen">
-      <div class="accordion__title">
-        <h3><slot name="title"></slot></h3>
-      </div>
-
-      <div
-        class="accordion__icon"
-        :class="{
-          'accordion__icon--rotate-180': isOpen,
-          'accordion__icon--rotate-0': !isOpen,
-        }"
-      >
-        <BaseIcon name="chevron-up"></BaseIcon>
-      </div>
-    </div>
-    <div
-      class="accordion__content u-margin-top-medium"
-      v-show="isOpen"
-      :class="{
-        'accordion__content--closed': !isOpen,
-      }"
+    <input
+      :id="uuid"
+      class="accordion__checkbox"
+      type="checkbox"
+      @change="isOpen = !isOpen"
+    />
+    <label :for="uuid" class="accordion__label"
+      ><BaseIcon v-if="isOpen" name="plus-circle"></BaseIcon>
+      <BaseIcon v-else name="minus-circle"></BaseIcon>
+      <slot name="title">Title</slot></label
     >
-      <slot name="content"></slot>
+    <div class="accordion__collapsible-content">
+      <div class="accordion__content-inner">
+        <slot name="content"></slot>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import UniqueID from "@/composables/uuid.js";
+import { ref } from "vue";
+
 export default {
   name: "BaseAccordion",
-  data() {
-    return {
-      isOpen: false,
-    };
+  props: {
+    height: {
+      type: String,
+      default: "100vh",
+    },
+  },
+  setup() {
+    const uuid = UniqueID();
+    const isOpen = ref(true);
+
+    return { uuid, isOpen };
   },
 };
 </script>
 
 <style lang="scss">
 .accordion {
+  &__checkbox {
+    display: none;
+  }
   &__label {
-    border: none;
+    user-select: none;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 0.5em;
     cursor: pointer;
-
-    min-height: 2em;
-    padding: 0.2em 0.3em;
+    font-weight: bold;
   }
+  &__collapsible-content {
+    max-height: 0px;
+    overflow: hidden;
 
-  &__icon {
-    transition: transform 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    align-self: stretch;
-    &--rotate-180 {
-      transform: rotate(-180deg);
-    }
+    transition: max-height 0.25s ease-in-out;
 
-    &--rotate-0 {
-      transform: rotate(0deg);
+    .accordion__content-inner {
+      margin-top: 2em;
     }
   }
+}
 
-  &__content {
-    padding: 0 0.3em;
-    //transition: transform 0.6s ease-in;
-    min-height: 100%;
-
-    &--closed {
-      transform: translateY(-100%);
-      max-height: 0;
-    }
-
-    .fade-enter-active,
-    .fade-leave-active {
-      transition: all 0.8s;
-    }
-    .fade-enter,
-    .fade-leave-to {
-      transform: translateY(1000px);
-    }
-  }
+.accordion__checkbox:checked
+  + .accordion__label
+  + .accordion__collapsible-content {
+  overflow-y: scroll;
+  max-height: v-bind(height);
 }
 </style>

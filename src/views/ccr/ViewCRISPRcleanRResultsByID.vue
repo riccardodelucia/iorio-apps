@@ -47,26 +47,31 @@
             class="card ccr-results__thumbnails ccr-results__thumbnails--color1"
           >
             <template v-slot:title>Normalization</template>
-            <template v-slot:content
-              ><BaseThumbnail
-                v-for="item in normImages"
-                :key="item.filename"
-                @click="openModal(item, id)"
-                :img="item"
-              ></BaseThumbnail></template
+            <template v-slot:content>
+              <div class="content">
+                <BaseThumbnail
+                  v-for="item in normImages"
+                  :key="item.filename"
+                  @click="openModal(item, id)"
+                  :img="item"
+                ></BaseThumbnail>
+              </div> </template
           ></BaseAccordion>
 
           <BaseAccordion
             class="card ccr-results__thumbnails ccr-results__thumbnails--color2"
+            height="42rem"
           >
             <template v-slot:title>Chromosome Charts</template>
             <template v-slot:content>
-              <BaseThumbnail
-                v-for="item in chrImages"
-                :key="item.filename"
-                @click="openModal(item, id)"
-                :img="item"
-              ></BaseThumbnail></template
+              <div class="content">
+                <BaseThumbnail
+                  v-for="item in chrImages"
+                  :key="item.filename"
+                  @click="openModal(item, id)"
+                  :img="item"
+                ></BaseThumbnail>
+              </div> </template
           ></BaseAccordion>
 
           <BaseAccordion
@@ -74,12 +79,14 @@
           >
             <template v-slot:title>QC Assessment</template>
             <template v-slot:content>
-              <BaseThumbnail
-                v-for="item in qcImages"
-                :key="item.filename"
-                @click="openModal(item, id)"
-                :img="item"
-              ></BaseThumbnail></template
+              <div class="content">
+                <BaseThumbnail
+                  v-for="item in qcImages"
+                  :key="item.filename"
+                  @click="openModal(item, id)"
+                  :img="item"
+                ></BaseThumbnail>
+              </div> </template
           ></BaseAccordion>
         </div>
       </template>
@@ -248,10 +255,11 @@ export default {
       background-color: rgb(163, 210, 253);
     }
 
-    div {
+    .content {
       display: grid;
-      grid-gap: 2rem;
-      grid-template-columns: repeat(auto-fit, 32rem);
+      justify-items: left;
+      gap: 1em;
+      grid-template-columns: repeat(auto-fit, minmax(min-content, 32rem));
     }
   }
 }
