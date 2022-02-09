@@ -1,5 +1,5 @@
 <template>
-  <header class="header header--web">
+  <header class="header">
     <div class="content">
       <a
         href="https://humantechnopole.it/en/"
@@ -59,36 +59,34 @@ export default {
 
 <style lang="scss">
 .header {
-  &--web {
-    //height: 8rem;
+  //height: 8rem;
 
-    grid-column: 1 / -1;
+  //grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  background-image: linear-gradient(
+    to right,
+    var(--color-gradient-blue-0) 0%,
+    var(--color-gradient-blue-100) 5%,
+    var(--color-gradient-green-0) 95%,
+    var(--color-gradient-green-100) 100%
+  );
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  .content {
+    flex: 1 1 150rem;
+    padding: 1em 2em;
+
+    grid-column: 2/ -2;
     display: flex;
-    justify-content: center;
-    background-image: linear-gradient(
-      to right,
-      var(--color-gradient-blue-0) 0%,
-      var(--color-gradient-blue-100) 5%,
-      var(--color-gradient-green-0) 95%,
-      var(--color-gradient-green-100) 100%
-    );
-    background-size: cover;
-    background-repeat: no-repeat;
-
-    .content {
-      flex: 0 1 150rem;
-      padding: 1em 2em;
-
-      grid-column: 2/ -2;
+    gap: 2rem;
+    flex-wrap: wrap;
+    nav {
       display: flex;
-      gap: 2rem;
-      flex-wrap: wrap;
-      nav {
-        display: flex;
-        align-items: center;
-        gap: 2em;
-        margin-left: auto;
-      }
+      align-items: center;
+      gap: 2em;
+      margin-left: auto;
     }
   }
 

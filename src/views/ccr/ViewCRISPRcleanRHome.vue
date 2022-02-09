@@ -1,5 +1,5 @@
 <template>
-  <BaseLayoutWebpage>
+  <BaseLayoutApp>
     <!-- <div class="ccr-background ccr-background--dna"></div> -->
     <div class="ccr-hero">
       <img
@@ -319,7 +319,7 @@
         </template>
       </BaseAccordion>
     </section>
-  </BaseLayoutWebpage>
+  </BaseLayoutApp>
 </template>
 
 <script>
