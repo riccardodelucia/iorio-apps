@@ -2,164 +2,102 @@
   <BaseLayoutApp>
     <div class="layout-ccr">
       <h2 class="u-margin-bottom-small">Results</h2>
-      <div class="ccr-results">
-        <div
-          v-if="result.status === 'success'"
-          class="card ccr-results__downloads"
-        >
-          <h3 class="u-margin-bottom-small">Downloads</h3>
-          <div>
-            <button
-              v-for="(file, index) in fileList"
-              :key="index"
-              @click="onClick(file, id)"
-              class="button button--primary button--small"
-              type="button"
-            >
-              {{ file }}&nbsp;<span><BaseIcon name="download" /></span>
-            </button>
-          </div>
-        </div>
-        <div class="card ccr-results__genes-signatures">
-          <h3 class="u-margin-bottom-small">Genes Signatures</h3>
-          <GeneSignatures :data="genesSignatures"> </GeneSignatures>
-        </div>
-        <div class="card ccr-results__details">
-          <h3 class="u-margin-bottom-small">Details</h3>
-          <ul>
-            <li><b>Title: </b>{{ result.title }}</li>
-            <li><b>Date: </b>{{ result.dateTime }}</li>
-            <li><b>Status: </b>{{ result.status }}</li>
-            <li><b>Input counts file: </b>{{ result.fileCountsName }}</li>
-            <li><b>Library: </b>{{ result.library }}</li>
-            <li><b>Number of controls: </b>{{ result.nControls }}</li>
-            <li>
-              <b>Minimal number of reads in the control sample: </b
-              >{{ result.normMinReads }}
-            </li>
-            <li><b>Normalization Method: </b>{{ result.method }}</li>
-            <li v-if="result.notes"><b>Notes: </b>{{ result.notes }}</li>
-          </ul>
-        </div>
-        <BaseAccordion
-          class="card ccr-results__thumbnails ccr-results__thumbnails--color1"
-        >
-          <template v-slot:title>Normalization</template>
-          <template v-slot:content
-            ><BaseThumbnail
-              v-for="item in normImages"
-              :key="item.filename"
-              @click="openModal(item, id)"
-              :img="item"
-            ></BaseThumbnail></template
-        ></BaseAccordion>
-        <BaseAccordion
-          class="card ccr-results__thumbnails ccr-results__thumbnails--color2"
-        >
-          <template v-slot:title>Chromosome Charts</template>
-          <template v-slot:content>
-            <BaseThumbnail
-              v-for="item in chrImages"
-              :key="item.filename"
-              @click="openModal(item, id)"
-              :img="item"
-            ></BaseThumbnail></template
-        ></BaseAccordion>
-        <BaseAccordion
-          class="card ccr-results__thumbnails ccr-results__thumbnails--color3"
-        >
-          <template v-slot:title>QC Assessment</template>
-          <template v-slot:content>
-            <BaseThumbnail
-              v-for="item in qcImages"
-              :key="item.filename"
-              @click="openModal(item, id)"
-              :img="item"
-            ></BaseThumbnail></template
-        ></BaseAccordion>
-        <!--  <div
-          class="card ccr-results__thumbnails ccr-results__thumbnails--color1"
-        >
-          <h3 class="u-margin-bottom-small">Main Charts</h3>
-          <div>
-            <BaseThumbnail
-              v-for="item in normImages"
-              :key="item.filename"
-              @click="openModal(item, id)"
-              :img="item"
-            ></BaseThumbnail>
-            <BaseThumbnail
-              v-for="item in qcImages"
-              :key="item.filename"
-              @click="openModal(item, id)"
-              :img="item"
-            ></BaseThumbnail>
-          </div>
-        </div> -->
-        <!--         <div
-          class="card ccr-results__thumbnails ccr-results__thumbnails--color2"
-        >
-          <h3 class="u-margin-bottom-small">Chromosome Charts</h3>
-          <div>
-            <BaseThumbnail
-              v-for="item in chrImages"
-              :key="item.filename"
-              @click="openModal(item, id)"
-              :img="item"
-            ></BaseThumbnail>
-          </div>
-        </div> -->
-      </div>
 
       <template v-if="result.status === 'success'">
-        <!-- <div class="downloads-container u-margin-top-small">
-          <button
-            v-for="(file, index) in fileList"
-            :key="index"
-            @click="onClick(file, id)"
-            class="button button--primary button--small"
-            type="button"
+        <div class="ccr-results">
+          <div class="card ccr-results__downloads">
+            <h3 class="u-margin-bottom-small">Downloads</h3>
+            <div>
+              <button
+                v-for="(file, index) in fileList"
+                :key="index"
+                @click="onClick(file, id)"
+                class="button button--primary button--small"
+                type="button"
+              >
+                {{ file }}&nbsp;<span><BaseIcon name="download" /></span>
+              </button>
+            </div>
+          </div>
+
+          <div class="card ccr-results__genes-signatures">
+            <h3 class="u-margin-bottom-small">Genes Signatures</h3>
+            <GeneSignatures :data="genesSignatures"> </GeneSignatures>
+          </div>
+
+          <div class="card ccr-results__details">
+            <h3 class="u-margin-bottom-small">Details</h3>
+            <ul>
+              <li><b>Title: </b>{{ result.title }}</li>
+              <li><b>Date: </b>{{ result.dateTime }}</li>
+              <li><b>Status: </b>{{ result.status }}</li>
+              <li><b>Input counts file: </b>{{ result.fileCountsName }}</li>
+              <li><b>Library: </b>{{ result.library }}</li>
+              <li><b>Number of controls: </b>{{ result.nControls }}</li>
+              <li>
+                <b>Minimal number of reads in the control sample: </b
+                >{{ result.normMinReads }}
+              </li>
+              <li><b>Normalization Method: </b>{{ result.method }}</li>
+              <li v-if="result.notes"><b>Notes: </b>{{ result.notes }}</li>
+            </ul>
+          </div>
+
+          <BaseAccordion
+            class="card ccr-results__thumbnails ccr-results__thumbnails--color1"
           >
-            {{ file }}&nbsp;<span><BaseIcon name="download" /></span>
-          </button>
-        </div> -->
-        <!--         <h3 class="u-margin-bottom-small">Genes Signatures</h3>
-        <GeneSignatures :data="genesSignatures"> </GeneSignatures> -->
+            <template v-slot:title>Normalization</template>
+            <template v-slot:content
+              ><BaseThumbnail
+                v-for="item in normImages"
+                :key="item.filename"
+                @click="openModal(item, id)"
+                :img="item"
+              ></BaseThumbnail></template
+          ></BaseAccordion>
 
-        <!--         <h3 class="u-margin-bottom-small">Cleaned chromosomes</h3>
-        <div class="ccr-results__thumbnails">
-          <BaseThumbnail
-            v-for="item in chrImages"
-            :key="item.filename"
-            @click="openModal(item, id)"
-            :img="item"
-          ></BaseThumbnail>
-        </div> -->
+          <BaseAccordion
+            class="card ccr-results__thumbnails ccr-results__thumbnails--color2"
+          >
+            <template v-slot:title>Chromosome Charts</template>
+            <template v-slot:content>
+              <BaseThumbnail
+                v-for="item in chrImages"
+                :key="item.filename"
+                @click="openModal(item, id)"
+                :img="item"
+              ></BaseThumbnail></template
+          ></BaseAccordion>
 
-        <!--         <h3 class="u-margin-bottom-small">QC assessment</h3>
-        <div class="ccr-results__thumbnails">
-          <BaseThumbnail
-            v-for="item in qcImages"
-            :key="item.filename"
-            @click="openModal(item, id)"
-            :img="item"
-          ></BaseThumbnail>
-        </div> -->
-        <BaseModal v-if="modalState != 'closed'" @modal-close="closeModal">
-          <template v-slot:header>{{ image.label }} </template>
-          <template v-slot:body>
-            <component
-              v-if="modalState === 'opened'"
-              :is="image.component"
-              :data="data"
-            />
-            <div v-else-if="modalState === 'loading'">Loading...</div>
-          </template>
-        </BaseModal>
+          <BaseAccordion
+            class="card ccr-results__thumbnails ccr-results__thumbnails--color3"
+          >
+            <template v-slot:title>QC Assessment</template>
+            <template v-slot:content>
+              <BaseThumbnail
+                v-for="item in qcImages"
+                :key="item.filename"
+                @click="openModal(item, id)"
+                :img="item"
+              ></BaseThumbnail></template
+          ></BaseAccordion>
+        </div>
       </template>
-      <!--  <p v-else>
+      <p class="ccr-results__msg" v-else>
         Further content will appear here upon successful job completion...
-      </p> -->
+      </p>
+
+      <BaseModal v-if="modalState != 'closed'" @modal-close="closeModal">
+        <template v-slot:header>{{ image.label }} </template>
+        <template v-slot:body>
+          <component
+            v-if="modalState === 'opened'"
+            :is="image.component"
+            :data="data"
+          />
+          <div v-else-if="modalState === 'loading'">Loading...</div>
+        </template>
+      </BaseModal>
     </div>
   </BaseLayoutApp>
 </template>
