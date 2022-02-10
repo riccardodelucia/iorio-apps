@@ -1,9 +1,9 @@
 <template>
-  <div v-if="collapsible" class="controller">
-    <div class="menu" @click="showSideNav = true">
-      <div class="menu__item"></div>
-      <div class="menu__item"></div>
-      <div class="menu__item"></div>
+  <div v-if="collapsible" class="sidenav-controller">
+    <div class="sidenav-controller__menu" @click="showSideNav = true">
+      <div></div>
+      <div></div>
+      <div></div>
     </div>
   </div>
 
@@ -58,23 +58,23 @@ export default {
 </script>
 
 <style lang="scss">
-.controller {
+.sidenav-controller {
   width: 8rem;
   background-color: var(--color-blue);
   color: white;
   padding: 1.5em 1em;
-}
 
-.menu {
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  gap: 1.3rem;
-  justify-content: space-between;
+  &__menu {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 1.3rem;
+    justify-content: space-between;
 
-  &__item {
-    height: 2px;
-    background-color: white;
+    div {
+      height: 2px;
+      background-color: white;
+    }
   }
 }
 
