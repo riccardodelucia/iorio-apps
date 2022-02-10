@@ -28,7 +28,7 @@ export default {
   props: {
     height: {
       type: String,
-      default: "100vh",
+      default: "min-content",
     },
   },
   setup() {
@@ -56,12 +56,9 @@ export default {
   &__collapsible-content {
     max-height: 0px;
     overflow: hidden;
+    margin-top: 3rem;
 
     transition: max-height 0.25s ease-in-out;
-
-    .accordion__content-inner {
-      margin-top: 2em;
-    }
   }
 }
 

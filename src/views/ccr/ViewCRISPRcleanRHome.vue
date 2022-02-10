@@ -97,8 +97,7 @@
       </ul>
     </div>
   </section>
-  <!--   <section class="ccr-section section-howitworks">
-    <img src="@/assets/img/excel.png" alt="excel sheet" />
+  <section class="ccr-section section-howitworks">
     <h2>How it works ⚙️</h2>
     <div class="section-howitworks__text">
       <p>
@@ -125,6 +124,7 @@
         guide RNAs included in the selected library will be considered.
       </p>
     </div>
+    <img src="@/assets/img/excel.png" alt="excel sheet" />
     <p class="section-howitworks__example">
       See, for example, the format of the
       <b>downloadable dataset</b> example input data at the top of this page.
@@ -142,11 +142,9 @@
       <template v-slot:title>Step 1️⃣ : submit your job</template>
       <template v-slot:content>
         <div class="text-small">
-          <div class="u-margin-bottom-small">
-            <video controls width="1200">
-              <source src="@/assets/videos/submission.mp4" type="video/mp4" />
-            </video>
-          </div>
+          <video controls class="ccr-section__video">
+            <source src="@/assets/videos/submission.mp4" type="video/mp4" />
+          </video>
           <p>
             CRISPRcleanR Web App allows you to submit your counts file in
             <b>.csv</b> and <b>.tsv</b> formats. Each new submission creates a
@@ -210,11 +208,9 @@
       >
       <template v-slot:content>
         <div class="text-small">
-          <div class="u-margin-bottom-small">
-            <video controls width="1200">
-              <source src="@/assets/videos/results.mp4" type="video/mp4" />
-            </video>
-          </div>
+          <video controls class="ccr-section__video">
+            <source src="@/assets/videos/results.mp4" type="video/mp4" />
+          </video>
           <p>
             Click on the <b>Results</b> navigation button on the left nav to
             access all your personal successfully computed and pending results.
@@ -238,11 +234,9 @@
       >
       <template v-slot:content>
         <div class="text-small">
-          <div class="u-margin-bottom-small">
-            <video controls width="1200">
-              <source src="@/assets/videos/result_by_id.mp4" type="video/mp4" />
-            </video>
-          </div>
+          <video controls class="ccr-section__video">
+            <source src="@/assets/videos/result_by_id.mp4" type="video/mp4" />
+          </video>
           <p>
             Click on the <b>eye icon</b> on the results list to access its
             details on a <b>dedicated page</b>.
@@ -266,8 +260,8 @@
         </div>
       </template>
     </BaseAccordion>
-  </section> -->
-  <!--   <section class="ccr-section section-charts u-margin-bottom-huge">
+  </section>
+  <section class="ccr-section section-charts">
     <h2>Interactive Charts 📊</h2>
     <p>
       By <b>clicking</b> on each <b>image thumbnail</b> on the job results page
@@ -275,11 +269,11 @@
       version of it. Depending on which image component your mouse pointer will
       move over, a tooltip will reveal different data/results’ details.
     </p>
-    <BaseAccordion class="u-margin-bottom-small">
+    <BaseAccordion>
       <template v-slot:title>Chart example</template>
       <template v-slot:content>
         <div class="text-small">
-          <p class="u-margin-bottom-medium">
+          <p>
             Each chart comes with its own sets of <b>controls</b>. For instance,
             you can find <b>sliders</b> and <b>checkboxes</b> to control major
             layout settings. Many charts come with a <b>minified graph</b> or
@@ -287,23 +281,18 @@
             chart. Within the context/ mingraph, click outside of the selected
             area to reset to full view.
           </p>
-          <div class="u-margin-bottom-medium">
-            <video controls width="1200">
-              <source
-                src="@/assets/videos/boxplot_chart.mp4"
-                type="video/mp4"
-              />
-            </video>
-          </div>
-          <div class="u-margin-bottom-medium">
-            <video controls width="1200">
-              <source src="@/assets/videos/chr_chart.mp4" type="video/mp4" />
-            </video>
-          </div>
+
+          <video controls class="ccr-section__video">
+            <source src="@/assets/videos/boxplot_chart.mp4" type="video/mp4" />
+          </video>
+
+          <video controls class="ccr-section__video">
+            <source src="@/assets/videos/chr_chart.mp4" type="video/mp4" />
+          </video>
         </div>
       </template>
     </BaseAccordion>
-  </section> -->
+  </section>
 </template>
 
 <script>
@@ -414,6 +403,12 @@ export default {
   padding: 4rem 0;
   row-gap: 3rem;
   column-gap: 4rem;
+
+  &__video {
+    width: 100%;
+    max-width: 1200px;
+    margin-bottom: 2em;
+  }
 }
 
 .section-cards {
@@ -523,21 +518,31 @@ export default {
   h2 {
     grid-row: 1 / 2;
     grid-column: 2 / 3;
+    @media only screen and (max-width: 700px) {
+      grid-column: 1 / -1;
+    }
   }
 
   img {
     width: 100%;
     grid-row: 1 / -1;
     grid-column: 1 / 2;
+    @media only screen and (max-width: 700px) {
+      grid-column: 1 / -1;
+      grid-row: 3 / 4;
+    }
   }
 
   &__text {
     grid-row: 2 / 3;
     grid-column: 2 / 3;
+    @media only screen and (max-width: 700px) {
+      grid-column: 1 / -1;
+    }
   }
 
   &__example {
-    grid-row: 3 / 4;
+    grid-row: 4 / 5;
     grid-column: 1 / -1;
   }
 
@@ -547,6 +552,9 @@ export default {
 }
 
 .section-charts {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+  margin-bottom: 5em;
 }
 </style>
