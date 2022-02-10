@@ -85,10 +85,11 @@ export default {
 
     gap: 2rem;
     flex-wrap: wrap;
+
     nav {
       display: flex;
       align-items: center;
-      gap: 2em;
+      gap: 1em;
       margin-left: auto;
     }
 

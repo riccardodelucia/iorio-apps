@@ -85,19 +85,42 @@ body {
     grid-template-columns:
       max-content minmax(5rem, 1fr) repeat(8, minmax(min-content, 15rem))
       repeat(2, minmax(5rem, 1fr));
+
     grid-template-rows: min-content 1fr;
+
+    @media all and (max-width: 600px) {
+      grid-template-rows: repeat(2, min-content) 1fr;
+    }
+
     .header {
       grid-row: 1 / 2;
       grid-column: 2 / -1;
+
+      @media only screen and (max-width: 600px) {
+        grid-row: 2 / 3;
+        grid-column: 1 / -1;
+      }
     }
+
     .sidenav-controller,
     .sidenav {
       grid-row: 1 / -1;
       grid-column: 1 / 2;
     }
+    .sidenav-controller {
+      @media only screen and (max-width: 600px) {
+        grid-row: 1 / 2;
+        grid-column: 1 / -1;
+      }
+    }
     .content {
       grid-column: 2 / -1;
       grid-row: 2 / -1;
+
+      @media only screen and (max-width: 600px) {
+        grid-row: 3 / 4;
+        grid-column: 1 / -1;
+      }
     }
   }
 

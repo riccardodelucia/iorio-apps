@@ -1,9 +1,7 @@
 <template>
   <div v-if="collapsible" class="sidenav-controller">
     <div class="sidenav-controller__menu" @click="showSideNav = true">
-      <div></div>
-      <div></div>
-      <div></div>
+      <div class="menu__item"></div>
     </div>
   </div>
 
@@ -38,7 +36,10 @@ import apps from "@/sidenav_apps.json";
 export default {
   name: "TheSidenav",
   created() {
-    this.collapsible = window.innerWidth < 1000;
+    window.addEventListener(
+      "resize",
+      () => (this.collapsible = window.innerWidth < 1000)
+    );
   },
   computed: {
     app() {
@@ -59,21 +60,41 @@ export default {
 
 <style lang="scss">
 .sidenav-controller {
-  width: 8rem;
   background-color: var(--color-blue);
   color: white;
-  padding: 1.5em 1em;
 
   &__menu {
     cursor: pointer;
+    width: 4rem;
+    height: 3rem;
     display: flex;
     flex-direction: column;
-    gap: 1.3rem;
-    justify-content: space-between;
+    justify-content: center;
+    margin: 2em 1em 0 1em;
 
-    div {
+    @media only screen and (max-width: 600px) {
+      margin: 0.5em 0 0.5em 2em;
+    }
+
+    .menu__item {
       height: 2px;
       background-color: white;
+
+      &:before,
+      &:after {
+        content: "";
+        display: block;
+        height: 2px;
+      }
+
+      &:before {
+        background-color: white;
+        transform: translateY(-1.2rem);
+      }
+      &:after {
+        background-color: white;
+        transform: translateY(1rem);
+      }
     }
   }
 }
