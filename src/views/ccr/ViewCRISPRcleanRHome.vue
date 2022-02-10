@@ -1,5 +1,4 @@
 <template>
-  <!-- <div class="ccr-background ccr-background--dna"></div> -->
   <div class="ccr-hero">
     <img
       class="ccr-hero__logo"
@@ -78,6 +77,8 @@
       and related results are <b>protected</b> and accessible to
       <b>you only</b>.
     </p>
+    <img src="@/assets/img/login.png" alt="login form" />
+
     <div class="disclaimer">
       <p>
         <b style="color: red">Disclaimer:</b><br />
@@ -95,10 +96,8 @@
         <li><mark>test3@test.com | pwd: 1234</mark></li>
       </ul>
     </div>
-
-    <img src="@/assets/img/login.png" alt="login form" />
   </section>
-  <section class="ccr-section section-howitworks">
+  <!--   <section class="ccr-section section-howitworks">
     <img src="@/assets/img/excel.png" alt="excel sheet" />
     <h2>How it works ⚙️</h2>
     <div class="section-howitworks__text">
@@ -267,8 +266,8 @@
         </div>
       </template>
     </BaseAccordion>
-  </section>
-  <section class="ccr-section section-charts u-margin-bottom-huge">
+  </section> -->
+  <!--   <section class="ccr-section section-charts u-margin-bottom-huge">
     <h2>Interactive Charts 📊</h2>
     <p>
       By <b>clicking</b> on each <b>image thumbnail</b> on the job results page
@@ -304,7 +303,7 @@
         </div>
       </template>
     </BaseAccordion>
-  </section>
+  </section> -->
 </template>
 
 <script>
@@ -329,10 +328,8 @@ export default {
 <style lang="scss" scoped>
 .ccr-hero {
   color: #fff;
-  padding: 5rem 4rem;
+  padding: 5rem 0;
   grid-column: 1 / -1;
-
-  grid-template-columns: minmax(6rem, 1fr) repeat(2, 1fr);
 
   background-image: linear-gradient(
       to right bottom,
@@ -354,49 +351,68 @@ export default {
     filter: brightness(0) invert(1);
     grid-column: 2 / 5;
     grid-row: 1/-1;
+    @media only screen and (max-width: 700px) {
+      grid-column: 2 / 5;
+      grid-row: 1 / 2;
+    }
+    @media only screen and (max-width: 500px) {
+      grid-column: 2 / -2;
+      height: 20rem;
+      justify-self: center;
+    }
   }
 
   &__title {
     color: #fff;
     grid-column: 5 / 10;
-    grid-row: 1 / 2;
     font-size: 6rem;
     line-height: 1;
+
+    @media only screen and (max-width: 700px) {
+      grid-column: 5 / -2;
+      font-size: 4rem;
+    }
+    @media only screen and (max-width: 500px) {
+      grid-column: 2 / -2;
+    }
   }
 
   &__text {
     grid-column: 5 / 10;
-    grid-row: 2 / 3;
     line-height: 2.5;
-    @media only screen and (max-width: 500px) {
-      grid-column: 1 / -1;
-      grid-row: 3/ 4;
+    @media only screen and (max-width: 700px) {
+      grid-column: 2 / -2;
     }
   }
 
   &__btn {
     &--start {
       grid-column: 5 / 7;
-      grid-row: 3/ 4;
 
+      @media only screen and (max-width: 700px) {
+        grid-column: 2 / 7;
+      }
       @media only screen and (max-width: 500px) {
-        grid-column: 1 / -1;
-        grid-row: 4/ 5;
+        grid-column: 2 / -2;
       }
     }
     &--download {
       grid-column: 7 / 9;
-      grid-row: 3/ 4;
+
+      @media only screen and (max-width: 700px) {
+        grid-column: 7 / -2;
+      }
+      @media only screen and (max-width: 500px) {
+        grid-column: 2 / -2;
+      }
     }
   }
 }
 
 .ccr-section {
   grid-column: 2 / -2;
-  margin-top: 8rem;
-  padding-left: 2em;
-  padding-right: 2em;
-  row-gap: 5rem;
+  padding: 4rem 0;
+  row-gap: 3rem;
   column-gap: 4rem;
 }
 
@@ -407,7 +423,6 @@ export default {
   justify-items: center;
 
   .card-step {
-    //text-align: center;
     width: 30rem;
 
     box-shadow: var(--shadow-1);
@@ -458,13 +473,17 @@ export default {
   grid-template-rows: min-content 1fr min-content;
 
   h2 {
-    grid-row: 1 / 2;
     grid-column: 1 / 2;
+    @media only screen and (max-width: 700px) {
+      grid-column: 1 / -1;
+    }
   }
 
   p {
-    grid-row: 2 / 3;
     grid-column: 1 / 2;
+    @media only screen and (max-width: 700px) {
+      grid-column: 1 / -1;
+    }
   }
 
   img {
@@ -473,16 +492,21 @@ export default {
     grid-row: 1 / -1;
     grid-column: 2 / 3;
     box-shadow: var(--shadow-1);
+    @media only screen and (max-width: 700px) {
+      grid-column: 1 / -1;
+      grid-row: -2 / -1;
+    }
   }
 
   .disclaimer {
-    grid-row: 3 / 4;
     grid-column: 1 / 2;
     align-self: end;
     font-size: 1.3rem;
+    @media only screen and (max-width: 900px) {
+      grid-column: 1 / -1;
+    }
     p {
       line-height: 1.5;
-      margin-bottom: 1em;
     }
 
     li {

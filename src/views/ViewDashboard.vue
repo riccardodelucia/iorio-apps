@@ -85,7 +85,7 @@ export default {
 <style lang="scss">
 .dashboard {
   grid-column: 2 / -2;
-  padding: 1em 3em;
+  padding: 1em 0;
 
   h2 {
     text-align: center;
