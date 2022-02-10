@@ -32,27 +32,33 @@
 
 <script>
 import apps from "@/sidenav_apps.json";
+import { ref, computed, onMounted, onUnmounted } from "vue";
+import { useRoute } from "vue-router";
 
 export default {
   name: "TheSidenav",
-  created() {
-    window.addEventListener(
-      "resize",
-      () => (this.collapsible = window.innerWidth < 1000)
-    );
-  },
-  computed: {
-    app() {
-      const key = Object.keys(apps).find((key) =>
-        this.$route.path.includes(key)
-      );
+  setup() {
+    const route = useRoute();
+    const collapsible = ref(false);
+    const showSideNav = ref(false);
+    const sizeListener = () => (collapsible.value = window.innerWidth < 1000);
+
+    onMounted(() => {
+      window.addEventListener("resize", sizeListener);
+    });
+    onUnmounted(() => {
+      window.removeEventListener("resize", sizeListener);
+    });
+
+    const app = computed(() => {
+      const key = Object.keys(apps).find((key) => route.path.includes(key));
       return !key ? {} : { title: apps[key].title, links: apps[key].links };
-    },
-  },
-  data() {
+    });
+
     return {
-      collapsible: true,
-      showSideNav: false,
+      collapsible,
+      showSideNav,
+      app,
     };
   },
 };

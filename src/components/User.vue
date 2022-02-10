@@ -34,12 +34,6 @@ export default {
       () => (this.useIcon = window.innerWidth < 500)
     );
   },
-  unmounted() {
-    window.removeEventListener(
-      "resize",
-      () => (this.useIcon = window.innerWidth < 500)
-    );
-  },
   data() {
     return {
       open: false,
