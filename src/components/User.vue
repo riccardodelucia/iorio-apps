@@ -12,42 +12,54 @@
 </template>
 
 <script>
+import { ref, computed, onMounted, onUnmounted, inject } from "vue";
+import { useStore } from "vuex";
+
 export default {
   name: "User",
-  inject: ["keycloak"],
-  computed: {
-    user() {
+  setup() {
+    const store = useStore();
+    const keycloak = inject("keycloak");
+    const open = ref(false);
+    const logoutRedirectUri = `${window.location.protocol}//${window.location.host}/`;
+    const useIcon = ref(false);
+
+    const sizeListener = () => (useIcon.value = window.innerWidth < 500);
+
+    onMounted(() => {
+      window.addEventListener("resize", sizeListener);
+    });
+    onUnmounted(() => {
+      window.removeEventListener("resize", sizeListener);
+    });
+
+    const onClickOutside = () => {
+      open.value = false;
+    };
+    const logout = () => {
+      keycloak.logout({ redirectUri: logoutRedirectUri });
+    };
+
+    const user = computed(() => {
       const maxLength = 20;
       const name =
-        this.$store.state.user.user?.firstName ||
-        this.$store.state.user.user?.username ||
+        store.state.user.user?.firstName ||
+        store.state.user.user?.username ||
         "user";
 
       return name.length > maxLength
         ? name.substring(0, maxLength - 3).concat("...")
         : name;
-    },
-  },
-  created() {
-    window.addEventListener(
-      "resize",
-      () => (this.useIcon = window.innerWidth < 500)
-    );
-  },
-  data() {
+    });
+
     return {
-      open: false,
-      logoutRedirectUri: `${window.location.protocol}//${window.location.host}/`,
-      useIcon: false,
+      open,
+      logoutRedirectUri,
+      useIcon,
+      onClickOutside,
+      logout,
+      user,
     };
-  },
-  methods: {
-    onClickOutside() {
-      this.open = false;
-    },
-    logout() {
-      this.keycloak.logout({ redirectUri: this.logoutRedirectUri });
-    },
   },
 };
 </script>
