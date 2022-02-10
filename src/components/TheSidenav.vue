@@ -1,5 +1,19 @@
 <template>
-  <nav class="sidenav" :class="{ 'sidenav--active': modelValue }">
+  <div v-if="collapsible" class="controller">
+    <div class="menu" @click="showSideNav = true">
+      <div class="menu__item"></div>
+      <div class="menu__item"></div>
+      <div class="menu__item"></div>
+    </div>
+  </div>
+
+  <nav
+    class="sidenav"
+    :class="{
+      'sidenav--collapsible': collapsible,
+      'sidenav--active': showSideNav,
+    }"
+  >
     <div class="sidenav__title">{{ app.title }}</div>
     <ul class="sidenav__list">
       <li
@@ -12,10 +26,7 @@
         <span class="sidenav__label">{{ link.label }}</span>
       </li>
     </ul>
-    <div
-      class="sidenav__close"
-      @click="$emit('update:modelValue', !modelValue)"
-    >
+    <div v-if="collapsible" class="sidenav__close" @click="showSideNav = false">
       <span>hide</span><BaseIcon name="chevrons-left"></BaseIcon>
     </div>
   </nav>
@@ -26,11 +37,8 @@ import apps from "@/sidenav_apps.json";
 
 export default {
   name: "TheSidenav",
-  props: {
-    modelValue: {
-      type: Boolean,
-      default: false,
-    },
+  created() {
+    this.collapsible = window.innerWidth < 1000;
   },
   computed: {
     app() {
@@ -40,10 +48,36 @@ export default {
       return !key ? {} : { title: apps[key].title, links: apps[key].links };
     },
   },
+  data() {
+    return {
+      collapsible: true,
+      showSideNav: false,
+    };
+  },
 };
 </script>
 
 <style lang="scss">
+.controller {
+  width: 8rem;
+  background-color: var(--color-blue);
+  color: white;
+  padding: 1.5em 1em;
+}
+
+.menu {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+  justify-content: space-between;
+
+  &__item {
+    height: 2px;
+    background-color: white;
+  }
+}
+
 .sidenav {
   width: 20rem;
   background-color: var(--color-blue);
@@ -51,13 +85,17 @@ export default {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  z-index: 100;
-  transform: translateX(-20rem);
-  transition: transform 0.2s ease-out;
+
   padding: 1em 0;
+
+  &--collapsible {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: 100;
+    transform: translateX(-20rem);
+    transition: transform 0.2s ease-out;
+  }
 
   &--active {
     transform: none;
