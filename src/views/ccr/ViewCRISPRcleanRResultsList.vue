@@ -1,21 +1,19 @@
 <template>
-  <BaseLayoutApp>
-    <div class="layout-ccr">
-      <h2 class="u-margin-bottom-medium">Results</h2>
-      <BaseDatatable :columns="columns" :rows="results">
-        <template v-slot:default="slotProps">
-          <td>{{ slotProps.row.dateTime }}</td>
-          <td>{{ slotProps.row.email }}</td>
-          <td>{{ slotProps.row.title }}</td>
-          <td>
-            <router-link :to="`/ccr/results/${slotProps.row.id}`">
-              <BaseIcon name="eye" />
-            </router-link>
-          </td>
-        </template>
-      </BaseDatatable>
-    </div>
-  </BaseLayoutApp>
+  <div class="layout-ccr">
+    <h2 class="u-margin-bottom-medium">Results</h2>
+    <BaseDatatable :columns="columns" :rows="results">
+      <template v-slot:default="slotProps">
+        <td>{{ slotProps.row.dateTime }}</td>
+        <td>{{ slotProps.row.email }}</td>
+        <td>{{ slotProps.row.title }}</td>
+        <td>
+          <router-link :to="`/ccr/results/${slotProps.row.id}`">
+            <BaseIcon name="eye" />
+          </router-link>
+        </td>
+      </template>
+    </BaseDatatable>
+  </div>
 </template>
 
 <script>

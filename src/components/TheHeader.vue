@@ -1,6 +1,9 @@
 <template>
   <header class="header">
-    <div class="content">
+    <div
+      class="header__content"
+      :class="{ 'header__content--web': layout === 'web' }"
+    >
       <a
         href="https://humantechnopole.it/en/"
         target="_blank"
@@ -44,6 +47,12 @@ export default {
   name: "TheHeader",
   components: { User },
   inject: ["keycloak"],
+  props: {
+    layout: {
+      type: String,
+      default: "app",
+    },
+  },
   data() {
     return {
       currentUri: `${window.location.protocol}//${window.location.host}${this.$route.fullPath}`,
@@ -59,11 +68,6 @@ export default {
 
 <style lang="scss">
 .header {
-  //height: 8rem;
-
-  //grid-column: 1 / -1;
-  display: flex;
-  justify-content: center;
   background-image: linear-gradient(
     to right,
     var(--color-gradient-blue-0) 0%,
@@ -74,12 +78,11 @@ export default {
   background-size: cover;
   background-repeat: no-repeat;
 
-  .content {
-    flex: 1 1 150rem;
+  &__content {
+    justify-content: space-between;
+    display: flex;
     padding: 1em 2em;
 
-    grid-column: 2/ -2;
-    display: flex;
     gap: 2rem;
     flex-wrap: wrap;
     nav {
@@ -87,6 +90,11 @@ export default {
       align-items: center;
       gap: 2em;
       margin-left: auto;
+    }
+
+    &--web {
+      max-width: 150rem;
+      margin: auto;
     }
   }
 

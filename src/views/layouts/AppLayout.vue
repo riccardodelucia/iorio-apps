@@ -1,15 +1,14 @@
 <template>
   <TheSidenav v-model="showSideNav"></TheSidenav>
-  <div class="container" :class="app ? 'container--app' : 'container--web'">
-    <div class="controller" v-if="app">
+  <div class="layout layout--app">
+    <div class="controller">
       <div class="menu" @click="onClick">
         <div class="menu__item"></div>
         <div class="menu__item"></div>
         <div class="menu__item"></div>
       </div>
     </div>
-    <TheHeader></TheHeader>
-
+    <TheHeader layout="app"></TheHeader>
     <div class="content"><slot></slot></div>
   </div>
 </template>
@@ -19,7 +18,7 @@ import TheSidenav from "@/components/TheSidenav";
 import TheHeader from "@/components/TheHeader";
 
 export default {
-  name: "BaseAppLayout",
+  name: "AppLayout",
   components: { TheHeader, TheSidenav },
   methods: {
     onClick() {
@@ -29,7 +28,6 @@ export default {
   data() {
     return {
       showSideNav: false,
-      app: false,
     };
   },
 };
