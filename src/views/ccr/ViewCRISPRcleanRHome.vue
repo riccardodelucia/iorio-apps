@@ -123,9 +123,21 @@
         controls and columns for <b>library</b> trasfected samples. Only single
         guide RNAs included in the selected library will be considered.
       </p>
+      <p>
+        See, for example, the format of the
+        <b>downloadable dataset</b> example input data at the top of this page.
+        This data encompasses single guide RNA counts derived from screening the
+        <b>HT-29</b> cell lines with the <b>KY_Library_v1.0</b> (which should be
+        selected in the job submission form) and it is part of the
+        <a href="https://score.depmap.sanger.ac.uk/ ">Project Score dataset</a>
+        (<a href="https://score.depmap.sanger.ac.uk/">Dwane et al. 2021</a>,
+        <a href="https://www.nature.com/articles/s41586-019-1103-9"
+          >Behan et al. 2019</a
+        >)
+      </p>
     </div>
     <img src="@/assets/img/excel.png" alt="excel sheet" />
-    <p class="section-howitworks__example">
+    <!--  <p class="section-howitworks__example">
       See, for example, the format of the
       <b>downloadable dataset</b> example input data at the top of this page.
       This data encompasses single guide RNA counts derived from screening the
@@ -136,7 +148,7 @@
       <a href="https://www.nature.com/articles/s41586-019-1103-9"
         >Behan et al. 2019</a
       >)
-    </p>
+    </p> -->
 
     <BaseAccordion class="section-howitworks__accordion">
       <template v-slot:title>Step 1️⃣ : submit your job</template>
@@ -541,10 +553,10 @@ export default {
     }
   }
 
-  &__example {
+  /*   &__example {
     grid-row: 4 / 5;
     grid-column: 1 / -1;
-  }
+  } */
 
   &__accordion {
     grid-column: 1 / -1;

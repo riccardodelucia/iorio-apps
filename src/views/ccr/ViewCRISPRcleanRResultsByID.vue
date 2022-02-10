@@ -221,12 +221,20 @@ export default {
 
   &__details {
     grid-column: 1 / 5;
-    grid-row: 1 / 2;
+    //grid-row: 1 / 2;
+    @media only screen and (max-width: 1300px) {
+      grid-column: 1 / -1;
+    }
   }
 
   &__downloads {
     grid-column: 1 / 4;
     grid-row: 2 / 3;
+
+    @media only screen and (max-width: 1300px) {
+      grid-column: 1 / -1;
+      grid-row: 3 / 4;
+    }
 
     div {
       margin-bottom: 1em;
@@ -238,6 +246,11 @@ export default {
   &__genes-signatures {
     grid-column: 5 / 9;
     grid-row: 1 / 3;
+
+    @media only screen and (max-width: 1300px) {
+      grid-column: 1 / -1;
+      grid-row: 1 / 2;
+    }
   }
 
   &__thumbnails {
