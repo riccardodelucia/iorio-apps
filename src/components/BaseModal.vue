@@ -81,10 +81,10 @@ export default {
 
   &__body {
     padding: 1em 2em;
-    min-width: 1000px;
-    min-height: 500px;
-    display: flex;
-    justify-content: center;
+    //min-width: 1000px;
+    //min-height: 500px;
+    //display: flex;
+    //justify-content: center;
   }
 }
 .fade-enter-active,

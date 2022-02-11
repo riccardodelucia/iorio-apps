@@ -22,7 +22,8 @@
         <div class="card ccr-results__genes-signatures">
           <!--           <h3 class="u-margin-bottom-small">Genes Signatures</h3>
  -->
-          <GeneSignatures :data="genesSignatures"> </GeneSignatures>
+          <GenesSignaturesMultichart :data="genesSignatures">
+          </GenesSignaturesMultichart>
         </div>
 
         <div class="card ccr-results__details">
@@ -109,11 +110,10 @@ import CcrAPI from "@/api/ccr.js";
 import fileList from "@/files.json";
 
 import BoxPlotMultichart from "@/components/ccr/charts/boxplot/BoxPlotMultichart.vue";
-//import ComingSoon from "@/components/ComingSoon.vue";
 import ChromosomeMultichart from "@/components/ccr/charts/chromosome/ChromosomeMultichart.vue";
 import LineChartROC from "@/components/ccr/charts/linechart/LineChartROC.vue";
 import LineChartPrRc from "@/components/ccr/charts/linechart/LineChartPrRc.vue";
-import GeneSignatures from "@/components/ccr/charts/genes_signatures/GeneSignatures.vue";
+import GenesSignaturesMultichart from "@/components/ccr/charts/genes_signatures/GenesSignaturesMultichart.vue";
 
 import { download } from "@/composables/download.js";
 
@@ -159,7 +159,7 @@ export default {
     LineChartROC,
     LineChartPrRc,
     //ComingSoon,
-    GeneSignatures,
+    GenesSignaturesMultichart,
   },
   props: {
     id: {
