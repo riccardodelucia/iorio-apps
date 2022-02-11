@@ -1,9 +1,4 @@
 <template>
-  <Tooltip
-    v-show="tooltipShow"
-    :tooltipCoords="tooltipCoords"
-    :data="tooltipData"
-  ></Tooltip>
   <div class="controls-container">
     <BaseToggleSwitch
       v-if="data.raw && data.norm"
@@ -24,9 +19,6 @@
         :width="chartFocusWidth"
         :height="height"
         :yDomain="yDomainFocus"
-        @tooltipMouseover="onMouseOver"
-        @tooltipMousemove="onMouseMove"
-        @tooltipMouseleave="onMouseLeave"
       />
     </g>
     <g :transform="`translate(${chartFocusWidth}, 0)`">
@@ -42,9 +34,6 @@
 
 <script>
 import { dataExtent } from "@/composables/boxplot.js";
-
-import Tooltip from "@/components/ccr/charts/Tooltip.vue";
-import { getTooltip } from "@/composables/chart.js";
 
 import BoxPlotChartFocus from "@/components/ccr/charts/boxplot/BoxPlotChartFocus.vue";
 import BoxPlotChartContext from "@/components/ccr/charts/boxplot/BoxPlotChartContext.vue";
@@ -95,7 +84,7 @@ const setupChart = (data) => {
 
 export default {
   name: "BoxPlotMultichart",
-  components: { BoxPlotChartFocus, BoxPlotChartContext, Tooltip },
+  components: { BoxPlotChartFocus, BoxPlotChartContext },
   props: {
     data: {
       type: Object,
@@ -103,15 +92,6 @@ export default {
     },
   },
   setup(props) {
-    const {
-      onMouseOver,
-      onMouseMove,
-      onMouseLeave,
-      tooltipCoords,
-      tooltipData,
-      tooltipShow,
-    } = getTooltip();
-
     const {
       chartDataUnnormalized,
       chartDataNormalized,
@@ -148,12 +128,6 @@ export default {
       brushed,
       yDomainFocus,
       selectedChartData,
-      onMouseOver,
-      onMouseMove,
-      onMouseLeave,
-      tooltipCoords,
-      tooltipData,
-      tooltipShow,
     };
   },
 };

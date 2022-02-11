@@ -1,7 +1,4 @@
 <template>
-  <!-- Tooltip must be here on the multichart, since child components all render within the svg.
-    We cannot add a div inside an SVG document! -->
-
   <div class="controls-container">
     <BaseCheckbox v-model="selections.segments" label="segments" />
     <BaseCheckbox v-model="selections.guides" label="guides" />

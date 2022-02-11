@@ -60,7 +60,6 @@ export default {
     onMouseOver(event) {
       //Note: creating one tippy for each new element does cause a memory leak in the long run?
       tippy(event.target, { duration: 0 });
-      //this.$emit("tooltip-mouseover", { event, data: point });
     },
     setTooltipContent(data) {
       const msg = Object.entries(data).reduce((acc, [key, value]) => {

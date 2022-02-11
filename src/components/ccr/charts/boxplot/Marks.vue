@@ -1,13 +1,8 @@
 <template>
   <g>
     <g
-      @mouseover="
-        $emit('tooltip-mouseover', { event: $event, data: data.dist })
-      "
-      @mousemove="
-        $emit('tooltip-mousemove', { event: $event, data: data.dist })
-      "
-      @mouseleave="$emit('tooltip-mouseleave')"
+      :data-tippy-content="setTooltipContent(data.dist)"
+      @mouseover="onMouseOver"
     >
       <line
         :x1="bandwidth / 2"
@@ -81,14 +76,15 @@
       :cx="bandwidth / 2 + outlier.xOffset"
       :cy="yScale(outlier.value)"
       class="boxplot__outliers"
-      @mouseover="$emit('tooltip-mouseover', { event: $event, data: outlier })"
-      @mousemove="$emit('tooltip-mousemove', { event: $event, data: outlier })"
-      @mouseleave="$emit('tooltip-mouseleave')"
+      :data-tippy-content="setTooltipContent(outlier)"
+      @mouseover="onMouseOver"
     />
   </g>
 </template>
 
 <script>
+import tippy from "tippy.js";
+
 export default {
   name: "Marks",
   props: {
@@ -109,6 +105,18 @@ export default {
     },
     boxHeight() {
       return this.yScale(this.data.dist.Q1) - this.yScale(this.data.dist.Q3);
+    },
+  },
+  methods: {
+    onMouseOver(event) {
+      //Note: creating one tippy for each new element does cause a memory leak in the long run?
+      tippy(event.target, { duration: 0 });
+    },
+    setTooltipContent(data) {
+      const msg = Object.entries(data).reduce((acc, [key, value]) => {
+        return acc + `${key}: ${value}\n`;
+      }, "");
+      return msg;
     },
   },
 };
