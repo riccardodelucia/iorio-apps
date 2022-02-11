@@ -1,5 +1,17 @@
 <template>
-  <nav class="sidenav">
+  <div v-if="collapsible" class="sidenav-controller">
+    <div class="sidenav-controller__menu" @click="showSideNav = true">
+      <div class="menu__item"></div>
+    </div>
+  </div>
+
+  <nav
+    class="sidenav"
+    :class="{
+      'sidenav--collapsible': collapsible,
+      'sidenav--active': showSideNav,
+    }"
+  >
     <div class="sidenav__title">{{ app.title }}</div>
     <ul class="sidenav__list">
       <li
@@ -12,26 +24,87 @@
         <span class="sidenav__label">{{ link.label }}</span>
       </li>
     </ul>
+    <div v-if="collapsible" class="sidenav__close" @click="showSideNav = false">
+      <span>hide</span><BaseIcon name="chevrons-left"></BaseIcon>
+    </div>
   </nav>
 </template>
 
 <script>
 import apps from "@/sidenav_apps.json";
+import { ref, computed, onMounted, onUnmounted } from "vue";
+import { useRoute } from "vue-router";
 
 export default {
   name: "TheSidenav",
-  computed: {
-    app() {
-      const key = Object.keys(apps).find((key) =>
-        this.$route.path.includes(key)
-      );
+  setup() {
+    const route = useRoute();
+    const collapsible = ref(false);
+    const showSideNav = ref(false);
+    const sizeListener = () => (collapsible.value = window.innerWidth < 1000);
+
+    onMounted(() => {
+      window.addEventListener("resize", sizeListener);
+    });
+    onUnmounted(() => {
+      window.removeEventListener("resize", sizeListener);
+    });
+
+    const app = computed(() => {
+      const key = Object.keys(apps).find((key) => route.path.includes(key));
       return !key ? {} : { title: apps[key].title, links: apps[key].links };
-    },
+    });
+
+    return {
+      collapsible,
+      showSideNav,
+      app,
+    };
   },
 };
 </script>
 
 <style lang="scss">
+.sidenav-controller {
+  background-color: var(--color-blue);
+  color: white;
+
+  &__menu {
+    cursor: pointer;
+    width: 4rem;
+    height: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 2em 1em 0 1em;
+
+    @media only screen and (max-width: 600px) {
+      margin: 0.5em 0 0.5em 2em;
+    }
+
+    .menu__item {
+      height: 2px;
+      background-color: white;
+
+      &:before,
+      &:after {
+        content: "";
+        display: block;
+        height: 2px;
+      }
+
+      &:before {
+        background-color: white;
+        transform: translateY(-1.2rem);
+      }
+      &:after {
+        background-color: white;
+        transform: translateY(1rem);
+      }
+    }
+  }
+}
+
 .sidenav {
   width: 20rem;
   background-color: var(--color-blue);
@@ -40,8 +113,31 @@ export default {
   justify-content: flex-start;
   align-items: center;
 
+  padding: 1em 0;
+
+  &--collapsible {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: 100;
+    transform: translateX(-20rem);
+    transition: transform 0.2s ease-out;
+  }
+
+  &--active {
+    transform: none;
+  }
+
+  &__close {
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    cursor: pointer;
+    font-size: 2.5rem;
+  }
+
   &__title {
-    padding: 0.5em 0.2em;
     font-weight: bold;
     color: white;
   }
@@ -53,10 +149,9 @@ export default {
   &__list {
     font-size: 1.8rem;
     list-style: none;
-    //padding: 0.5em;
-    //margin-top: 2em;
     font-weight: 400;
     align-self: stretch;
+    margin-bottom: auto;
   }
 
   &__item {
@@ -68,7 +163,6 @@ export default {
       display: block;
       width: 100%;
       color: white;
-      //text-transform: uppercase;
       text-decoration: none;
       padding: 1rem 2rem;
     }

@@ -1,9 +1,10 @@
 <template>
   <div tabindex="-1" class="user" v-click-outside="onClickOutside">
-    <div class="user__name" @click="open = !open">
+    <div v-if="!useIcon" class="user__name" @click="open = !open">
       {{ user }}
-      <div></div>
+      <div class="user__arrow"></div>
     </div>
+    <BaseIcon v-else name="user" @click="open = !open"></BaseIcon>
     <div v-show="open" class="user__menu">
       <a href="#" @click="logout">logout</a>
     </div>
@@ -11,35 +12,54 @@
 </template>
 
 <script>
+import { ref, computed, onMounted, onUnmounted, inject } from "vue";
+import { useStore } from "vuex";
+
 export default {
   name: "User",
-  inject: ["keycloak"],
-  computed: {
-    user() {
+  setup() {
+    const store = useStore();
+    const keycloak = inject("keycloak");
+    const open = ref(false);
+    const logoutRedirectUri = `${window.location.protocol}//${window.location.host}/`;
+    const useIcon = ref(false);
+
+    const sizeListener = () => (useIcon.value = window.innerWidth < 500);
+
+    onMounted(() => {
+      window.addEventListener("resize", sizeListener);
+    });
+    onUnmounted(() => {
+      window.removeEventListener("resize", sizeListener);
+    });
+
+    const onClickOutside = () => {
+      open.value = false;
+    };
+    const logout = () => {
+      keycloak.logout({ redirectUri: logoutRedirectUri });
+    };
+
+    const user = computed(() => {
       const maxLength = 20;
       const name =
-        this.$store.state.user.user?.firstName ||
-        this.$store.state.user.user?.username ||
+        store.state.user.user?.firstName ||
+        store.state.user.user?.username ||
         "user";
 
       return name.length > maxLength
         ? name.substring(0, maxLength - 3).concat("...")
         : name;
-    },
-  },
-  data() {
+    });
+
     return {
-      open: false,
-      logoutRedirectUri: `${window.location.protocol}//${window.location.host}/`,
+      open,
+      logoutRedirectUri,
+      useIcon,
+      onClickOutside,
+      logout,
+      user,
     };
-  },
-  methods: {
-    onClickOutside() {
-      this.open = false;
-    },
-    logout() {
-      this.keycloak.logout({ redirectUri: this.logoutRedirectUri });
-    },
   },
 };
 </script>
@@ -56,8 +76,9 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 1em;
-    div {
+    gap: 0.3em;
+
+    .user__arrow {
       width: 0;
       height: 0;
       border: 5px solid transparent;
@@ -70,9 +91,9 @@ export default {
     position: absolute;
     font-weight: normal;
     border: 1px solid var(--color-text-dark-blue);
-    left: 0px;
+    //left: 0px;
     right: 0px;
-    height: 4rem;
+    //height: 4rem;
     background-color: #fff;
     padding: 0.4em 0.8em;
 

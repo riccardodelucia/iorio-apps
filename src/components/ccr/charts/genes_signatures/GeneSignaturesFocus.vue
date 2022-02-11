@@ -97,8 +97,8 @@ export default {
   },
   components: { D3Axis, MarksCurve, Tooltip },
   setup(props) {
-    const width = 500;
-    const height = 500;
+    const width = 700;
+    const height = 900;
 
     const margin = {
       top: 20,

@@ -1,14 +1,12 @@
 <template>
-  <div class="message-page">
-    <BaseMessage :title="title" :message="message" />
-    <button
-      class="button button--primary button--large"
-      type="button"
-      @click="$router.push({ name: 'dashboard' })"
-    >
-      Back to Dashboard
-    </button>
-  </div>
+  <BaseMessage :title="title" :message="message" />
+  <button
+    class="button button--primary button--large"
+    type="button"
+    @click="$router.push({ name: 'dashboard' })"
+  >
+    Back to Dashboard
+  </button>
 </template>
 
 <script>

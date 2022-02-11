@@ -1,17 +1,16 @@
 <template>
-  <BaseLayoutWebpage
-    ><div class="dashboard">
-      <h2 class="heading-secondary u-margin-top-medium">
-        Apps, Tools and Computable Manuscripts
-      </h2>
-      <div class="app-cards__container u-padding-content">
-        <AppsCard
-          v-for="item in tools"
-          :key="item.title"
-          :cardData="item"
-        ></AppsCard>
-      </div></div
-  ></BaseLayoutWebpage>
+  <div class="dashboard">
+    <h2 class="heading-secondary u-margin-top-medium">
+      Apps, Tools and Computable Manuscripts
+    </h2>
+    <div class="app-cards__container u-padding-content">
+      <AppsCard
+        v-for="item in tools"
+        :key="item.title"
+        :cardData="item"
+      ></AppsCard>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -86,7 +85,7 @@ export default {
 <style lang="scss">
 .dashboard {
   grid-column: 2 / -2;
-  padding: 1em 3em;
+  padding: 1em 0;
 
   h2 {
     text-align: center;

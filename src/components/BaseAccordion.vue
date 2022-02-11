@@ -12,9 +12,11 @@
       <slot name="title">Title</slot></label
     >
     <div class="accordion__collapsible-content">
-      <div class="accordion__content-inner">
-        <slot name="content"></slot>
-      </div>
+      <!--       <div class="accordion__content-inner">
+ -->
+      <slot name="content"></slot>
+      <!--       </div>
+ -->
     </div>
   </div>
 </template>
@@ -28,7 +30,7 @@ export default {
   props: {
     height: {
       type: String,
-      default: "100vh",
+      default: "min-content",
     },
   },
   setup() {
@@ -56,12 +58,8 @@ export default {
   &__collapsible-content {
     max-height: 0px;
     overflow: hidden;
-
+    margin-top: 3rem;
     transition: max-height 0.25s ease-in-out;
-
-    .accordion__content-inner {
-      margin-top: 2em;
-    }
   }
 }
 

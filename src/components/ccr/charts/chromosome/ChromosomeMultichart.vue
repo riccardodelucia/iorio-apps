@@ -1,48 +1,46 @@
 <template>
-  <div>
-    <!-- Tooltip must be here on the multichart, since child components all render within the svg.
+  <!-- Tooltip must be here on the multichart, since child components all render within the svg.
     We cannot add a div inside an SVG document! -->
-    <Tooltip
-      v-show="tooltipShow"
-      :tooltipCoords="tooltipCoords"
-      :data="tooltipData"
-    ></Tooltip>
-    <div class="controls-container">
-      <BaseCheckbox v-model="selections.segments" label="segments" />
-      <BaseCheckbox v-model="selections.guides" label="guides" />
+  <Tooltip
+    v-show="tooltipShow"
+    :tooltipCoords="tooltipCoords"
+    :data="tooltipData"
+  ></Tooltip>
+  <div class="controls-container">
+    <BaseCheckbox v-model="selections.segments" label="segments" />
+    <BaseCheckbox v-model="selections.guides" label="guides" />
 
-      <span>{{
-        showNormalizedData ? "post correction" : "pre  correction"
-      }}</span>
-      <BaseToggleSwitch v-model="showNormalizedData" />
-    </div>
-    <svg
-      :width="width"
-      :height="height"
-      :viewBox="[0, 0, width, height].join(' ')"
-    >
-      <g>
-        <ChromosomeChartFocus
-          :data="selectedChartData"
-          :width="width"
-          :height="chartFocusHeight"
-          :xBrush="xBrush"
-          :selections="selections"
-          @tooltipMouseover="onMouseOver"
-          @tooltipMousemove="onMouseMove"
-          @tooltipMouseleave="onMouseLeave"
-        />
-      </g>
-      <g :transform="`translate(0, ${chartFocusHeight})`">
-        <ChromosomeChartContext
-          :data="selectedChartData"
-          :width="width"
-          :height="chartContextHeight"
-          @brush="brushed"
-        />
-      </g>
-    </svg>
+    <span>{{
+      showNormalizedData ? "post correction" : "pre  correction"
+    }}</span>
+    <BaseToggleSwitch v-model="showNormalizedData" />
   </div>
+  <svg
+    :width="width"
+    :height="height"
+    :viewBox="[0, 0, width, height].join(' ')"
+  >
+    <g>
+      <ChromosomeChartFocus
+        :data="selectedChartData"
+        :width="width"
+        :height="chartFocusHeight"
+        :xBrush="xBrush"
+        :selections="selections"
+        @tooltipMouseover="onMouseOver"
+        @tooltipMousemove="onMouseMove"
+        @tooltipMouseleave="onMouseLeave"
+      />
+    </g>
+    <g :transform="`translate(0, ${chartFocusHeight})`">
+      <ChromosomeChartContext
+        :data="selectedChartData"
+        :width="width"
+        :height="chartContextHeight"
+        @brush="brushed"
+      />
+    </g>
+  </svg>
 </template>
 
 <script>

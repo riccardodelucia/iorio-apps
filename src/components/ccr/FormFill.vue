@@ -185,6 +185,5 @@ export default {
   max-width: 50rem;
   display: flex;
   flex-direction: column;
-  gap: 1em;
 }
 </style>

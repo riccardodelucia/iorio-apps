@@ -1,45 +1,43 @@
 <template>
-  <div>
-    <Tooltip
-      v-show="tooltipShow"
-      :tooltipCoords="tooltipCoords"
-      :data="tooltipData"
-    ></Tooltip>
-    <div class="controls-container">
-      <BaseToggleSwitch
-        v-if="data.raw && data.norm"
-        v-model="showNormalizedData"
-      />
-      <span v-if="needsToggleSwitch">{{
-        !showNormalizedData ? "unnormalized" : "normalized"
-      }}</span>
-    </div>
-    <svg
-      :width="width"
-      :height="height"
-      :viewBox="[0, 0, width, height].join(' ')"
-    >
-      <g>
-        <BoxPlotChartFocus
-          :data="selectedChartData"
-          :width="chartFocusWidth"
-          :height="height"
-          :yDomain="yDomainFocus"
-          @tooltipMouseover="onMouseOver"
-          @tooltipMousemove="onMouseMove"
-          @tooltipMouseleave="onMouseLeave"
-        />
-      </g>
-      <g :transform="`translate(${chartFocusWidth}, 0)`">
-        <BoxPlotChartContext
-          :data="selectedChartData"
-          :width="chartContextWidth"
-          :height="height"
-          @brush="brushed"
-        />
-      </g>
-    </svg>
+  <Tooltip
+    v-show="tooltipShow"
+    :tooltipCoords="tooltipCoords"
+    :data="tooltipData"
+  ></Tooltip>
+  <div class="controls-container">
+    <BaseToggleSwitch
+      v-if="data.raw && data.norm"
+      v-model="showNormalizedData"
+    />
+    <span v-if="needsToggleSwitch">{{
+      !showNormalizedData ? "unnormalized" : "normalized"
+    }}</span>
   </div>
+  <svg
+    :width="width"
+    :height="height"
+    :viewBox="[0, 0, width, height].join(' ')"
+  >
+    <g>
+      <BoxPlotChartFocus
+        :data="selectedChartData"
+        :width="chartFocusWidth"
+        :height="height"
+        :yDomain="yDomainFocus"
+        @tooltipMouseover="onMouseOver"
+        @tooltipMousemove="onMouseMove"
+        @tooltipMouseleave="onMouseLeave"
+      />
+    </g>
+    <g :transform="`translate(${chartFocusWidth}, 0)`">
+      <BoxPlotChartContext
+        :data="selectedChartData"
+        :width="chartContextWidth"
+        :height="height"
+        @brush="brushed"
+      />
+    </g>
+  </svg>
 </template>
 
 <script>
