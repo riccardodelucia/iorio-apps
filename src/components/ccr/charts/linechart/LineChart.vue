@@ -1,67 +1,60 @@
 <template>
-  <div>
-    <Tooltip
-      v-show="tooltipShow"
-      :tooltipCoords="tooltipCoords"
-      :data="tooltipData"
-    ></Tooltip>
-    <svg
-      ref="svg"
-      :width="width"
-      :height="height"
-      :viewBox="[0, 0, width, height].join(' ')"
-      @mouseover="onMouseOver"
-      @mousemove="onMouseOver"
-      @mouseleave="onMouseLeave"
-    >
-      <g ref="chart" :transform="`translate(${margin.left}, ${margin.top})`">
-        <D3Axis :scale="yScale" position="left" />
+  <svg
+    :width="width"
+    :height="height"
+    :viewBox="[0, 0, width, height].join(' ')"
+    @mouseover="onMouseOver"
+    @mousemove="onMouseOver"
+    @mouseleave="onMouseLeave"
+  >
+    <g ref="chart" :transform="`translate(${margin.left}, ${margin.top})`">
+      <D3Axis :scale="yScale" position="left" />
+      <text
+        :transform="`translate(${-yAxisLabelOffset}, ${
+          innerHeight / 2
+        }) rotate(-90)`"
+        class="axis-label"
+      >
+        {{ yLabel }}
+      </text>
+      <g :transform="`translate(0, ${innerHeight})`">
+        <D3Axis :scale="xScale" position="bottom" />
         <text
-          :transform="`translate(${-yAxisLabelOffset}, ${
-            innerHeight / 2
-          }) rotate(-90)`"
+          :transform="`translate(${innerWidth / 2}, ${xAxisLabelOffset})`"
           class="axis-label"
         >
-          {{ yLabel }}
+          {{ xLabel }}
         </text>
-        <g :transform="`translate(0, ${innerHeight})`">
-          <D3Axis :scale="xScale" position="bottom" />
-          <text
-            :transform="`translate(${innerWidth / 2}, ${xAxisLabelOffset})`"
-            class="axis-label"
-          >
-            {{ xLabel }}
-          </text>
-        </g>
-        <slot
-          :lineChartProps="{
-            sizes: { innerHeight, innerWidth },
-            scales: { xScale, yScale },
-          }"
-        ></slot>
-        <path :d="curve" class="chart__path" />
-        <circle
-          v-show="tooltipShow"
-          :cx="cursorPoint.x"
-          :cy="cursorPoint.y"
-          r="3"
-          class="chart__point"
-        />
       </g>
-    </svg>
-  </div>
+      <slot
+        :lineChartProps="{
+          sizes: { innerHeight, innerWidth },
+          scales: { xScale, yScale },
+        }"
+      ></slot>
+      <path :d="curve" class="chart__path" />
+      <circle
+        v-show="tooltipShow"
+        :cx="cursorPoint.x"
+        :cy="cursorPoint.y"
+        r="3"
+        id="cursor"
+        class="chart__point"
+        :data-tippy-content="tooltipContent"
+      />
+    </g>
+  </svg>
 </template>
 
 <script>
 import { scaleLinear, extent, line, bisector, pointer } from "d3";
 import D3Axis from "@/components/ccr/charts/D3Axis.vue";
 
-import { ref, reactive, onMounted } from "vue";
-import { getTooltip } from "@/composables/chart.js";
-
-import Tooltip from "@/components/ccr/charts/Tooltip.vue";
-
+import { ref, reactive } from "vue";
 import { getInnerChartSizes } from "@/composables/chart.js";
+
+import tippy from "tippy.js";
+import { hideAll } from "tippy.js";
 
 const bisectD3 = bisector((d) => d.x).left;
 
@@ -86,7 +79,7 @@ export default {
     yLabel: String,
     yDomain: { type: Array, required: true },
   },
-  components: { D3Axis, Tooltip },
+  components: { D3Axis },
   setup(props) {
     const width = 500;
     const height = 500;
@@ -104,9 +97,6 @@ export default {
       margin
     );
 
-    const { tooltipShow, setupTooltip, tooltipCoords, tooltipData } =
-      getTooltip();
-
     const xScale = scaleLinear().domain(props.xDomain).range([0, innerWidth]);
 
     const yScale = scaleLinear()
@@ -117,26 +107,27 @@ export default {
       .x((d) => xScale(d.x))
       .y((d) => yScale(d.y))(props.data);
 
-    let svgOrigin = ref(null);
-    const svg = ref(null);
     const chart = ref(null);
 
     const cursorPoint = reactive({ x: 0, y: 0 });
+    const tooltipShow = ref(false);
+    const tooltipContent = ref("");
 
     const onMouseOver = (event) => {
       tooltipShow.value = true;
       const datum = bisect(event, xScale, props.data, chart.value);
       cursorPoint.x = xScale(datum.x);
       cursorPoint.y = yScale(datum.y);
-      const x = xScale(datum.x) + svgOrigin.value[0] + margin.left;
-      const y = yScale(datum.y) + svgOrigin.value[1] + margin.top;
-      setupTooltip({ x, y }, datum);
+      tooltipContent.value = `Threshold: ${datum.threshold}`;
+      hideAll({ duration: 0 });
+      const instance = tippy("#cursor", { duration: 0 });
+      instance[0].show();
     };
 
-    onMounted(() => {
-      const { left, top } = svg.value.getBoundingClientRect();
-      svgOrigin.value = [left, top];
-    });
+    const onMouseLeave = () => {
+      tooltipShow.value = false;
+      hideAll({ duration: 0 });
+    };
 
     return {
       width,
@@ -151,11 +142,10 @@ export default {
       yAxisLabelOffset: 30,
       cursorPoint,
       tooltipShow,
-      tooltipCoords,
-      tooltipData,
-      svg,
+      tooltipContent,
       chart,
       onMouseOver,
+      onMouseLeave,
     };
   },
 };
