@@ -1,11 +1,7 @@
 <template>
   <!-- Tooltip must be here on the multichart, since child components all render within the svg.
     We cannot add a div inside an SVG document! -->
-  <Tooltip
-    v-show="tooltipShow"
-    :tooltipCoords="tooltipCoords"
-    :data="tooltipData"
-  ></Tooltip>
+
   <div class="controls-container">
     <BaseCheckbox v-model="selections.segments" label="segments" />
     <BaseCheckbox v-model="selections.guides" label="guides" />
@@ -27,9 +23,6 @@
         :height="chartFocusHeight"
         :xBrush="xBrush"
         :selections="selections"
-        @tooltipMouseover="onMouseOver"
-        @tooltipMousemove="onMouseMove"
-        @tooltipMouseleave="onMouseLeave"
       />
     </g>
     <g :transform="`translate(0, ${chartFocusHeight})`">
@@ -46,8 +39,6 @@
 <script>
 import ChromosomeChartFocus from "@/components/ccr/charts/chromosome/ChromosomeChartFocus.vue";
 import ChromosomeChartContext from "@/components/ccr/charts/chromosome/ChromosomeChartContext.vue";
-import Tooltip from "@/components/ccr/charts/Tooltip.vue";
-import { getTooltip } from "@/composables/chart.js";
 
 import { extent } from "d3";
 
@@ -80,7 +71,7 @@ const setupChart = (data) => {
 
 export default {
   name: "ChromosomeMultichart",
-  components: { ChromosomeChartFocus, ChromosomeChartContext, Tooltip },
+  components: { ChromosomeChartFocus, ChromosomeChartContext },
   props: {
     data: {
       type: Object,
@@ -88,15 +79,6 @@ export default {
     },
   },
   setup(props) {
-    const {
-      onMouseOver,
-      onMouseMove,
-      onMouseLeave,
-      tooltipCoords,
-      tooltipData,
-      tooltipShow,
-    } = getTooltip();
-
     const showNormalizedData = ref(true);
 
     const { chartDataUnnormalized, chartDataNormalized } = setupChart(
@@ -123,12 +105,6 @@ export default {
       selections: reactive({ segments: true, guides: true }),
       showNormalizedData,
       brushed,
-      onMouseOver,
-      onMouseMove,
-      onMouseLeave,
-      tooltipCoords,
-      tooltipData,
-      tooltipShow,
     };
   },
 };

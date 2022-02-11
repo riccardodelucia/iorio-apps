@@ -8,9 +8,8 @@
         :cx="xScale(point.idx)"
         :cy="yScale(point.avgLogFC)"
         :r="pointRadius"
-        @mouseover="$emit('tooltip-mouseover', { event: $event, data: point })"
-        @mousemove="$emit('tooltip-mousemove', { event: $event, data: point })"
-        @mouseleave="$emit('tooltip-mouseleave')"
+        :data-tippy-content="setTooltipContent(point)"
+        @mouseover="onMouseOver"
       ></circle>
     </g>
     <g v-show="selections.segments">
@@ -22,19 +21,16 @@
         :x2="xScale(segment.idxEnd)"
         :y1="yScale(segment.avgLogFC)"
         :y2="yScale(segment.avgLogFC)"
-        @mouseover="
-          $emit('tooltip-mouseover', { event: $event, data: segment })
-        "
-        @mousemove="
-          $emit('tooltip-mousemove', { event: $event, data: segment })
-        "
-        @mouseleave="$emit('tooltip-mouseleave')"
+        :data-tippy-content="setTooltipContent(segment)"
+        @mouseover="onMouseOver"
       ></line>
     </g>
   </g>
 </template>
 
 <script>
+import tippy from "tippy.js";
+
 export default {
   name: "Marks",
   props: {
@@ -58,6 +54,19 @@ export default {
     selections: {
       type: Object,
       default: () => ({ segments: true, guides: true }),
+    },
+  },
+  methods: {
+    onMouseOver(event) {
+      //Note: creating one tippy for each new element does cause a memory leak in the long run?
+      tippy(event.target, { duration: 0 });
+      //this.$emit("tooltip-mouseover", { event, data: point });
+    },
+    setTooltipContent(data) {
+      const msg = Object.entries(data).reduce((acc, [key, value]) => {
+        return acc + `${key}: ${value}\n`;
+      }, "");
+      return msg;
     },
   },
 };
