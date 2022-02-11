@@ -130,7 +130,9 @@
         <b>HT-29</b> cell lines with the <b>KY_Library_v1.0</b> (which should be
         selected in the job submission form) and it is part of the
         <a href="https://score.depmap.sanger.ac.uk/ ">Project Score dataset</a>
-        (<a href="https://score.depmap.sanger.ac.uk/">Dwane et al. 2021</a>,
+        (<a href="https://academic.oup.com/nar/article/49/D1/D1365/5929235"
+          >Dwane et al. 2021</a
+        >,
         <a href="https://www.nature.com/articles/s41586-019-1103-9"
           >Behan et al. 2019</a
         >)
@@ -552,12 +554,6 @@ export default {
       grid-column: 1 / -1;
     }
   }
-
-  /*   &__example {
-    grid-row: 4 / 5;
-    grid-column: 1 / -1;
-  } */
-
   &__accordion {
     grid-column: 1 / -1;
   }

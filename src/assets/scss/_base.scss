@@ -116,6 +116,7 @@ body {
     .content {
       grid-column: 2 / -1;
       grid-row: 2 / -1;
+      background-color: var(--color-grey-lighter);
 
       @media only screen and (max-width: 600px) {
         grid-row: 3 / 4;
@@ -145,7 +146,7 @@ body {
 }
 
 .layout-ccr {
-  padding: 1.5em 2em 3em 2em;
+  padding: 1.5em 2em 0 2em;
 }
 
 ul {

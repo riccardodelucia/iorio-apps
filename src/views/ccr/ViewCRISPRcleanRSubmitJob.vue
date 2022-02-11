@@ -2,7 +2,6 @@
   <div class="layout-ccr">
     <h2 class="u-margin-bottom-small">Submit a new job</h2>
     <FormFill
-      class="ccr-form"
       v-if="currentState === 'idle'"
       @nav="updateService($event)"
       :config="$route.params.config"

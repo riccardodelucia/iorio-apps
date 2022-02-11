@@ -20,7 +20,8 @@
         </div>
 
         <div class="card ccr-results__genes-signatures">
-          <h3 class="u-margin-bottom-small">Genes Signatures</h3>
+          <!--           <h3 class="u-margin-bottom-small">Genes Signatures</h3>
+ -->
           <GeneSignatures :data="genesSignatures"> </GeneSignatures>
         </div>
 
@@ -42,12 +43,10 @@
           </ul>
         </div>
 
-        <BaseAccordion
-          class="card ccr-results__thumbnails ccr-results__thumbnails--color1"
-        >
+        <BaseAccordion class="card card--color1 ccr-results__thumbnails">
           <template v-slot:title>Normalization</template>
           <template v-slot:content>
-            <div class="content">
+            <div class="thumbnails__content">
               <BaseThumbnail
                 v-for="item in normImages"
                 :key="item.filename"
@@ -58,12 +57,12 @@
         ></BaseAccordion>
 
         <BaseAccordion
-          class="card ccr-results__thumbnails ccr-results__thumbnails--color2"
+          class="card card--color2 ccr-results__thumbnails"
           height="42rem"
         >
           <template v-slot:title>Chromosome Charts</template>
           <template v-slot:content>
-            <div class="content">
+            <div class="thumbnails__content">
               <BaseThumbnail
                 v-for="item in chrImages"
                 :key="item.filename"
@@ -73,12 +72,10 @@
             </div> </template
         ></BaseAccordion>
 
-        <BaseAccordion
-          class="card ccr-results__thumbnails ccr-results__thumbnails--color3"
-        >
+        <BaseAccordion class="card card--color3 ccr-results__thumbnails">
           <template v-slot:title>QC Assessment</template>
           <template v-slot:content>
-            <div class="content">
+            <div class="thumbnails__content">
               <BaseThumbnail
                 v-for="item in qcImages"
                 :key="item.filename"
@@ -255,23 +252,13 @@ export default {
 
   &__thumbnails {
     grid-column: 1/ -1;
+  }
 
-    &--color1 {
-      background-color: rgb(232, 232, 253);
-    }
-    &--color2 {
-      background-color: rgb(212, 255, 208);
-    }
-    &--color3 {
-      background-color: rgb(163, 210, 253);
-    }
-
-    .content {
-      display: grid;
-      justify-items: left;
-      gap: 1em;
-      grid-template-columns: repeat(auto-fit, minmax(min-content, 32rem));
-    }
+  .thumbnails__content {
+    display: grid;
+    justify-items: left;
+    gap: 1em;
+    grid-template-columns: repeat(auto-fit, minmax(min-content, 32rem));
   }
 }
 </style>

@@ -12,9 +12,11 @@
       <slot name="title">Title</slot></label
     >
     <div class="accordion__collapsible-content">
-      <div class="accordion__content-inner">
-        <slot name="content"></slot>
-      </div>
+      <!--       <div class="accordion__content-inner">
+ -->
+      <slot name="content"></slot>
+      <!--       </div>
+ -->
     </div>
   </div>
 </template>
@@ -57,7 +59,6 @@ export default {
     max-height: 0px;
     overflow: hidden;
     margin-top: 3rem;
-
     transition: max-height 0.25s ease-in-out;
   }
 }
