@@ -1,9 +1,6 @@
 <template>
   <g>
-    <g
-      :data-tippy-content="setTooltipContent(data.dist)"
-      @mouseover="onMouseOver"
-    >
+    <g data-tippy-content="we" @mouseover="onMouseOver" class="boxplot">
       <line
         :x1="bandwidth / 2"
         :x2="bandwidth / 2"
@@ -84,6 +81,8 @@
 
 <script>
 import tippy from "tippy.js";
+import { setTooltipContent } from "@/composables/chart.js";
+import { computed } from "vue";
 
 export default {
   name: "Marks",
@@ -98,26 +97,22 @@ export default {
       type: Object,
     },
   },
+  setup(props) {
+    const bandwidth = computed(() => {
+      return props.xScale.bandwidth();
+    });
+    const boxHeight = computed(() => {
+      return (
+        props.yScale(props.data.dist.Q1) - props.yScale(props.data.dist.Q3)
+      );
+    });
 
-  computed: {
-    bandwidth() {
-      return this.xScale.bandwidth();
-    },
-    boxHeight() {
-      return this.yScale(this.data.dist.Q1) - this.yScale(this.data.dist.Q3);
-    },
-  },
-  methods: {
-    onMouseOver(event) {
+    const onMouseOver = (event) => {
+      console.log(event);
       //Note: creating one tippy for each new element does cause a memory leak in the long run?
       tippy(event.target, { duration: 0 });
-    },
-    setTooltipContent(data) {
-      const msg = Object.entries(data).reduce((acc, [key, value]) => {
-        return acc + `${key}: ${value}\n`;
-      }, "");
-      return msg;
-    },
+    };
+    return { setTooltipContent, bandwidth, boxHeight, onMouseOver };
   },
 };
 </script>

@@ -14,7 +14,6 @@
     convenient, since segments are very lightweight to manage, and the filtering algorithm would have
     to trim segment endpoints according to the current selected area. -->
     <Marks
-      v-bind="$attrs"
       :points="focusData.sgRNAArray"
       :segments="data.segments"
       :xScale="xScale"

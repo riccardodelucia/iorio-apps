@@ -48,3 +48,10 @@ export const getInnerChartSizes = function (width, height, margin) {
 
   return { innerWidth, innerHeight };
 };
+
+export const setTooltipContent = function (data) {
+  const msg = Object.entries(data).reduce((acc, [key, value]) => {
+    return acc + `${key}: ${value} \n`;
+  }, "");
+  return msg;
+};
