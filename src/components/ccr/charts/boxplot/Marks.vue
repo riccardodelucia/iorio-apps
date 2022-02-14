@@ -1,6 +1,6 @@
 <template>
   <g>
-    <g data-tippy-content="we" @mouseover="onMouseOver" class="boxplot">
+    <g @mouseover="onMouseOver" class="boxplot">
       <line
         :x1="bandwidth / 2"
         :x2="bandwidth / 2"
@@ -14,6 +14,8 @@
         :y1="yScale(data.dist.W1)"
         :y2="yScale(data.dist.W1)"
         class="boxplot__whisker-q"
+        :data-tippy-content="`W1: ${data.dist.W1}`"
+        @mouseover="onMouseOver"
       />
       <line
         :x1="0"
@@ -21,6 +23,8 @@
         :y1="yScale(data.dist.W2)"
         :y2="yScale(data.dist.W2)"
         class="boxplot__whisker-q"
+        :data-tippy-content="`W2: ${data.dist.W2}`"
+        @mouseover="onMouseOver"
       />
       <line
         :x1="0"
@@ -28,6 +32,8 @@
         :y1="yScale(data.dist.sd1)"
         :y2="yScale(data.dist.sd1)"
         class="boxplot__whisker-stdev"
+        :data-tippy-content="`Std dev 1: ${data.dist.sd1}`"
+        @mouseover="onMouseOver"
       />
       <line
         :x1="0"
@@ -35,6 +41,8 @@
         :y1="yScale(data.dist.sd2)"
         :y2="yScale(data.dist.sd2)"
         class="boxplot__whisker-stdev"
+        :data-tippy-content="`Std dev 2: ${data.dist.sd2}`"
+        @mouseover="onMouseOver"
       />
       <rect
         :x="0"
@@ -42,6 +50,8 @@
         :width="bandwidth"
         :height="boxHeight"
         class="boxplot__box"
+        :data-tippy-content="`IQR: ${data.dist.Q3}`"
+        @mouseover="onMouseOver"
       />
       <line
         :x1="0"
@@ -49,6 +59,8 @@
         :y1="yScale(data.dist.median)"
         :y2="yScale(data.dist.median)"
         class="boxplot__median"
+        :data-tippy-content="`Median: ${data.dist.median}`"
+        @mouseover="onMouseOver"
       />
       <line
         :x1="0"
@@ -56,13 +68,8 @@
         :y1="yScale(data.dist.mean)"
         :y2="yScale(data.dist.mean)"
         class="boxplot__mean"
-      />
-      <line
-        :x1="0"
-        :x2="bandwidth"
-        :y1="yScale(data.dist.median)"
-        :y2="yScale(data.dist.median)"
-        class="boxplot__median"
+        :data-tippy-content="`Mean: ${data.dist.mean}`"
+        @mouseover="onMouseOver"
       />
     </g>
 
@@ -108,9 +115,8 @@ export default {
     });
 
     const onMouseOver = (event) => {
-      console.log(event);
-      //Note: creating one tippy for each new element does cause a memory leak in the long run?
-      tippy(event.target, { duration: 0 });
+      //Note: it has been demonstrated that creating multiple tippies doesn't increase the overall number of DOM elements over time
+      tippy(event.target, { duration: 0, allowHTML: true });
     };
     return { setTooltipContent, bandwidth, boxHeight, onMouseOver };
   },

@@ -30,6 +30,7 @@
 
 <script>
 import tippy from "tippy.js";
+import { setTooltipContent } from "@/composables/chart.js";
 
 export default {
   name: "Marks",
@@ -56,17 +57,12 @@ export default {
       default: () => ({ segments: true, guides: true }),
     },
   },
-  methods: {
-    onMouseOver(event) {
-      //Note: creating one tippy for each new element does cause a memory leak in the long run?
-      tippy(event.target, { duration: 0 });
-    },
-    setTooltipContent(data) {
-      const msg = Object.entries(data).reduce((acc, [key, value]) => {
-        return acc + `${key}: ${value}\n`;
-      }, "");
-      return msg;
-    },
+  setup() {
+    const onMouseOver = (event) => {
+      //Note: it has been demonstrated that creating multiple tippies doesn't increase the overall number of DOM elements over time
+      tippy(event.target, { duration: 0, allowHTML: true });
+    };
+    return { setTooltipContent, onMouseOver };
   },
 };
 </script>
