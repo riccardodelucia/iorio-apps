@@ -1,85 +1,63 @@
 <template>
-  <svg
-    ref="svg"
-    :width="width"
-    :height="height"
-    :viewBox="[0, 0, width, height].join(' ')"
-  >
-    <g ref="chart" :transform="`translate(${margin.left}, ${margin.top})`">
+  <g ref="chart" :transform="`translate(${margin.left}, ${margin.top})`">
+    <text
+      :transform="`translate(${-yAxisLabelOffset}, ${
+        innerHeight / 2
+      }) rotate(-90)`"
+      class="axis-label"
+    >
+      Depletion Rank
+    </text>
+    <D3Axis :scale="yScale" position="left" />
+    <g :transform="`translate(0, ${innerHeight})`">
+      <D3Axis :scale="xScale" position="bottom" />
       <text
-        :transform="`translate(${-yAxisLabelOffset}, ${
-          innerHeight / 2
-        }) rotate(-90)`"
+        :transform="`translate(${curveWidth / 2}, ${xAxisLabelOffset})`"
         class="axis-label"
       >
-        Depletion Rank
+        Log FC
       </text>
-      <D3Axis :scale="yScale" position="left" />
-      <g :transform="`translate(0, ${innerHeight})`">
-        <D3Axis :scale="xScale" position="bottom" />
-        <text
-          :transform="`translate(${
-            (innerWidth * 0.5) / 2
-          }, ${xAxisLabelOffset})`"
-          class="axis-label"
-        >
-          Log FC
-        </text>
-      </g>
-      <line
-        class="chart__line chart__line--dashed chart__line--black"
-        :x1="xScale(0)"
-        :y1="0"
-        :x2="xScale(0)"
-        :y2="innerHeight"
-      />
-      <line
-        class="chart__line chart__line--dashed chart__line--red"
-        :x1="0"
-        :y1="yScale(threshold)"
-        :x2="innerWidth"
-        :y2="yScale(threshold)"
-      />
-      <MarksCurve
-        :points="chartData"
-        :xScale="xScale"
-        :yScale="yScale"
-        @tooltipMouseover="onMouseOver"
-        @tooltipMousemove="onMouseMove"
-        @tooltipMouseleave="onMouseLeave"
-      ></MarksCurve>
     </g>
-  </svg>
+    <line
+      class="chart__line chart__line--dashed chart__line--black"
+      :x1="xScale(0)"
+      :y1="0"
+      :x2="xScale(0)"
+      :y2="innerHeight"
+    />
+    <line
+      class="chart__line chart__line--dashed chart__line--red"
+      :x1="0"
+      :y1="yScale(data.threshold)"
+      :x2="innerWidth"
+      :y2="yScale(data.threshold)"
+    />
+    <MarksCurve
+      :points="data.genes"
+      :xScale="xScale"
+      :yScale="yScale"
+      @selectedGene="onSelection"
+    ></MarksCurve>
+    <g :transform="`translate(${curveWidth + padding}, 0)`">
+      <MarksGeneSet
+        :geneSet="data.genesSets.CFE"
+        :width="geneSetWidth"
+        :yScale="yScale"
+        :selectedGene="selectedGene"
+      ></MarksGeneSet>
+    </g>
+  </g>
 </template>
 
 <script>
 import { extent, scaleLinear, scaleLog } from "d3";
+import { ref } from "vue";
+
 import { getInnerChartSizes } from "@/composables/chart.js";
 import D3Axis from "@/components/ccr/charts/D3Axis.vue";
 import MarksCurve from "@/components/ccr/charts/genes_signatures/MarksCurve.vue";
+import MarksGeneSet from "@/components/ccr/charts/genes_signatures/MarksGeneSet.vue";
 
-const setupChart = (data) => {
-  const chartData = data.curve
-    .map((item) => ({
-      x: item.logFC,
-      y: item.rank,
-    }))
-    .sort((a, b) => a.x - b.x);
-
-  const xDomain = extent(chartData.map((item) => item.x));
-  const yDomain = extent(chartData.map((item) => item.y));
-  const xInterval = xDomain[0] - xDomain[1];
-  const xThreshold = data?.metrics[0]?.threshod * xInterval; // typo from the files
-  const { idx: thresholdCandidateIdx } = chartData
-    .map((item, idx) => ({
-      dist: Math.abs(item.x - xThreshold),
-      idx,
-    }))
-    .sort((a, b) => a.dist - b.dist)[0];
-  const threshold = chartData[thresholdCandidateIdx].y;
-
-  return { chartData, xDomain, yDomain, threshold };
-};
 export default {
   name: "GenesSignaturesFocus",
   props: {
@@ -87,12 +65,11 @@ export default {
       type: Object,
       required: true,
     },
+    width: { type: Number },
+    height: { type: Number },
   },
-  components: { D3Axis, MarksCurve },
+  components: { D3Axis, MarksCurve, MarksGeneSet },
   setup(props) {
-    const width = 700;
-    const height = 900;
-
     const margin = {
       top: 20,
       right: 20,
@@ -101,29 +78,42 @@ export default {
     };
 
     const { innerWidth, innerHeight } = getInnerChartSizes(
-      width,
-      height,
+      props.width,
+      props.height,
       margin
     );
 
-    const { chartData, xDomain, yDomain, threshold } = setupChart(props.data);
+    const xDomain = extent(props.data.genes.map((item) => item.x));
+    const yDomain = extent(props.data.genes.map((item) => item.y));
+
+    const curveWidth = innerWidth * 0.5;
+    const padding = 20;
+    const geneSetWidth = innerWidth - curveWidth - padding;
+
     const xScale = scaleLinear()
       .domain(xDomain)
       .range([0, innerWidth * 0.5]);
     const yScale = scaleLog().domain(yDomain).range([0, innerHeight]);
 
+    const selectedGene = ref(null);
+
+    const onSelection = (gene) => {
+      selectedGene.value = gene;
+    };
+
     return {
-      width,
-      height,
       margin,
-      chartData,
       xScale,
       xAxisLabelOffset: 30,
       yScale,
       yAxisLabelOffset: 35,
-      threshold,
       innerWidth,
       innerHeight,
+      curveWidth,
+      geneSetWidth,
+      padding,
+      selectedGene,
+      onSelection,
     };
   },
 };

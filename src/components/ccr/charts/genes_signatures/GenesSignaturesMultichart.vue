@@ -5,63 +5,21 @@
     :height="height"
     :viewBox="[0, 0, width, height].join(' ')"
   >
-    <g ref="chart" :transform="`translate(${margin.left}, ${margin.top})`">
-      <text
-        :transform="`translate(${-yAxisLabelOffset}, ${
-          innerHeight / 2
-        }) rotate(-90)`"
-        class="axis-label"
-      >
-        Depletion Rank
-      </text>
-      <D3Axis :scale="yScale" position="left" />
-      <g :transform="`translate(0, ${innerHeight})`">
-        <D3Axis :scale="xScale" position="bottom" />
-        <text
-          :transform="`translate(${
-            (innerWidth * 0.5) / 2
-          }, ${xAxisLabelOffset})`"
-          class="axis-label"
-        >
-          Log FC
-        </text>
-      </g>
-      <line
-        class="chart__line chart__line--dashed chart__line--black"
-        :x1="xScale(0)"
-        :y1="0"
-        :x2="xScale(0)"
-        :y2="innerHeight"
-      />
-      <line
-        class="chart__line chart__line--dashed chart__line--red"
-        :x1="0"
-        :y1="yScale(threshold)"
-        :x2="innerWidth"
-        :y2="yScale(threshold)"
-      />
-      <MarksCurve
-        :points="chartData"
-        :xScale="xScale"
-        :yScale="yScale"
-        @tooltipMouseover="onMouseOver"
-        @tooltipMousemove="onMouseMove"
-        @tooltipMouseleave="onMouseLeave"
-      ></MarksCurve>
-    </g>
+    <GenesSignaturesFocus
+      :data="chartData"
+      :width="width"
+      :height="height"
+    ></GenesSignaturesFocus>
   </svg>
 </template>
 
 <script>
-/* eslint-disable */
-import { extent, scaleLinear, scaleLog } from "d3";
-import { getInnerChartSizes } from "@/composables/chart.js";
-import D3Axis from "@/components/ccr/charts/D3Axis.vue";
-import MarksCurve from "@/components/ccr/charts/genes_signatures/MarksCurve.vue";
+import { extent } from "d3";
+
 import GenesSignaturesFocus from "@/components/ccr/charts/genes_signatures/GenesSignaturesFocus.vue";
 
 const setupChart = (data) => {
-  const chartData = data.curve
+  const genes = data.curve
     .map((item) => ({
       x: item.logFC,
       y: item.rank,
@@ -69,19 +27,23 @@ const setupChart = (data) => {
     }))
     .sort((a, b) => a.x - b.x);
 
-  const xDomain = extent(chartData.map((item) => item.x));
-  const yDomain = extent(chartData.map((item) => item.y));
+  const xDomain = extent(genes.map((item) => item.x));
   const xInterval = xDomain[0] - xDomain[1];
-  const xThreshold = data?.metrics[0]?.threshod * xInterval; // typo from the files
-  const { idx: thresholdCandidateIdx } = chartData
+  const xThreshold = data.metrics[0].threshod * xInterval; // typo from the files
+  const { idx: thresholdCandidateIdx } = genes
     .map((item, idx) => ({
       dist: Math.abs(item.x - xThreshold),
       idx,
     }))
     .sort((a, b) => a.dist - b.dist)[0];
-  const threshold = chartData[thresholdCandidateIdx].y;
 
-  return { chartData, xDomain, yDomain, threshold };
+  const threshold = genes[thresholdCandidateIdx].y;
+
+  return {
+    genes,
+    threshold,
+    genesSets: data.geneSetArray,
+  };
 };
 export default {
   name: "GeneSignatures",
@@ -91,42 +53,17 @@ export default {
       required: true,
     },
   },
-  components: { D3Axis, MarksCurve, GenesSignaturesFocus },
+  components: { GenesSignaturesFocus },
   setup(props) {
     const width = 700;
     const height = 900;
 
-    const margin = {
-      top: 20,
-      right: 20,
-      bottom: 40,
-      left: 60,
-    };
-
-    const { innerWidth, innerHeight } = getInnerChartSizes(
-      width,
-      height,
-      margin
-    );
-
-    const { chartData, xDomain, yDomain, threshold } = setupChart(props.data);
-    const xScale = scaleLinear()
-      .domain(xDomain)
-      .range([0, innerWidth * 0.5]);
-    const yScale = scaleLog().domain(yDomain).range([0, innerHeight]);
+    const chartData = setupChart(props.data);
 
     return {
       width,
       height,
-      margin,
       chartData,
-      xScale,
-      xAxisLabelOffset: 30,
-      yScale,
-      yAxisLabelOffset: 35,
-      threshold,
-      innerWidth,
-      innerHeight,
     };
   },
 };

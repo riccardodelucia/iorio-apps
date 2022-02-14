@@ -1,14 +1,18 @@
 <template>
-  <circle
-    class="genes_signatures__points"
-    v-for="(point, idx) in points"
-    :key="idx"
-    :cx="xScale(point.x)"
-    :cy="yScale(point.y)"
-    :r="pointRadius"
-    :data-tippy-content="point.gene"
-    @mouseover="onMouseOver"
-  ></circle>
+  <g>
+    <circle
+      class="genes-signatures__points"
+      v-for="(point, idx) in points"
+      :key="idx"
+      :cx="xScale(point.x)"
+      :cy="yScale(point.y)"
+      :r="pointRadius"
+      stroke="black"
+      :data-tippy-content="point.gene"
+      @mouseover="onMouseOver($event, point)"
+      @mouseleave="onMouseLeave(point)"
+    ></circle
+  ></g>
 </template>
 
 <script>
@@ -32,15 +36,24 @@ export default {
       type: Function,
     },
   },
-  setup() {
-    const { onMouseOver, setTooltipContent } = setupTooltip();
-    return { onMouseOver, setTooltipContent };
+  setup(props, { emit }) {
+    const { onMouseOver: updateTooltip, setTooltipContent } = setupTooltip();
+
+    const onMouseOver = (event, point) => {
+      updateTooltip(event);
+      emit("selectedGene", point.gene);
+    };
+
+    const onMouseLeave = () => {
+      emit("selectedGene", null);
+    };
+    return { onMouseOver, onMouseLeave, setTooltipContent };
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.genes_signatures {
+.genes-signatures {
   &__points {
     fill: black;
 
