@@ -87,8 +87,7 @@
 </template>
 
 <script>
-import tippy from "tippy.js";
-import { setTooltipContent } from "@/composables/chart.js";
+import { setupTooltip } from "@/composables/chart.js";
 import { computed } from "vue";
 
 export default {
@@ -113,11 +112,8 @@ export default {
         props.yScale(props.data.dist.Q1) - props.yScale(props.data.dist.Q3)
       );
     });
+    const { onMouseOver, setTooltipContent } = setupTooltip();
 
-    const onMouseOver = (event) => {
-      //Note: it has been demonstrated that creating multiple tippies doesn't increase the overall number of DOM elements over time
-      tippy(event.target, { duration: 0, allowHTML: true });
-    };
     return { setTooltipContent, bandwidth, boxHeight, onMouseOver };
   },
 };

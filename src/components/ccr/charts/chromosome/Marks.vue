@@ -29,8 +29,7 @@
 </template>
 
 <script>
-import tippy from "tippy.js";
-import { setTooltipContent } from "@/composables/chart.js";
+import { setupTooltip } from "@/composables/chart.js";
 
 export default {
   name: "Marks",
@@ -58,10 +57,8 @@ export default {
     },
   },
   setup() {
-    const onMouseOver = (event) => {
-      //Note: it has been demonstrated that creating multiple tippies doesn't increase the overall number of DOM elements over time
-      tippy(event.target, { duration: 0, allowHTML: true });
-    };
+    const { onMouseOver, setTooltipContent } = setupTooltip();
+
     return { setTooltipContent, onMouseOver };
   },
 };

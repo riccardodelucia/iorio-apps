@@ -6,13 +6,14 @@
     :cx="xScale(point.x)"
     :cy="yScale(point.y)"
     :r="pointRadius"
-    @mouseover="$emit('tooltip-mouseover', { event: $event, data: point })"
-    @mousemove="$emit('tooltip-mousemove', { event: $event, data: point })"
-    @mouseleave="$emit('tooltip-mouseleave')"
+    :data-tippy-content="point.gene"
+    @mouseover="onMouseOver"
   ></circle>
 </template>
 
 <script>
+import { setupTooltip } from "@/composables/chart.js";
+
 export default {
   name: "MarksCurve",
   props: {
@@ -30,6 +31,10 @@ export default {
     yScale: {
       type: Function,
     },
+  },
+  setup() {
+    const { onMouseOver, setTooltipContent } = setupTooltip();
+    return { onMouseOver, setTooltipContent };
   },
 };
 </script>
