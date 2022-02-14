@@ -53,10 +53,12 @@
 </template>
 
 <script>
+/* eslint-disable */
 import { extent, scaleLinear, scaleLog } from "d3";
 import { getInnerChartSizes } from "@/composables/chart.js";
 import D3Axis from "@/components/ccr/charts/D3Axis.vue";
 import MarksCurve from "@/components/ccr/charts/genes_signatures/MarksCurve.vue";
+import GenesSignaturesFocus from "@/components/ccr/charts/genes_signatures/GenesSignaturesFocus.vue";
 
 const setupChart = (data) => {
   const chartData = data.curve
@@ -89,7 +91,7 @@ export default {
       required: true,
     },
   },
-  components: { D3Axis, MarksCurve },
+  components: { D3Axis, MarksCurve, GenesSignaturesFocus },
   setup(props) {
     const width = 700;
     const height = 900;
