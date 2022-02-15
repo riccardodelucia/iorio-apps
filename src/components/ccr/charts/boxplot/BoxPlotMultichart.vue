@@ -27,6 +27,7 @@
         :width="chartContextWidth"
         :height="height"
         @brush="brushed"
+        :domain="yDomainContext"
       />
     </g>
   </svg>
@@ -107,8 +108,13 @@ export default {
     );
 
     const yDomainFocus = ref(null);
+    const yDomainContext = ref(null);
+
     watchEffect(() => {
       yDomainFocus.value = showNormalizedData.value
+        ? yDomainMaxNormalized
+        : yDomainMaxUnnormalized;
+      yDomainContext.value = showNormalizedData.value
         ? yDomainMaxNormalized
         : yDomainMaxUnnormalized;
     });
@@ -128,6 +134,7 @@ export default {
       needsToggleSwitch,
       brushed,
       yDomainFocus,
+      yDomainContext,
       selectedChartData,
     };
   },

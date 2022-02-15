@@ -9,14 +9,14 @@
     >
     <g ref="brush"></g>
     <g :transform="`translate(${innerWidth}, 0)`">
-      <D3Axis :scale="yScale" position="right"></D3Axis>
+      <D3Axis :scale="scale" position="right"></D3Axis>
     </g>
   </g>
 </template>
 <script>
-import { select, brushY, scaleLinear } from "d3";
+import { select, brushX, brushY, scaleLinear } from "d3";
 import D3Axis from "@/components/ccr/charts/D3Axis.vue";
-import { dataExtent } from "@/composables/boxplot.js";
+//import { dataExtent } from "@/composables/boxplot.js";
 import { getInnerChartSizes } from "@/composables/chart.js";
 
 import { ref, onMounted, computed } from "vue";
@@ -46,6 +46,13 @@ export default {
         left: 0,
       }),
     },
+    domain: {
+      type: Array,
+    },
+    brushDirection: {
+      type: String,
+      default: "vertical",
+    },
   },
   setup(props, { emit }) {
     const { innerWidth, innerHeight } = getInnerChartSizes(
@@ -54,37 +61,39 @@ export default {
       props.margin
     );
 
-    const yDomain = computed(() => {
+    /*     const yDomain = computed(() => {
       return dataExtent(props.data);
-    });
-    const yScale = computed(() => {
-      return scaleLinear().domain(yDomain.value).range([innerHeight, 0]);
+    }); */
+    const scale = computed(() => {
+      return scaleLinear().domain(props.domain).range([innerHeight, 0]);
     });
 
-    const updateScale = ({ selection }) => {
+    const updateBrushedDomain = ({ selection }) => {
       const extent = selection
-        ? selection.map(yScale.value.invert).reverse()
-        : yDomain.value;
+        ? selection.map(scale.value.invert).reverse()
+        : props.domain.value;
       emit("brush", extent);
     };
 
     const brush = ref(null);
 
+    const brushFunction = props.brushDirection === "vertical" ? brushY : brushX;
+
     onMounted(() => {
       select(brush.value).call(
-        brushY()
+        brushFunction()
           .extent([
             [0, 0],
             [innerWidth, innerHeight],
           ])
-          .on("brush end", updateScale)
+          .on("brush end", updateBrushedDomain)
       );
     });
 
     return {
       innerWidth,
       innerHeight,
-      yScale,
+      scale,
       brush,
     };
   },
