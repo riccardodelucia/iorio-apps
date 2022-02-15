@@ -1,9 +1,7 @@
 <template>
   <g class="brush-area" :transform="`translate(${margin.left}, ${margin.top})`">
-    <rect x="0" y="0" :width="innerWidth" :height="innerHeight" />
-    <slot></slot>
+    <slot :innerWidth="innerWidth" :innerHeight="innerHeight"></slot>
     <g ref="brush"></g>
-
     <g
       v-if="brushDirection === 'vertical'"
       :transform="`translate(${innerWidth}, 0)`"

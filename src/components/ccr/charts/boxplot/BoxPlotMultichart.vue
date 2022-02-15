@@ -29,13 +29,16 @@
         @brush="brushed"
         :domain="yDomainContext"
       >
-        <text
-          :transform="`translate(${chartContextWidth / 2}, ${
-            height / 2
-          }) rotate(90 0 0)`"
-        >
-          Drag to zoom
-        </text>
+        <template v-slot="{ innerWidth, innerHeight }">
+          <rect x="0" y="0" :width="innerWidth" :height="innerHeight" />
+          <text
+            :transform="`translate(${innerWidth / 2}, ${
+              innerHeight / 2
+            }) rotate(90 0 0)`"
+          >
+            Drag to zoom
+          </text>
+        </template>
       </BoxPlotChartContext>
     </g>
   </svg>
@@ -163,5 +166,21 @@ export default {
   * {
     margin-right: 0.4em;
   }
+}
+</style>
+
+<style lang="scss" scoped>
+.brush-area rect {
+  fill: #f5f5f5;
+  stroke: #b1b1b1;
+  stroke-width: 2px;
+  stroke-dasharray: 4 2;
+}
+.brush-area text {
+  text-anchor: middle;
+  fill: #b1b1b1;
+}
+.brush-area__group text {
+  fill: #b1b1b1;
 }
 </style>
