@@ -38,7 +38,7 @@
       :y2="yScale(data.threshold)"
     />
     <MarksCurve
-      :points="data.genes"
+      :points="filteredData.genes"
       :xScale="xScale"
       :yScale="yScale"
       @selectedGene="onSelection"
@@ -46,7 +46,7 @@
     ></MarksCurve>
     <g :transform="`translate(${curveWidth + padding.x}, 0)`">
       <MarksGeneSet
-        :geneSet="data.genesSets.CFE"
+        :geneSet="filteredData.genesSets.CFE"
         :width="geneSetWidth"
         :yScale="yScale"
         :selectedGene="selectedGene"
@@ -114,6 +114,22 @@ export default {
       selectedGene.value = gene;
     };
 
+    const filteredData = computed(() => {
+      const genes = props.data.genes.filter(
+        (gene) =>
+          gene.y >= Math.min(...props.yDomain) &&
+          gene.y <= Math.max(...props.yDomain)
+      );
+      const genesSets = {
+        CFE: props.data.genesSets.CFE.filter(
+          (gene) =>
+            gene.rank >= Math.min(...props.yDomain) &&
+            gene.rank <= Math.max(...props.yDomain)
+        ),
+      };
+      return { genes, genesSets };
+    });
+
     return {
       margin,
       xScale,
@@ -127,6 +143,7 @@ export default {
       padding,
       selectedGene,
       onSelection,
+      filteredData,
     };
   },
 };
