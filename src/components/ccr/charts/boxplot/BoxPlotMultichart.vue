@@ -28,7 +28,15 @@
         :height="height"
         @brush="brushed"
         :domain="yDomainContext"
-      />
+      >
+        <text
+          :transform="`translate(${chartContextWidth / 2}, ${
+            height / 2
+          }) rotate(90 0 0)`"
+        >
+          Drag to zoom
+        </text>
+      </BoxPlotChartContext>
     </g>
   </svg>
 </template>

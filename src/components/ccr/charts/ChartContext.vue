@@ -1,22 +1,25 @@
 <template>
   <g class="brush-area" :transform="`translate(${margin.left}, ${margin.top})`">
     <rect x="0" y="0" :width="innerWidth" :height="innerHeight" />
-    <text
-      :transform="`translate(${innerWidth / 2}, ${
-        innerHeight / 2
-      }) rotate(90 0 0)`"
-      >Drag to zoom</text
-    >
+    <slot></slot>
     <g ref="brush"></g>
-    <g :transform="`translate(${innerWidth}, 0)`">
-      <D3Axis :scale="scale" position="right"></D3Axis>
+    <g
+      v-if="brushDirection === 'vertical'"
+      :transform="`translate(${innerWidth}, 0)`"
+    >
+      <D3Axis :scale="scale" :position="axisPos"></D3Axis>
+    </g>
+    <g
+      v-if="brushDirection === 'horizontal'"
+      :transform="`translate(0, ${innerHeight})`"
+    >
+      <D3Axis :scale="scale" :position="axisPos"></D3Axis>
     </g>
   </g>
 </template>
 <script>
 import { select, brushX, brushY, scaleLinear } from "d3";
 import D3Axis from "@/components/ccr/charts/D3Axis.vue";
-//import { dataExtent } from "@/composables/boxplot.js";
 import { getInnerChartSizes } from "@/composables/chart.js";
 
 import { ref, onMounted, computed } from "vue";
@@ -53,6 +56,10 @@ export default {
       type: String,
       default: "vertical",
     },
+    axisPos: {
+      type: String,
+      default: "right",
+    },
   },
   setup(props, { emit }) {
     const { innerWidth, innerHeight } = getInnerChartSizes(
@@ -61,9 +68,6 @@ export default {
       props.margin
     );
 
-    /*     const yDomain = computed(() => {
-      return dataExtent(props.data);
-    }); */
     const scale = computed(() => {
       return scaleLinear().domain(props.domain).range([innerHeight, 0]);
     });
@@ -71,7 +75,7 @@ export default {
     const updateBrushedDomain = ({ selection }) => {
       const extent = selection
         ? selection.map(scale.value.invert).reverse()
-        : props.domain.value;
+        : props.domain;
       emit("brush", extent);
     };
 

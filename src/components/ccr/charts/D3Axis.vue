@@ -4,7 +4,7 @@
 
 <script>
 import { select, axisBottom, axisLeft, axisRight, axisTop } from "d3";
-import { ref, watchEffect } from "vue";
+import { ref, onMounted } from "vue";
 
 export default {
   name: "D3Axis",
@@ -19,7 +19,7 @@ export default {
     },
     position: {
       type: String,
-      default: "x",
+      default: "bottom",
     },
   },
   setup(props) {
@@ -43,16 +43,11 @@ export default {
         break;
     }
 
-    watchEffect(
-      () => {
-        select(axis.value)
-          .call(axisFunction(props.scale))
-          .attr("stroke-opacity", 0.2);
-      },
-      {
-        flush: "post",
-      }
-    );
+    onMounted(() => {
+      select(axis.value)
+        .call(axisFunction(props.scale))
+        .attr("stroke-opacity", 0.2);
+    });
 
     return {
       axisFunction,
