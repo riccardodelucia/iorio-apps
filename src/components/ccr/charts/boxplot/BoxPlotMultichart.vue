@@ -45,13 +45,9 @@
 </template>
 
 <script>
-//import { dataExtent } from "@/composables/boxplot.js";
-
 import BoxPlotChartFocus from "@/components/ccr/charts/boxplot/BoxPlotChartFocus.vue";
-//import BoxPlotChartContext from "@/components/ccr/charts/boxplot/BoxPlotChartContext.vue";
 import BoxPlotChartContext from "@/components/ccr/charts/ChartContext.vue";
 
-//import { expand } from "@/composables/chart.js";
 import { extent } from "d3";
 
 import { ref, computed, watchEffect } from "vue";
@@ -132,8 +128,8 @@ export default {
         ? yDomainMaxNormalized
         : yDomainMaxUnnormalized;
       yDomainContext.value = showNormalizedData.value
-        ? yDomainMaxNormalized //.sort((a, b) => b - a)
-        : yDomainMaxUnnormalized; //.sort((a, b) => b - a);
+        ? yDomainMaxNormalized
+        : yDomainMaxUnnormalized;
     });
 
     const brushed = (extent) => {

@@ -37,7 +37,15 @@
           bottom: 20,
           left: 50,
         }"
-      />
+      >
+        <Marks
+          :points="selectedChartData.sgRNAArray"
+          :segments="selectedChartData.segments"
+          :xScale="xScale"
+          :yScale="yScale"
+          :pointRadius="2"
+        />
+      </ChromosomeChartContext>
     </g>
   </svg>
 </template>

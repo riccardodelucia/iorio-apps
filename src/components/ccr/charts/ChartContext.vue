@@ -114,19 +114,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.brush-area rect {
-  fill: #f5f5f5;
-  stroke: #b1b1b1;
-  stroke-width: 2px;
-  stroke-dasharray: 4 2;
-}
-.brush-area text {
-  text-anchor: middle;
-  fill: #b1b1b1;
-}
-.brush-area__group text {
-  fill: #b1b1b1;
-}
-</style>
