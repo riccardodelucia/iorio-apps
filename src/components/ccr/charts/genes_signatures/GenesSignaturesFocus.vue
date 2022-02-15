@@ -38,7 +38,7 @@
       :yScale="yScale"
       @selectedGene="onSelection"
     ></MarksCurve>
-    <g :transform="`translate(${curveWidth + padding}, 0)`">
+    <g :transform="`translate(${curveWidth + padding.x}, 0)`">
       <MarksGeneSet
         :geneSet="data.genesSets.CFE"
         :width="geneSetWidth"
@@ -67,6 +67,9 @@ export default {
     },
     width: { type: Number },
     height: { type: Number },
+    yDomain: {
+      type: Array,
+    },
   },
   components: { D3Axis, MarksCurve, MarksGeneSet },
   setup(props) {
@@ -84,16 +87,17 @@ export default {
     );
 
     const xDomain = extent(props.data.genes.map((item) => item.x));
-    const yDomain = extent(props.data.genes.map((item) => item.y));
 
     const curveWidth = innerWidth * 0.5;
-    const padding = 20;
-    const geneSetWidth = innerWidth - curveWidth - padding;
+    const padding = { x: 20, y: 30 };
+    const geneSetWidth = innerWidth - curveWidth - padding.x;
 
     const xScale = scaleLinear()
       .domain(xDomain)
       .range([0, innerWidth * 0.5]);
-    const yScale = scaleLog().domain(yDomain).range([0, innerHeight]);
+    const yScale = scaleLog()
+      .domain(props.yDomain)
+      .range([0, innerHeight - padding.y]);
 
     const selectedGene = ref(null);
 

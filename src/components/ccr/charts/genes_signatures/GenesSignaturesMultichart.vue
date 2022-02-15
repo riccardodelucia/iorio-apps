@@ -9,12 +9,16 @@
       :data="chartData"
       :width="width"
       :height="height"
+      :yDomain="yDomain"
     ></GenesSignaturesFocus>
   </svg>
 </template>
 
 <script>
+/* eslint-disable */
 import { extent } from "d3";
+
+import { expand } from "@/composables/chart.js";
 
 import GenesSignaturesFocus from "@/components/ccr/charts/genes_signatures/GenesSignaturesFocus.vue";
 
@@ -59,11 +63,13 @@ export default {
     const height = 900;
 
     const chartData = setupChart(props.data);
+    const yDomain = extent(chartData.genes.map((item) => item.y));
 
     return {
       width,
       height,
       chartData,
+      yDomain,
     };
   },
 };

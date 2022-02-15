@@ -8,8 +8,14 @@
     :y2="yScale(gene.rank)"
     :data-tippy-content="gene.gene"
     class="genes-signatures__gene"
-    :class="{ 'genes-signatures__gene--selected': selectedGene === gene.gene }"
+    :class="{ 'genes-signatures__gene--selected': gene.gene === selectedGene }"
+    :id="`${gene.gene}`"
   ></line>
+  <use
+    :xlink:href="`#${selectedGene}`"
+    class="genes-signatures__gene--selected"
+    stroke="red"
+  />
 </template>
 
 <script>
@@ -25,13 +31,15 @@ export default {
     },
     selectedGene: { type: String },
   },
+  setup() {
+    return {};
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .genes-signatures__gene {
   stroke: black;
-  fill: black;
   stroke-width: 2;
 
   &--selected {

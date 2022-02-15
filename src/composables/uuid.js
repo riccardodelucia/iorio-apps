@@ -1,6 +1,6 @@
 let UUID = 0;
 
-export default function UniqueID() {
+export default function () {
   const getID = () => {
     UUID++;
     return UUID;
