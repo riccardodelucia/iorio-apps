@@ -53,7 +53,7 @@
 <script>
 import ChromosomeChartFocus from "@/components/ccr/charts/chromosome/ChromosomeChartFocus.vue";
 //import ChromosomeChartContext from "@/components/ccr/charts/chromosome/ChromosomeChartContext.vue";
-import ChromosomeChartContext from "@/components/ccr/charts/ChartContext.vue";
+import ChromosomeChartContext from "@/components/ccr/charts/BrushArea.vue";
 
 import { extent } from "d3";
 

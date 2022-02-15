@@ -23,30 +23,18 @@
     </g>
     <g :transform="`translate(${chartFocusWidth}, 0)`">
       <BoxPlotChartContext
-        :data="selectedChartData"
         :width="chartContextWidth"
         :height="height"
         @brush="brushed"
-        :domain="yDomainContext"
-      >
-        <template v-slot="{ innerWidth, innerHeight }">
-          <rect x="0" y="0" :width="innerWidth" :height="innerHeight" />
-          <text
-            :transform="`translate(${innerWidth / 2}, ${
-              innerHeight / 2
-            }) rotate(90 0 0)`"
-          >
-            Drag to zoom
-          </text>
-        </template>
-      </BoxPlotChartContext>
+        :yDomain="yDomainContext"
+      ></BoxPlotChartContext>
     </g>
   </svg>
 </template>
 
 <script>
 import BoxPlotChartFocus from "@/components/ccr/charts/boxplot/BoxPlotChartFocus.vue";
-import BoxPlotChartContext from "@/components/ccr/charts/ChartContext.vue";
+import BoxPlotChartContext from "@/components/ccr/charts/boxplot/BoxPlotChartContext.vue";
 
 import { extent } from "d3";
 
@@ -133,6 +121,7 @@ export default {
     });
 
     const brushed = (extent) => {
+      console.log("brushed");
       yDomainFocus.value = extent;
     };
 
@@ -162,21 +151,5 @@ export default {
   * {
     margin-right: 0.4em;
   }
-}
-</style>
-
-<style lang="scss" scoped>
-.brush-area rect {
-  fill: #f5f5f5;
-  stroke: #b1b1b1;
-  stroke-width: 2px;
-  stroke-dasharray: 4 2;
-}
-.brush-area text {
-  text-anchor: middle;
-  fill: #b1b1b1;
-}
-.brush-area__group text {
-  fill: #b1b1b1;
 }
 </style>
