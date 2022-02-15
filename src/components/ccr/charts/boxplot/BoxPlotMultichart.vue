@@ -36,7 +36,8 @@
 import { dataExtent } from "@/composables/boxplot.js";
 
 import BoxPlotChartFocus from "@/components/ccr/charts/boxplot/BoxPlotChartFocus.vue";
-import BoxPlotChartContext from "@/components/ccr/charts/boxplot/BoxPlotChartContext.vue";
+//import BoxPlotChartContext from "@/components/ccr/charts/boxplot/BoxPlotChartContext.vue";
+import BoxPlotChartContext from "@/components/ccr/charts/ChartContext.vue";
 
 import { expand } from "@/composables/chart.js";
 
