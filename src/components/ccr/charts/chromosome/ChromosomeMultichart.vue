@@ -18,7 +18,7 @@
         :data="selectedChartData"
         :width="width"
         :height="chartFocusHeight"
-        :xBrush="xBrush"
+        :xDomain="xDomainFocus"
         :selections="selections"
       />
     </g>
@@ -28,6 +28,15 @@
         :width="width"
         :height="chartContextHeight"
         @brush="brushed"
+        :domain="xDomainContext"
+        brushDirection="horizontal"
+        axisPos="bottom"
+        :margin="{
+          top: 20,
+          right: 50,
+          bottom: 20,
+          left: 50,
+        }"
       />
     </g>
   </svg>
@@ -35,7 +44,8 @@
 
 <script>
 import ChromosomeChartFocus from "@/components/ccr/charts/chromosome/ChromosomeChartFocus.vue";
-import ChromosomeChartContext from "@/components/ccr/charts/chromosome/ChromosomeChartContext.vue";
+//import ChromosomeChartContext from "@/components/ccr/charts/chromosome/ChromosomeChartContext.vue";
+import ChromosomeChartContext from "@/components/ccr/charts/ChartContext.vue";
 
 import { extent } from "d3";
 
@@ -82,10 +92,12 @@ export default {
       props.data
     );
 
-    const xBrush = ref(extent([0, props.data.sgRNAArray.length]));
+    const xDomainFocus = ref(extent([0, props.data.sgRNAArray.length]));
+    const xDomainContext = xDomainFocus.value;
 
     const brushed = (extent) => {
-      xBrush.value = extent;
+      console.log(extent);
+      xDomainFocus.value = extent;
     };
 
     const selectedChartData = computed(() =>
@@ -98,7 +110,8 @@ export default {
       chartFocusHeight: 350,
       chartContextHeight: 100,
       selectedChartData,
-      xBrush,
+      xDomainFocus,
+      xDomainContext,
       selections: reactive({ segments: true, guides: true }),
       showNormalizedData,
       brushed,

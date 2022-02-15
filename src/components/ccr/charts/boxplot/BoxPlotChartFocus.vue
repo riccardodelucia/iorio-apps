@@ -74,14 +74,15 @@ export default {
       .padding(0.5);
 
     const yScale = computed(() => {
-      return scaleLinear().domain(props.yDomain).range([innerHeight, 0]);
+      return scaleLinear().domain(props.yDomain).range([0, innerHeight]);
     });
     const filteredData = computed(() => {
       return props.data.map((boxplot) => ({
         ...boxplot,
         outliers: boxplot.outliers.filter(
           (outlier) =>
-            outlier.value > props.yDomain[0] && outlier.value < props.yDomain[1]
+            outlier.value > Math.min(...props.yDomain) &&
+            outlier.value < Math.max(...props.yDomain)
         ),
       }));
     });

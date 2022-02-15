@@ -52,7 +52,7 @@ export default {
       type: Object,
       default: () => ({ segments: true, guides: true }),
     },
-    xBrush: {
+    xDomain: {
       type: Array,
     },
   },
@@ -75,7 +75,7 @@ export default {
       .range([innerHeight, 0]);
 
     const xScale = computed(() => {
-      return scaleLinear().domain(extent(props.xBrush)).range([0, innerWidth]);
+      return scaleLinear().domain(extent(props.xDomain)).range([0, innerWidth]);
     });
 
     const focusData = computed(() => {
@@ -83,7 +83,7 @@ export default {
         ...props.data,
         sgRNAArray: props.data.sgRNAArray.filter(
           (sgRNA) =>
-            sgRNA.idx >= props.xBrush[0] && sgRNA.idx <= props.xBrush[1]
+            sgRNA.idx >= props.xDomain[0] && sgRNA.idx <= props.xDomain[1]
         ),
       };
     });

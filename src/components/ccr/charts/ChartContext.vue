@@ -3,6 +3,7 @@
     <rect x="0" y="0" :width="innerWidth" :height="innerHeight" />
     <slot></slot>
     <g ref="brush"></g>
+
     <g
       v-if="brushDirection === 'vertical'"
       :transform="`translate(${innerWidth}, 0)`"
@@ -49,6 +50,9 @@ export default {
         left: 0,
       }),
     },
+    // the domain must be sorted according to how it has to be mapped on the screen, following the standard SVG axes orientation
+    // horizontal brush: [left, right]
+    // vertical brush:  [top, bottom]
     domain: {
       type: Array,
     },
@@ -68,20 +72,29 @@ export default {
       props.margin
     );
 
-    const scale = computed(() => {
-      return scaleLinear().domain(props.domain).range([innerHeight, 0]);
-    });
+    let scale = undefined;
+    let brushFunction = undefined;
+    const brush = ref(null);
+
+    if (props.brushDirection === "vertical") {
+      scale = computed(() => {
+        return scaleLinear().domain(props.domain).range([0, innerHeight]);
+      });
+      brushFunction = brushY;
+    } else {
+      scale = computed(() => {
+        return scaleLinear().domain(props.domain).range([0, innerWidth]);
+      });
+      brushFunction = brushX;
+    }
 
     const updateBrushedDomain = ({ selection }) => {
       const extent = selection
-        ? selection.map(scale.value.invert).reverse()
+        ? selection.map(scale.value.invert)
         : props.domain;
+
       emit("brush", extent);
     };
-
-    const brush = ref(null);
-
-    const brushFunction = props.brushDirection === "vertical" ? brushY : brushX;
 
     onMounted(() => {
       select(brush.value).call(

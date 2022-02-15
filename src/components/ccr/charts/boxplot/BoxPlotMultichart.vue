@@ -42,13 +42,14 @@
 </template>
 
 <script>
-import { dataExtent } from "@/composables/boxplot.js";
+//import { dataExtent } from "@/composables/boxplot.js";
 
 import BoxPlotChartFocus from "@/components/ccr/charts/boxplot/BoxPlotChartFocus.vue";
 //import BoxPlotChartContext from "@/components/ccr/charts/boxplot/BoxPlotChartContext.vue";
 import BoxPlotChartContext from "@/components/ccr/charts/ChartContext.vue";
 
-import { expand } from "@/composables/chart.js";
+//import { expand } from "@/composables/chart.js";
+import { extent } from "d3";
 
 import { ref, computed, watchEffect } from "vue";
 
@@ -79,17 +80,20 @@ const setupChart = (data) => {
   const chartDataUnnormalized = data?.raw && processData(data.raw);
   const chartDataNormalized = data?.norm && processData(data.norm);
 
-  const yDomainMaxUnnormalized =
-    data?.raw && expand(dataExtent(chartDataUnnormalized));
-  const yDomainMaxNormalized =
-    data?.norm && expand(dataExtent(chartDataNormalized));
-
   return {
     chartDataUnnormalized,
     chartDataNormalized,
-    yDomainMaxUnnormalized,
-    yDomainMaxNormalized,
   };
+};
+
+const dataExtent = (data) => {
+  const dist = data.map((item) => Object.values(item.dist)).flat();
+  const outliers = data
+    .map((item) => item.outliers)
+    .flat()
+    .map((item) => item.value)
+    .concat();
+  return extent(outliers.concat(dist)).sort((a, b) => b - a);
 };
 
 export default {
@@ -102,12 +106,9 @@ export default {
     },
   },
   setup(props) {
-    const {
-      chartDataUnnormalized,
-      chartDataNormalized,
-      yDomainMaxUnnormalized,
-      yDomainMaxNormalized,
-    } = setupChart(props.data);
+    const { chartDataUnnormalized, chartDataNormalized } = setupChart(
+      props.data
+    );
 
     const showNormalizedData = ref(Boolean(props.data?.norm));
 
@@ -118,13 +119,18 @@ export default {
     const yDomainFocus = ref(null);
     const yDomainContext = ref(null);
 
+    const yDomainMaxUnnormalized =
+      chartDataUnnormalized && dataExtent(chartDataUnnormalized); //expand(dataExtent(chartDataUnnormalized));
+    const yDomainMaxNormalized =
+      chartDataNormalized && dataExtent(chartDataNormalized); //expand(dataExtent(chartDataNormalized));
+
     watchEffect(() => {
       yDomainFocus.value = showNormalizedData.value
         ? yDomainMaxNormalized
         : yDomainMaxUnnormalized;
       yDomainContext.value = showNormalizedData.value
-        ? yDomainMaxNormalized
-        : yDomainMaxUnnormalized;
+        ? yDomainMaxNormalized //.sort((a, b) => b - a)
+        : yDomainMaxUnnormalized; //.sort((a, b) => b - a);
     });
 
     const brushed = (extent) => {
