@@ -44,6 +44,7 @@
         :width="geneSetWidth"
         :yScale="yScale"
         :selectedGene="selectedGene"
+        :thr="data.threshold"
       ></MarksGeneSet>
     </g>
   </g>
