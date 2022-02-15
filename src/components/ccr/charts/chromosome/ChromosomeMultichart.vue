@@ -28,32 +28,15 @@
         :width="width"
         :height="chartContextHeight"
         @brush="brushed"
-        :domain="xDomainContext"
-        brushDirection="horizontal"
-        axisPos="bottom"
-        :margin="{
-          top: 20,
-          right: 50,
-          bottom: 20,
-          left: 50,
-        }"
-      >
-        <Marks
-          :points="selectedChartData.sgRNAArray"
-          :segments="selectedChartData.segments"
-          :xScale="xScale"
-          :yScale="yScale"
-          :pointRadius="2"
-        />
-      </ChromosomeChartContext>
+        :xDomain="xDomainContext"
+      ></ChromosomeChartContext>
     </g>
   </svg>
 </template>
 
 <script>
 import ChromosomeChartFocus from "@/components/ccr/charts/chromosome/ChromosomeChartFocus.vue";
-//import ChromosomeChartContext from "@/components/ccr/charts/chromosome/ChromosomeChartContext.vue";
-import ChromosomeChartContext from "@/components/ccr/charts/BrushArea.vue";
+import ChromosomeChartContext from "@/components/ccr/charts/chromosome/ChromosomeChartContext.vue";
 
 import { extent } from "d3";
 

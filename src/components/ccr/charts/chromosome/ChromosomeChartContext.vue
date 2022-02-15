@@ -3,6 +3,15 @@
     <g :transform="`translate(0, ${innerHeight})`">
       <D3Axis :scale="xScale" orientation="x" />
     </g>
+    <BrushArea
+      :width="innerWidth"
+      :height="innerHeight"
+      v-bind="$attrs"
+      :domain="xDomain"
+      :scale="xScale"
+      brushDirection="horizontal"
+    >
+    </BrushArea>
     <Marks
       :points="data.sgRNAArray"
       :segments="data.segments"
@@ -18,6 +27,7 @@
 import { scaleLinear, extent, select, brushX } from "d3";
 import Marks from "@/components/ccr/charts/chromosome/Marks.vue";
 import D3Axis from "@/components/ccr/charts/D3Axis.vue";
+import BrushArea from "@/components/ccr/charts/BrushArea.vue";
 
 import { getInnerChartSizes } from "@/composables/chart.js";
 
@@ -25,7 +35,7 @@ import { ref, onMounted } from "vue";
 
 export default {
   name: "ChromosomeChartContext",
-  components: { Marks, D3Axis },
+  components: { D3Axis, BrushArea, Marks },
   props: {
     data: {
       type: Object,
@@ -36,6 +46,9 @@ export default {
     },
     height: {
       type: Number,
+    },
+    xDomain: {
+      type: Array,
     },
   },
   setup(props, { emit }) {
@@ -60,10 +73,8 @@ export default {
       .domain([0, props.data.sgRNAArray.length])
       .range([0, innerWidth]);
 
-    const xDomain = xScale.domain();
-
     const updateScale = ({ selection }) => {
-      const extent = selection ? selection.map(xScale.invert) : xDomain;
+      const extent = selection ? selection.map(xScale.invert) : props.xDomain;
       emit("brush", extent);
     };
 
