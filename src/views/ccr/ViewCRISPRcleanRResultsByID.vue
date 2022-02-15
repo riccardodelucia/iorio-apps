@@ -211,13 +211,13 @@ export default {
 <style lang="scss">
 .ccr-results {
   display: grid;
-  grid-template-columns: repeat(8, minmax(min-content, 14rem)) 1fr;
+  grid-template-columns: minmax(40rem, max-content) max-content 1fr;
   grid-column-gap: 1.2em;
   grid-row-gap: 1.5em;
   margin-bottom: 2em;
 
   &__details {
-    grid-column: 1 / 5;
+    grid-column: 1 / 2;
     //grid-row: 1 / 2;
     @media only screen and (max-width: 1300px) {
       grid-column: 1 / -1;
@@ -225,7 +225,7 @@ export default {
   }
 
   &__downloads {
-    grid-column: 1 / 4;
+    grid-column: 1 / 2;
     grid-row: 2 / 3;
 
     @media only screen and (max-width: 1300px) {
@@ -241,8 +241,10 @@ export default {
     }
   }
   &__genes-signatures {
-    grid-column: 5 / 9;
+    grid-column: 2 / 3;
     grid-row: 1 / 3;
+    width: min-content;
+    //justify-self: left;
 
     @media only screen and (max-width: 1300px) {
       grid-column: 1 / -1;

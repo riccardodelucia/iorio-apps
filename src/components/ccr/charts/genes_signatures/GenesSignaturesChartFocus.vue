@@ -46,7 +46,7 @@
     ></MarksCurve>
     <g :transform="`translate(${curveWidth + padding.x}, 0)`">
       <MarksGeneSet
-        :geneSet="filteredData.genesSets.CFE"
+        :geneSet="filteredData.genesSet"
         :width="geneSetWidth"
         :yScale="yScale"
         :selectedGene="selectedGene"
@@ -77,6 +77,9 @@ export default {
     height: { type: Number },
     yDomain: {
       type: Array,
+    },
+    genesSet: {
+      type: String,
     },
   },
   components: { D3Axis, MarksCurve, MarksGeneSet },
@@ -120,14 +123,13 @@ export default {
           gene.y >= Math.min(...props.yDomain) &&
           gene.y <= Math.max(...props.yDomain)
       );
-      const genesSets = {
-        CFE: props.data.genesSets.CFE.filter(
-          (gene) =>
-            gene.rank >= Math.min(...props.yDomain) &&
-            gene.rank <= Math.max(...props.yDomain)
-        ),
-      };
-      return { genes, genesSets };
+      const genesSet = props.data.genesSets[props.genesSet].filter(
+        (gene) =>
+          gene.rank >= Math.min(...props.yDomain) &&
+          gene.rank <= Math.max(...props.yDomain)
+      );
+
+      return { genes, genesSet };
     });
 
     return {

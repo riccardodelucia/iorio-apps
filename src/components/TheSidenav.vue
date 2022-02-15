@@ -78,7 +78,7 @@ export default {
     justify-content: center;
     margin: 2em 1em 0 1em;
 
-    @media only screen and (max-width: 600px) {
+    @media only screen and (max-width: 700px) {
       margin: 0.5em 0 0.5em 2em;
     }
 

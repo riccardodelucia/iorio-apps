@@ -1,4 +1,10 @@
 <template>
+  <BaseSelect
+    label="Gene Set"
+    :options="Object.keys(chartData.genesSets)"
+    v-model="genesSet"
+  >
+  </BaseSelect>
   <svg
     ref="svg"
     :width="width"
@@ -10,6 +16,7 @@
       :width="chartFocusWidth"
       :height="height"
       :yDomain="yDomainFocus"
+      :genesSet="genesSet"
     ></GenesSignaturesChartFocus>
     <g :transform="`translate(${chartFocusWidth}, 0)`">
       <GenesSignaturesChartContext
@@ -74,11 +81,12 @@ export default {
 
     const brushed = (extent) => {
       yDomainFocus.value = extent;
-      //console.log("brushed: ", extent);
     };
 
+    const genesSet = ref(Object.keys(chartData.genesSets)[0]);
+
     return {
-      width: 800,
+      width: 540,
       height: 700,
       chartFocusWidth: 350,
       chartContextWidth: 150,
@@ -86,6 +94,7 @@ export default {
       yDomainFocus,
       yDomainContext,
       brushed,
+      genesSet,
     };
   },
 };
