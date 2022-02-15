@@ -7,10 +7,10 @@
     :y1="yScale(gene.rank)"
     :y2="yScale(gene.rank)"
     class="genes-signatures__gene"
-    :class="{
-      'genes-signatures__gene--selected': gene.gene === selectedGene,
-      'genes-signatures__gene--grey': gene.rank >= thr,
-    }"
+    :class="[
+      `genes-signatures__gene--${gene.rank <= thr ? 'blue' : 'grey'}`,
+      gene.gene === selectedGene ? 'genes-signatures__gene--selected' : '',
+    ]"
     :id="`${gene.gene}`"
   ></line>
   <use
@@ -44,18 +44,20 @@ export default {
 
 <style lang="scss" scoped>
 .genes-signatures__gene {
-  stroke: blue;
   stroke-width: 2;
   opacity: 0.2;
+
+  &--blue {
+    stroke: blue;
+  }
+  &--grey {
+    stroke: grey;
+  }
 
   &--selected {
     stroke: red;
     stroke-width: 4;
     opacity: 1;
-  }
-
-  &--grey {
-    stroke: grey;
   }
 }
 </style>
