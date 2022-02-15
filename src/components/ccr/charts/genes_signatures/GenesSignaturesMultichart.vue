@@ -5,22 +5,29 @@
     :height="height"
     :viewBox="[0, 0, width, height].join(' ')"
   >
-    <GenesSignaturesFocus
+    <GenesSignaturesChartFocus
       :data="chartData"
-      :width="width"
+      :width="chartFocusWidth"
       :height="height"
-      :yDomain="yDomain"
-    ></GenesSignaturesFocus>
+      :yDomain="yDomainFocus"
+    ></GenesSignaturesChartFocus>
+    <g :transform="`translate(${chartFocusWidth}, 0)`">
+      <GenesSignaturesChartContext
+        :width="chartContextWidth"
+        :height="height"
+        :yDomain="yDomainContext"
+        @brush="brushed"
+      ></GenesSignaturesChartContext>
+    </g>
   </svg>
 </template>
 
 <script>
-/* eslint-disable */
 import { extent } from "d3";
+import { ref } from "vue";
 
-import { expand } from "@/composables/chart.js";
-
-import GenesSignaturesFocus from "@/components/ccr/charts/genes_signatures/GenesSignaturesFocus.vue";
+import GenesSignaturesChartFocus from "@/components/ccr/charts/genes_signatures/GenesSignaturesChartFocus.vue";
+import GenesSignaturesChartContext from "@/components/ccr/charts/genes_signatures/GenesSignaturesChartContext.vue";
 
 const setupChart = (data) => {
   const genes = data.curve
@@ -57,19 +64,28 @@ export default {
       required: true,
     },
   },
-  components: { GenesSignaturesFocus },
+  components: { GenesSignaturesChartFocus, GenesSignaturesChartContext },
   setup(props) {
-    const width = 700;
-    const height = 900;
-
     const chartData = setupChart(props.data);
-    const yDomain = extent(chartData.genes.map((item) => item.y));
+
+    const yDomainFocus = ref(extent(chartData.genes.map((item) => item.y)));
+
+    const yDomainContext = yDomainFocus.value;
+
+    const brushed = (extent) => {
+      yDomainFocus.value = extent;
+      //console.log("brushed: ", extent);
+    };
 
     return {
-      width,
-      height,
+      width: 800,
+      height: 700,
+      chartFocusWidth: 350,
+      chartContextWidth: 150,
       chartData,
-      yDomain,
+      yDomainFocus,
+      yDomainContext,
+      brushed,
     };
   },
 };

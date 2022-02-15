@@ -1,7 +1,7 @@
 <template>
   <g :transform="`translate(${margin.left}, ${margin.top})`">
     <g :transform="`translate(0, ${innerHeight})`">
-      <D3Axis :scale="xScale" orientation="x" />
+      <D3Axis :scale="xScale" position="bottom" />
     </g>
     <BrushArea
       :width="innerWidth"

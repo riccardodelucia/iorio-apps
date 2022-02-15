@@ -1,5 +1,10 @@
 <template>
-  <g ref="chart" :transform="`translate(${margin.left}, ${margin.top})`">
+  <g :transform="`translate(${margin.left}, ${margin.top})`">
+    <defs>
+      <clipPath id="clip-genes">
+        <rect :width="innerWidth" :height="innerHeight" />
+      </clipPath>
+    </defs>
     <text
       :transform="`translate(${-yAxisLabelOffset}, ${
         innerHeight / 2
@@ -37,6 +42,7 @@
       :xScale="xScale"
       :yScale="yScale"
       @selectedGene="onSelection"
+      clip-path="url(#clip-boxplots)"
     ></MarksCurve>
     <g :transform="`translate(${curveWidth + padding.x}, 0)`">
       <MarksGeneSet
@@ -45,6 +51,7 @@
         :yScale="yScale"
         :selectedGene="selectedGene"
         :thr="data.threshold"
+        clip-path="url(#clip-boxplots)"
       ></MarksGeneSet>
     </g>
   </g>
@@ -52,7 +59,7 @@
 
 <script>
 import { extent, scaleLinear, scaleLog } from "d3";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 import { getInnerChartSizes } from "@/composables/chart.js";
 import D3Axis from "@/components/ccr/charts/D3Axis.vue";
@@ -96,9 +103,10 @@ export default {
     const xScale = scaleLinear()
       .domain(xDomain)
       .range([0, innerWidth * 0.5]);
-    const yScale = scaleLog()
-      .domain(props.yDomain)
-      .range([0, innerHeight - padding.y]);
+
+    const yScale = computed(() =>
+      scaleLog().domain(props.yDomain).range([0, innerHeight])
+    );
 
     const selectedGene = ref(null);
 

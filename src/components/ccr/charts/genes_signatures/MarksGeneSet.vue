@@ -3,7 +3,7 @@
     v-for="(gene, idx) in geneSet"
     :key="idx"
     :x1="0"
-    :x2="300"
+    :x2="width"
     :y1="yScale(gene.rank)"
     :y2="yScale(gene.rank)"
     class="genes-signatures__gene"

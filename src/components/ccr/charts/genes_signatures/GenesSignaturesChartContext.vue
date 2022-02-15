@@ -1,6 +1,6 @@
 <template>
-  <g class="brush-area" :transform="`translate(${margin.left}, ${margin.top})`"
-    ><BrushArea
+  <g class="brush-area" :transform="`translate(${margin.left}, ${margin.top})`">
+    <BrushArea
       :width="innerWidth"
       :height="innerHeight"
       v-bind="$attrs"
@@ -8,14 +8,8 @@
       :scale="yScale"
     >
       <rect x="0" y="0" :width="innerWidth" :height="innerHeight" />
-      <text
-        :transform="`translate(${innerWidth / 2}, ${
-          innerHeight / 2
-        }) rotate(90 0 0)`"
-      >
-        Drag to zoom
-      </text>
     </BrushArea>
+
     <g :transform="`translate(${innerWidth}, 0)`">
       <D3Axis :scale="yScale" position="right"></D3Axis>
     </g>
@@ -23,14 +17,15 @@
 </template>
 
 <script>
+/* eslint-disable */
 import BrushArea from "@/components/ccr/charts/BrushArea.vue";
-import { getInnerChartSizes } from "@/composables/chart.js";
 import D3Axis from "@/components/ccr/charts/D3Axis.vue";
+import { getInnerChartSizes } from "@/composables/chart.js";
 import { computed } from "vue";
-import { scaleLinear } from "d3";
+import { scaleLog } from "d3";
 
 export default {
-  name: "BoxPlotChartContext",
+  name: "GenesSignaturesChartContext",
   components: { BrushArea, D3Axis },
   props: {
     width: {
@@ -49,7 +44,7 @@ export default {
     const margin = {
       top: 20,
       right: 0,
-      bottom: 30,
+      bottom: 40,
       left: 0,
     };
 
@@ -60,7 +55,7 @@ export default {
     );
 
     const yScale = computed(() => {
-      return scaleLinear().domain(props.yDomain).range([0, innerHeight]);
+      return scaleLog().domain(props.yDomain).range([0, innerHeight]);
     });
 
     return { margin, innerWidth, innerHeight, yScale };
