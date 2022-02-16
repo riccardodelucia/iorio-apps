@@ -243,7 +243,7 @@ export default {
   &__genes-signatures {
     grid-column: 2 / 3;
     grid-row: 1 / 3;
-    width: min-content;
+    //width: min-content;
     //justify-self: left;
 
     @media only screen and (max-width: 1300px) {

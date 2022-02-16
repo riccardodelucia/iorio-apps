@@ -8,6 +8,12 @@
       :scale="yScale"
     >
       <rect x="0" y="0" :width="innerWidth" :height="innerHeight" />
+      <MarksCurve
+        :points="data.genes"
+        :xScale="xScale"
+        :yScale="yScale"
+        pointRadius="2"
+      ></MarksCurve>
     </BrushArea>
 
     <g :transform="`translate(${innerWidth}, 0)`">
@@ -17,16 +23,15 @@
 </template>
 
 <script>
-/* eslint-disable */
 import BrushArea from "@/components/ccr/charts/BrushArea.vue";
 import D3Axis from "@/components/ccr/charts/D3Axis.vue";
 import { getInnerChartSizes } from "@/composables/chart.js";
-import { computed } from "vue";
-import { scaleLog } from "d3";
+import { scaleLog, extent, scaleLinear } from "d3";
+import MarksCurve from "@/components/ccr/charts/genes_signatures/MarksCurve.vue";
 
 export default {
   name: "GenesSignaturesChartContext",
-  components: { BrushArea, D3Axis },
+  components: { BrushArea, D3Axis, MarksCurve },
   props: {
     width: {
       type: Number,
@@ -34,6 +39,10 @@ export default {
     },
     height: {
       type: Number,
+      required: true,
+    },
+    data: {
+      type: Object,
       required: true,
     },
     yDomain: {
@@ -54,21 +63,22 @@ export default {
       margin
     );
 
-    const yScale = computed(() => {
-      return scaleLog().domain(props.yDomain).range([0, innerHeight]);
-    });
+    const yScale = scaleLog().domain(props.yDomain).range([0, innerHeight]);
 
-    return { margin, innerWidth, innerHeight, yScale };
+    const xDomain = extent(props.data.genes.map((item) => item.x));
+
+    const xScale = scaleLinear().domain(xDomain).range([0, innerWidth]);
+
+    return { margin, innerWidth, innerHeight, yScale, xScale };
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .brush-area rect {
-  fill: #f5f5f5;
-  stroke: #b1b1b1;
-  stroke-width: 2px;
-  stroke-dasharray: 4 2;
+  fill: #fafafa;
+  stroke: #ebebeb;
+  stroke-width: 1px;
 }
 .brush-area text {
   text-anchor: middle;

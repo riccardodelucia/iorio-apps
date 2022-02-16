@@ -20,6 +20,7 @@
     ></GenesSignaturesChartFocus>
     <g :transform="`translate(${chartFocusWidth}, 0)`">
       <GenesSignaturesChartContext
+        :data="chartData"
         :width="chartContextWidth"
         :height="height"
         :yDomain="yDomainContext"
@@ -86,10 +87,10 @@ export default {
     const genesSet = ref(Object.keys(chartData.genesSets)[0]);
 
     return {
-      width: 540,
+      width: 600,
       height: 700,
-      chartFocusWidth: 350,
-      chartContextWidth: 150,
+      chartFocusWidth: 450,
+      chartContextWidth: 70,
       chartData,
       yDomainFocus,
       yDomainContext,
