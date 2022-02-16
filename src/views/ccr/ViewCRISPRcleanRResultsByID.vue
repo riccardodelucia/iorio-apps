@@ -20,8 +20,6 @@
         </div>
 
         <div class="card ccr-results__genes-signatures">
-          <!--           <h3 class="u-margin-bottom-small">Genes Signatures</h3>
- -->
           <GenesSignaturesMultichart :data="genesSignatures">
           </GenesSignaturesMultichart>
         </div>
@@ -158,7 +156,6 @@ export default {
     ChromosomeMultichart,
     LineChartROC,
     LineChartPrRc,
-    //ComingSoon,
     GenesSignaturesMultichart,
   },
   props: {
@@ -211,7 +208,7 @@ export default {
 <style lang="scss">
 .ccr-results {
   display: grid;
-  grid-template-columns: minmax(40rem, max-content) min-content 1fr;
+  grid-template-columns: minmax(min-content, 80rem) min-content 1fr;
   grid-column-gap: 1.2em;
   grid-row-gap: 1.5em;
   margin-bottom: 2em;
