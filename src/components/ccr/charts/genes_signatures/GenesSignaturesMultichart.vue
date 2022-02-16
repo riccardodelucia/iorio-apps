@@ -61,6 +61,7 @@ const setupChart = (data) => {
   return {
     genes,
     threshold,
+    thresholdLabel: `FDR: ${data.metrics[0].threshod * 100}%`,
     genesSets: data.geneSetArray,
   };
 };

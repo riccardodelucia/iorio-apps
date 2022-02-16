@@ -24,19 +24,30 @@
       </text>
     </g>
     <line
-      class="chart__line chart__line--dashed chart__line--black"
       :x1="xScale(0)"
       :y1="0"
       :x2="xScale(0)"
       :y2="innerHeight"
+      stroke="black"
+      stroke-dasharray="4 2"
     />
-    <line
-      class="chart__line chart__line--dashed chart__line--red"
-      :x1="0"
-      :y1="yScale(data.threshold)"
-      :x2="innerWidth"
-      :y2="yScale(data.threshold)"
-    />
+    <g>
+      <line
+        :x1="0"
+        :y1="yScale(data.threshold)"
+        :x2="innerWidth"
+        :y2="yScale(data.threshold)"
+        stroke="red"
+        stroke-dasharray="4 2"
+      />
+      <text
+        :transform="`translate(10, ${yScale(data.threshold) - 5})`"
+        fill="red"
+      >
+        {{ data.thresholdLabel }}
+      </text>
+    </g>
+
     <MarksCurve
       :points="filteredData.genes"
       :xScale="xScale"
@@ -150,18 +161,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.chart__line {
-  stroke-width: 1;
-  &--dashed {
-    stroke-dasharray: 4 2;
-  }
-  &--black {
-    stroke: black;
-  }
-  &--red {
-    stroke: red;
-  }
-}
 .axis-label {
   text-anchor: middle;
   font-family: sans-serif;
