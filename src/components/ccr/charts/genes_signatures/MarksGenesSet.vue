@@ -1,27 +1,20 @@
 <template>
   <g class="marks">
     <line
+      v-for="(gene, idx) in geneSet"
+      :key="idx"
       :x1="0"
-      :y1="yScale(data.threshold)"
       :x2="width"
-      :y2="yScale(data.threshold)"
-      stroke="red"
-      stroke-dasharray="4 2"
-      clip-path="url(#clip-genes)" />
-    <circle
+      :y1="yScale(gene.rank)"
+      :y2="yScale(gene.rank)"
+      :stroke="gene.rank <= thr ? 'blue' : 'grey'"
       :class="{
         selected: gene.gene === modelValue,
       }"
-      v-for="(gene, idx) in data.genes"
-      :key="idx"
-      :cx="xScale(gene.x)"
-      :cy="yScale(gene.y)"
-      :r="pointRadius"
-      stroke="black"
       :data-tippy-content="gene.gene"
       @mouseover="onMouseOver($event, gene)"
       @mouseleave="onMouseLeave(gene)"
-    ></circle
+    ></line
   ></g>
 </template>
 
@@ -29,18 +22,9 @@
 import { setupMarksChart } from "@/composables/genes-signatures-chart.js";
 
 export default {
-  name: "MarksCurve",
+  name: "MarksGenesSet",
   props: {
-    data: {
-      type: Object,
-    },
-    pointRadius: {
-      type: Number,
-      default: 4,
-    },
-    xScale: {
-      type: Function,
-    },
+    geneSet: { type: Array },
     yScale: {
       type: Function,
     },
@@ -48,6 +32,9 @@ export default {
       type: Number,
     },
     modelValue: { type: String },
+    thr: {
+      type: Number,
+    },
   },
   setup(props, context) {
     const { onMouseOver, onMouseLeave } = setupMarksChart(context);
@@ -58,13 +45,14 @@ export default {
 
 <style lang="scss" scoped>
 .marks {
-  circle {
-    fill: black;
+  line {
+    stroke-width: 2;
+    opacity: 0.2;
 
     &.selected {
-      fill: red;
       stroke: red;
-      stroke-width: 8;
+      stroke-width: 4;
+      opacity: 1;
     }
   }
 }

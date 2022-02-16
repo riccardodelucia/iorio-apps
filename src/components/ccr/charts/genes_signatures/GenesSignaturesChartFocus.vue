@@ -31,39 +31,36 @@
       stroke="black"
       stroke-dasharray="4 2"
     />
-    <g>
-      <line
-        :x1="0"
-        :y1="yScale(data.threshold)"
-        :x2="innerWidth"
-        :y2="yScale(data.threshold)"
-        stroke="red"
-        stroke-dasharray="4 2"
-      />
-      <text
-        :transform="`translate(10, ${yScale(data.threshold) - 5})`"
-        fill="red"
-      >
-        {{ data.thresholdLabel }}
-      </text>
-    </g>
+    <text
+      x="5"
+      :y="yScale(data.threshold) - 10"
+      fill="red"
+      clip-path="url(#clip-genes)"
+    >
+      {{ data.thresholdLabel }}
+    </text>
 
     <MarksCurve
-      :points="filteredData.genes"
+      :data="filteredData"
+      :width="innerWidth"
       :xScale="xScale"
       :yScale="yScale"
-      @selectedGene="onSelection"
-      clip-path="url(#clip-boxplots)"
+      v-model="selectedGene"
     ></MarksCurve>
     <g :transform="`translate(${curveWidth + paddingX}, 0)`">
-      <MarksGeneSet
+      <MarksGenesSet
         :geneSet="filteredData.genesSet"
         :width="geneSetWidth"
         :yScale="yScale"
-        :selectedGene="selectedGene"
+        v-model="selectedGene"
         :thr="data.threshold"
-        clip-path="url(#clip-boxplots)"
-      ></MarksGeneSet>
+      ></MarksGenesSet>
+      <text
+        :transform="`translate(0, ${innerHeight + 28})`"
+        class="genes-set__label"
+      >
+        Recall: 1234
+      </text>
     </g>
   </g>
 </template>
@@ -75,7 +72,7 @@ import { ref, computed } from "vue";
 import { getInnerChartSizes } from "@/composables/chart.js";
 import D3Axis from "@/components/ccr/charts/D3Axis.vue";
 import MarksCurve from "@/components/ccr/charts/genes_signatures/MarksCurve.vue";
-import MarksGeneSet from "@/components/ccr/charts/genes_signatures/MarksGeneSet.vue";
+import MarksGenesSet from "@/components/ccr/charts/genes_signatures/MarksGenesSet.vue";
 
 export default {
   name: "GenesSignaturesFocus",
@@ -93,7 +90,7 @@ export default {
       type: String,
     },
   },
-  components: { D3Axis, MarksCurve, MarksGeneSet },
+  components: { D3Axis, MarksCurve, MarksGenesSet },
   setup(props) {
     const margin = {
       top: 20,
@@ -122,10 +119,6 @@ export default {
 
     const selectedGene = ref(null);
 
-    const onSelection = (gene) => {
-      selectedGene.value = gene;
-    };
-
     const filteredData = computed(() => {
       const genes = props.data.genes.filter(
         (gene) =>
@@ -138,7 +131,7 @@ export default {
           gene.rank <= Math.max(...props.yDomain)
       );
 
-      return { genes, genesSet };
+      return { genes, genesSet, threshold: props.data.threshold };
     });
 
     return {
@@ -153,7 +146,6 @@ export default {
       geneSetWidth,
       paddingX,
       selectedGene,
-      onSelection,
       filteredData,
     };
   },
@@ -165,6 +157,11 @@ export default {
   text-anchor: middle;
   font-family: sans-serif;
   font-size: 15px;
-  color: black;
+  fill: black;
+}
+.genes-set__label {
+  font-family: sans-serif;
+  font-size: 15px;
+  fill: blue;
 }
 </style>

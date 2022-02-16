@@ -9,7 +9,8 @@
     >
       <rect x="0" y="0" :width="innerWidth" :height="innerHeight" />
       <MarksCurve
-        :points="data.genes"
+        :width="innerWidth"
+        :data="data"
         :xScale="xScale"
         :yScale="yScale"
         pointRadius="2"

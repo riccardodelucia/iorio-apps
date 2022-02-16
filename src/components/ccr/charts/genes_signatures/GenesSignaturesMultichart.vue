@@ -1,6 +1,6 @@
 <template>
   <BaseSelect
-    label="Gene Set"
+    label="Choose a Genes Set"
     :options="Object.keys(chartData.genesSets)"
     v-model="genesSet"
   >
@@ -58,11 +58,13 @@ const setupChart = (data) => {
 
   const threshold = genes[thresholdCandidateIdx].y;
 
+  const genesSets = data.geneSetArray;
+
   return {
     genes,
     threshold,
     thresholdLabel: `FDR: ${data.metrics[0].threshod * 100}%`,
-    genesSets: data.geneSetArray,
+    genesSets,
   };
 };
 export default {

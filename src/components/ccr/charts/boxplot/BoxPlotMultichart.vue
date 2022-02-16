@@ -107,9 +107,9 @@ export default {
     const yDomainContext = ref(null);
 
     const yDomainMaxUnnormalized =
-      chartDataUnnormalized && dataExtent(chartDataUnnormalized); //expand(dataExtent(chartDataUnnormalized));
+      chartDataUnnormalized && dataExtent(chartDataUnnormalized);
     const yDomainMaxNormalized =
-      chartDataNormalized && dataExtent(chartDataNormalized); //expand(dataExtent(chartDataNormalized));
+      chartDataNormalized && dataExtent(chartDataNormalized);
 
     watchEffect(() => {
       yDomainFocus.value = showNormalizedData.value

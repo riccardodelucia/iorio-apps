@@ -1,10 +1,5 @@
 import tippy from "tippy.js";
 
-export const expand = function (extent) {
-  const diff = Math.abs(extent[0] - extent[1]);
-  return [extent[0] - 0.05 * diff, extent[1] + 0.05 * diff];
-};
-
 export const getInnerChartSizes = function (width, height, margin) {
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
