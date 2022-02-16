@@ -44,7 +44,7 @@
       @selectedGene="onSelection"
       clip-path="url(#clip-boxplots)"
     ></MarksCurve>
-    <g :transform="`translate(${curveWidth + padding.x}, 0)`">
+    <g :transform="`translate(${curveWidth + paddingX}, 0)`">
       <MarksGeneSet
         :geneSet="filteredData.genesSet"
         :width="geneSetWidth"
@@ -99,13 +99,11 @@ export default {
 
     const xDomain = extent(props.data.genes.map((item) => item.x));
 
-    const curveWidth = innerWidth * 0.5;
-    const padding = { x: 20, y: 30 };
-    const geneSetWidth = innerWidth - curveWidth - padding.x;
+    const curveWidth = innerWidth * 0.7;
+    const paddingX = 20;
+    const geneSetWidth = innerWidth - curveWidth - paddingX;
 
-    const xScale = scaleLinear()
-      .domain(xDomain)
-      .range([0, innerWidth * 0.5]);
+    const xScale = scaleLinear().domain(xDomain).range([0, curveWidth]);
 
     const yScale = computed(() =>
       scaleLog().domain(props.yDomain).range([0, innerHeight])
@@ -142,7 +140,7 @@ export default {
       innerHeight,
       curveWidth,
       geneSetWidth,
-      padding,
+      paddingX,
       selectedGene,
       onSelection,
       filteredData,
