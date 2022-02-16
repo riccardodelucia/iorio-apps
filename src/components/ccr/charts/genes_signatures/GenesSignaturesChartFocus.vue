@@ -31,6 +31,15 @@
       stroke="black"
       stroke-dasharray="4 2"
     />
+    <line
+      :x1="0"
+      :y1="yScale(data.threshold)"
+      :x2="innerWidth"
+      :y2="yScale(data.threshold)"
+      stroke="red"
+      stroke-dasharray="4 2"
+      clip-path="url(#clip-genes)"
+    />
     <text
       x="5"
       :y="yScale(data.threshold) - 10"
@@ -59,7 +68,7 @@
         :transform="`translate(0, ${innerHeight + 28})`"
         class="genes-set__label"
       >
-        Recall: 1234
+        Recall: {{ selectedGenesSetRecall }}
       </text>
     </g>
   </g>
@@ -119,19 +128,23 @@ export default {
 
     const selectedGene = ref(null);
 
+    const selectedGenesSetRecall = computed(
+      () => props.data.genesSets[props.genesSet].score
+    );
+
     const filteredData = computed(() => {
       const genes = props.data.genes.filter(
         (gene) =>
           gene.y >= Math.min(...props.yDomain) &&
           gene.y <= Math.max(...props.yDomain)
       );
-      const genesSet = props.data.genesSets[props.genesSet].filter(
+      const genesSet = props.data.genesSets[props.genesSet].set.filter(
         (gene) =>
           gene.rank >= Math.min(...props.yDomain) &&
           gene.rank <= Math.max(...props.yDomain)
       );
 
-      return { genes, genesSet, threshold: props.data.threshold };
+      return { genes, genesSet };
     });
 
     return {
@@ -147,6 +160,7 @@ export default {
       paddingX,
       selectedGene,
       filteredData,
+      selectedGenesSetRecall,
     };
   },
 };

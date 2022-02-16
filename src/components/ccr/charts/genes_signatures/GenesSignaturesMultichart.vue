@@ -34,6 +34,8 @@
 import { extent } from "d3";
 import { ref } from "vue";
 
+import camelize from "camelize";
+
 import GenesSignaturesChartFocus from "@/components/ccr/charts/genes_signatures/GenesSignaturesChartFocus.vue";
 import GenesSignaturesChartContext from "@/components/ccr/charts/genes_signatures/GenesSignaturesChartContext.vue";
 
@@ -59,12 +61,28 @@ const setupChart = (data) => {
   const threshold = genes[thresholdCandidateIdx].y;
 
   const genesSets = data.geneSetArray;
+  const genesSetsScores = data.geneSetScoreArray.reduce((acc, item) => {
+    const key = camelize(item.geneSet);
+    acc[key] = item.score;
+    return acc;
+  }, {});
+
+  const genesSetsWithScore = Object.entries(genesSets).reduce(
+    (acc, [key, value]) => {
+      acc[key] = {
+        set: value,
+        score: genesSetsScores[key],
+      };
+      return acc;
+    },
+    {}
+  );
 
   return {
     genes,
     threshold,
     thresholdLabel: `FDR: ${data.metrics[0].threshod * 100}%`,
-    genesSets,
+    genesSets: genesSetsWithScore,
   };
 };
 export default {

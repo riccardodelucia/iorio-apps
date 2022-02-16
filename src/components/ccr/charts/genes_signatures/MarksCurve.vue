@@ -1,13 +1,5 @@
 <template>
   <g class="marks">
-    <line
-      :x1="0"
-      :y1="yScale(data.threshold)"
-      :x2="width"
-      :y2="yScale(data.threshold)"
-      stroke="red"
-      stroke-dasharray="4 2"
-      clip-path="url(#clip-genes)" />
     <circle
       :class="{
         selected: gene.gene === modelValue,
