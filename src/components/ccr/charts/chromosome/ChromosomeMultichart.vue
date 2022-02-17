@@ -3,14 +3,15 @@
     <BaseCheckbox v-model="selections.segments" label="segments" />
     <BaseCheckbox v-model="selections.guides" label="guides" />
 
-    <span>{{
-      showNormalizedData ? "post correction" : "pre  correction"
-    }}</span>
-    <BaseToggleSwitch v-model="showNormalizedData" />
+    <div class="controls-container__normalization">
+      <span>{{
+        showNormalizedData ? "post correction" : "pre  correction"
+      }}</span>
+      <BaseToggleSwitch v-model="showNormalizedData" />
+    </div>
   </div>
   <svg
-    :width="width"
-    :height="height"
+    preserveAspectRatio="xMinYMin meet"
     :viewBox="[0, 0, width, height].join(' ')"
   >
     <g>
@@ -115,13 +116,17 @@ export default {
 .controls-container {
   margin: 0 2em;
   margin-bottom: 1em;
-  display: grid;
-  grid-template-columns: repeat(2, max-content) 1fr repeat(2, max-content);
-  grid-gap: 2em;
+  display: flex;
+  gap: 2em;
   align-items: center;
+  flex-wrap: wrap;
+  align-content: center;
 
-  span {
-    grid-column: 4 / 5;
+  &__normalization {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
   }
 }
 </style>

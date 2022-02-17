@@ -9,8 +9,7 @@
     }}</span>
   </div>
   <svg
-    :width="width"
-    :height="height"
+    preserveAspectRatio="xMinYMin meet"
     :viewBox="[0, 0, width, height].join(' ')"
   >
     <g>
@@ -127,11 +126,15 @@ export default {
 
     const needsToggleSwitch = props.data?.norm && props.data?.raw;
 
+    const chartFocusWidth = 900;
+    const chartContextWidth = 80;
+    const width = chartFocusWidth + chartContextWidth;
+
     return {
-      width: 1152,
+      width,
       height: 500,
-      chartFocusWidth: 900,
-      chartContextWidth: 80,
+      chartFocusWidth,
+      chartContextWidth,
       showNormalizedData,
       needsToggleSwitch,
       brushed,

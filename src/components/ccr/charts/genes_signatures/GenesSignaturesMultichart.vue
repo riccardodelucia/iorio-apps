@@ -6,9 +6,7 @@
   >
   </BaseSelect>
   <svg
-    ref="svg"
-    :width="width"
-    :height="height"
+    preserveAspectRatio="xMinYMin meet"
     :viewBox="[0, 0, width, height].join(' ')"
   >
     <GenesSignaturesChartFocus
@@ -107,11 +105,15 @@ export default {
 
     const genesSet = ref(Object.keys(chartData.genesSets)[0]);
 
+    const chartFocusWidth = 450;
+    const chartContextWidth = 70;
+    const width = chartFocusWidth + chartContextWidth;
+
     return {
-      width: 600,
+      width,
       height: 700,
-      chartFocusWidth: 450,
-      chartContextWidth: 70,
+      chartFocusWidth,
+      chartContextWidth,
       chartData,
       yDomainFocus,
       yDomainContext,

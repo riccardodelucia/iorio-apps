@@ -62,7 +62,7 @@ export default {
   setup(props) {
     const margin = {
       top: 20,
-      right: 0,
+      right: 20,
       bottom: 40,
       left: 0,
     };

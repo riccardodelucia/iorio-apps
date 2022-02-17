@@ -35,6 +35,21 @@ export default {
   z-index: 9;
   background-color: rgba(0, 0, 0, 0.8);
 
+  display: flex;
+  justify-content: center;
+  padding: 2em 1em;
+
+  &__dialog {
+    flex: 1 1 120rem;
+    max-width: 120rem;
+    background-color: #ffffff;
+    position: relative;
+    //width: fit-content;
+    height: fit-content;
+    //margin-top: 2rem; // auto;
+    border-radius: 5px;
+    z-index: 2;
+  }
   &__close {
     position: absolute;
     right: 1em;
@@ -62,29 +77,11 @@ export default {
     }
   }
 
-  &__dialog {
-    background-color: #ffffff;
-    position: relative;
-    width: fit-content;
-    height: fit-content;
-    margin: 2rem auto;
-    border-radius: 5px;
-    z-index: 2;
-  }
-
   &__header,
-  &__footer {
-    min-height: 3em;
-    padding: 1em;
-    text-align: center;
-  }
-
+  &__footer,
   &__body {
     padding: 1em 2em;
-    //min-width: 1000px;
-    //min-height: 500px;
-    //display: flex;
-    //justify-content: center;
+    text-align: center;
   }
 }
 .fade-enter-active,

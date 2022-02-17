@@ -1,7 +1,6 @@
 <template>
   <svg
-    :width="width"
-    :height="height"
+    preserveAspectRatio="xMinYMin meet"
     :viewBox="[0, 0, width, height].join(' ')"
     @mouseover="onMouseOver"
     @mousemove="onMouseOver"

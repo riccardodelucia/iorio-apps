@@ -208,14 +208,13 @@ export default {
 <style lang="scss">
 .ccr-results {
   display: grid;
-  grid-template-columns: minmax(min-content, 80rem) min-content 1fr;
+  grid-template-columns: minmax(min-content, 60rem) minmax(20rem, 60rem) 1fr;
   grid-column-gap: 1.2em;
   grid-row-gap: 1.5em;
   margin-bottom: 2em;
 
   &__details {
     grid-column: 1 / 2;
-    //grid-row: 1 / 2;
     @media only screen and (max-width: 1300px) {
       grid-column: 1 / -1;
     }
