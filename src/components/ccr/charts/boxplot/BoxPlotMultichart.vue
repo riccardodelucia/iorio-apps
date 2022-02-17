@@ -1,57 +1,41 @@
 <template>
-  <div>
-    <Tooltip
-      v-show="tooltipShow"
-      :tooltipCoords="tooltipCoords"
-      :data="tooltipData"
-    ></Tooltip>
-    <div class="controls-container">
-      <BaseToggleSwitch
-        v-if="data.raw && data.norm"
-        v-model="showNormalizedData"
-      />
-      <span v-if="needsToggleSwitch">{{
-        !showNormalizedData ? "unnormalized" : "normalized"
-      }}</span>
-    </div>
-    <svg
-      :width="width"
-      :height="height"
-      :viewBox="[0, 0, width, height].join(' ')"
-    >
-      <g>
-        <BoxPlotChartFocus
-          :data="selectedChartData"
-          :width="chartFocusWidth"
-          :height="height"
-          :yDomain="yDomainFocus"
-          @tooltipMouseover="onMouseOver"
-          @tooltipMousemove="onMouseMove"
-          @tooltipMouseleave="onMouseLeave"
-        />
-      </g>
-      <g :transform="`translate(${chartFocusWidth}, 0)`">
-        <BoxPlotChartContext
-          :data="selectedChartData"
-          :width="chartContextWidth"
-          :height="height"
-          @brush="brushed"
-        />
-      </g>
-    </svg>
+  <div class="controls-container">
+    <BaseToggleSwitch
+      v-if="data.raw && data.norm"
+      v-model="showNormalizedData"
+    />
+    <span v-if="needsToggleSwitch">{{
+      !showNormalizedData ? "unnormalized" : "normalized"
+    }}</span>
   </div>
+  <svg
+    preserveAspectRatio="xMinYMin meet"
+    :viewBox="[0, 0, width, height].join(' ')"
+  >
+    <g>
+      <BoxPlotChartFocus
+        :data="selectedChartData"
+        :width="chartFocusWidth"
+        :height="height"
+        :yDomain="yDomainFocus"
+      />
+    </g>
+    <g :transform="`translate(${chartFocusWidth}, 0)`">
+      <BoxPlotChartContext
+        :width="chartContextWidth"
+        :height="height"
+        @brush="brushed"
+        :yDomain="yDomainContext"
+      ></BoxPlotChartContext>
+    </g>
+  </svg>
 </template>
 
 <script>
-import { dataExtent } from "@/composables/boxplot.js";
-
-import Tooltip from "@/components/ccr/charts/Tooltip.vue";
-import { getTooltip } from "@/composables/chart.js";
-
 import BoxPlotChartFocus from "@/components/ccr/charts/boxplot/BoxPlotChartFocus.vue";
 import BoxPlotChartContext from "@/components/ccr/charts/boxplot/BoxPlotChartContext.vue";
 
-import { expand } from "@/composables/chart.js";
+import { extent } from "d3";
 
 import { ref, computed, watchEffect } from "vue";
 
@@ -82,22 +66,25 @@ const setupChart = (data) => {
   const chartDataUnnormalized = data?.raw && processData(data.raw);
   const chartDataNormalized = data?.norm && processData(data.norm);
 
-  const yDomainMaxUnnormalized =
-    data?.raw && expand(dataExtent(chartDataUnnormalized));
-  const yDomainMaxNormalized =
-    data?.norm && expand(dataExtent(chartDataNormalized));
-
   return {
     chartDataUnnormalized,
     chartDataNormalized,
-    yDomainMaxUnnormalized,
-    yDomainMaxNormalized,
   };
+};
+
+const dataExtent = (data) => {
+  const dist = data.map((item) => Object.values(item.dist)).flat();
+  const outliers = data
+    .map((item) => item.outliers)
+    .flat()
+    .map((item) => item.value)
+    .concat();
+  return extent(outliers.concat(dist)).sort((a, b) => b - a);
 };
 
 export default {
   name: "BoxPlotMultichart",
-  components: { BoxPlotChartFocus, BoxPlotChartContext, Tooltip },
+  components: { BoxPlotChartFocus, BoxPlotChartContext },
   props: {
     data: {
       type: Object,
@@ -105,21 +92,9 @@ export default {
     },
   },
   setup(props) {
-    const {
-      onMouseOver,
-      onMouseMove,
-      onMouseLeave,
-      tooltipCoords,
-      tooltipData,
-      tooltipShow,
-    } = getTooltip();
-
-    const {
-      chartDataUnnormalized,
-      chartDataNormalized,
-      yDomainMaxUnnormalized,
-      yDomainMaxNormalized,
-    } = setupChart(props.data);
+    const { chartDataUnnormalized, chartDataNormalized } = setupChart(
+      props.data
+    );
 
     const showNormalizedData = ref(Boolean(props.data?.norm));
 
@@ -128,34 +103,44 @@ export default {
     );
 
     const yDomainFocus = ref(null);
+    const yDomainContext = ref(null);
+
+    const yDomainMaxUnnormalized =
+      chartDataUnnormalized && dataExtent(chartDataUnnormalized);
+    const yDomainMaxNormalized =
+      chartDataNormalized && dataExtent(chartDataNormalized);
+
     watchEffect(() => {
       yDomainFocus.value = showNormalizedData.value
+        ? yDomainMaxNormalized
+        : yDomainMaxUnnormalized;
+      yDomainContext.value = showNormalizedData.value
         ? yDomainMaxNormalized
         : yDomainMaxUnnormalized;
     });
 
     const brushed = (extent) => {
+      console.log("brushed");
       yDomainFocus.value = extent;
     };
 
     const needsToggleSwitch = props.data?.norm && props.data?.raw;
 
+    const chartFocusWidth = 900;
+    const chartContextWidth = 80;
+    const width = chartFocusWidth + chartContextWidth;
+
     return {
-      width: 1152,
+      width,
       height: 500,
-      chartFocusWidth: 900,
-      chartContextWidth: 80,
+      chartFocusWidth,
+      chartContextWidth,
       showNormalizedData,
       needsToggleSwitch,
       brushed,
       yDomainFocus,
+      yDomainContext,
       selectedChartData,
-      onMouseOver,
-      onMouseMove,
-      onMouseLeave,
-      tooltipCoords,
-      tooltipData,
-      tooltipShow,
     };
   },
 };

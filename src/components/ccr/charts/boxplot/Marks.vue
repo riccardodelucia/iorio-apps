@@ -1,14 +1,6 @@
 <template>
   <g>
-    <g
-      @mouseover="
-        $emit('tooltip-mouseover', { event: $event, data: data.dist })
-      "
-      @mousemove="
-        $emit('tooltip-mousemove', { event: $event, data: data.dist })
-      "
-      @mouseleave="$emit('tooltip-mouseleave')"
-    >
+    <g @mouseover="onMouseOver" class="boxplot">
       <line
         :x1="bandwidth / 2"
         :x2="bandwidth / 2"
@@ -22,6 +14,8 @@
         :y1="yScale(data.dist.W1)"
         :y2="yScale(data.dist.W1)"
         class="boxplot__whisker-q"
+        :data-tippy-content="`W1: ${data.dist.W1}`"
+        @mouseover="onMouseOver"
       />
       <line
         :x1="0"
@@ -29,6 +23,8 @@
         :y1="yScale(data.dist.W2)"
         :y2="yScale(data.dist.W2)"
         class="boxplot__whisker-q"
+        :data-tippy-content="`W2: ${data.dist.W2}`"
+        @mouseover="onMouseOver"
       />
       <line
         :x1="0"
@@ -36,6 +32,8 @@
         :y1="yScale(data.dist.sd1)"
         :y2="yScale(data.dist.sd1)"
         class="boxplot__whisker-stdev"
+        :data-tippy-content="`Std dev 1: ${data.dist.sd1}`"
+        @mouseover="onMouseOver"
       />
       <line
         :x1="0"
@@ -43,6 +41,8 @@
         :y1="yScale(data.dist.sd2)"
         :y2="yScale(data.dist.sd2)"
         class="boxplot__whisker-stdev"
+        :data-tippy-content="`Std dev 2: ${data.dist.sd2}`"
+        @mouseover="onMouseOver"
       />
       <rect
         :x="0"
@@ -50,6 +50,8 @@
         :width="bandwidth"
         :height="boxHeight"
         class="boxplot__box"
+        :data-tippy-content="`IQR: ${data.dist.Q3}`"
+        @mouseover="onMouseOver"
       />
       <line
         :x1="0"
@@ -57,6 +59,8 @@
         :y1="yScale(data.dist.median)"
         :y2="yScale(data.dist.median)"
         class="boxplot__median"
+        :data-tippy-content="`Median: ${data.dist.median}`"
+        @mouseover="onMouseOver"
       />
       <line
         :x1="0"
@@ -64,13 +68,8 @@
         :y1="yScale(data.dist.mean)"
         :y2="yScale(data.dist.mean)"
         class="boxplot__mean"
-      />
-      <line
-        :x1="0"
-        :x2="bandwidth"
-        :y1="yScale(data.dist.median)"
-        :y2="yScale(data.dist.median)"
-        class="boxplot__median"
+        :data-tippy-content="`Mean: ${data.dist.mean}`"
+        @mouseover="onMouseOver"
       />
     </g>
 
@@ -81,14 +80,16 @@
       :cx="bandwidth / 2 + outlier.xOffset"
       :cy="yScale(outlier.value)"
       class="boxplot__outliers"
-      @mouseover="$emit('tooltip-mouseover', { event: $event, data: outlier })"
-      @mousemove="$emit('tooltip-mousemove', { event: $event, data: outlier })"
-      @mouseleave="$emit('tooltip-mouseleave')"
+      :data-tippy-content="setTooltipContent(outlier)"
+      @mouseover="onMouseOver"
     />
   </g>
 </template>
 
 <script>
+import { setupTooltip } from "@/composables/chart.js";
+import { computed } from "vue";
+
 export default {
   name: "Marks",
   props: {
@@ -102,14 +103,18 @@ export default {
       type: Object,
     },
   },
+  setup(props) {
+    const bandwidth = computed(() => {
+      return props.xScale.bandwidth();
+    });
+    const boxHeight = computed(() => {
+      return (
+        props.yScale(props.data.dist.Q1) - props.yScale(props.data.dist.Q3)
+      );
+    });
+    const { onMouseOver, setTooltipContent } = setupTooltip();
 
-  computed: {
-    bandwidth() {
-      return this.xScale.bandwidth();
-    },
-    boxHeight() {
-      return this.yScale(this.data.dist.Q1) - this.yScale(this.data.dist.Q3);
-    },
+    return { setTooltipContent, bandwidth, boxHeight, onMouseOver };
   },
 };
 </script>

@@ -24,12 +24,16 @@ export default {
   position: fixed;
   top: 0;
   right: 0;
+  max-width: 100vw;
+
+  &__content {
+    overflow: scroll;
+  }
 
   &__bar {
     padding: 1em 2em;
     min-width: 30vw;
-    margin-right: 1em;
-    margin-top: 1em;
+    margin: 1em;
     position: relative;
 
     &--success {
@@ -66,8 +70,8 @@ export default {
     position: absolute;
     right: 5px;
     top: 5px;
-    width: 2.4rem;
-    height: 2.4rem;
+    width: 24px;
+    height: 24px;
     opacity: 0.3;
     background-color: white;
     border: 1px solid;

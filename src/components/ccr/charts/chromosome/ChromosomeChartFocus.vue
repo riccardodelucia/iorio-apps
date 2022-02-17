@@ -5,15 +5,15 @@
         <rect :width="innerWidth" :height="innerHeight" />
       </clipPath>
     </defs>
-    <D3Axis :scale="yScale" orientation="y" :tickSize="-innerWidth" />
+    <D3Axis :scale="yScale" position="left" :tickSize="-innerWidth" />
+
     <g :transform="`translate(0, ${innerHeight})`">
-      <D3Axis :scale="xScale" orientation="x" />
+      <D3Axis :scale="xScale" position="bottom" />
     </g>
     <!-- Segments are clipped through a clip path, instead of filtering data. This is 
     convenient, since segments are very lightweight to manage, and the filtering algorithm would have
     to trim segment endpoints according to the current selected area. -->
     <Marks
-      v-bind="$attrs"
       :points="focusData.sgRNAArray"
       :segments="data.segments"
       :xScale="xScale"
@@ -52,7 +52,7 @@ export default {
       type: Object,
       default: () => ({ segments: true, guides: true }),
     },
-    xBrush: {
+    xDomain: {
       type: Array,
     },
   },
@@ -75,7 +75,7 @@ export default {
       .range([innerHeight, 0]);
 
     const xScale = computed(() => {
-      return scaleLinear().domain(extent(props.xBrush)).range([0, innerWidth]);
+      return scaleLinear().domain(extent(props.xDomain)).range([0, innerWidth]);
     });
 
     const focusData = computed(() => {
@@ -83,7 +83,7 @@ export default {
         ...props.data,
         sgRNAArray: props.data.sgRNAArray.filter(
           (sgRNA) =>
-            sgRNA.idx >= props.xBrush[0] && sgRNA.idx <= props.xBrush[1]
+            sgRNA.idx >= props.xDomain[0] && sgRNA.idx <= props.xDomain[1]
         ),
       };
     });

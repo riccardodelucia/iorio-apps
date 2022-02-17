@@ -1,6 +1,9 @@
 <template>
-  <header class="header header--web">
-    <div class="content">
+  <header class="header">
+    <div
+      class="header__content"
+      :class="{ 'header__content--web': layout === 'web' }"
+    >
       <a
         href="https://humantechnopole.it/en/"
         target="_blank"
@@ -44,6 +47,12 @@ export default {
   name: "TheHeader",
   components: { User },
   inject: ["keycloak"],
+  props: {
+    layout: {
+      type: String,
+      default: "app",
+    },
+  },
   data() {
     return {
       currentUri: `${window.location.protocol}//${window.location.host}${this.$route.fullPath}`,
@@ -59,36 +68,34 @@ export default {
 
 <style lang="scss">
 .header {
-  &--web {
-    //height: 8rem;
+  background-image: linear-gradient(
+    to right,
+    var(--color-gradient-blue-0) 0%,
+    var(--color-gradient-blue-100) 5%,
+    var(--color-gradient-green-0) 95%,
+    var(--color-gradient-green-100) 100%
+  );
+  background-size: cover;
+  background-repeat: no-repeat;
 
-    grid-column: 1 / -1;
+  &__content {
+    justify-content: space-between;
     display: flex;
-    justify-content: center;
-    background-image: linear-gradient(
-      to right,
-      var(--color-gradient-blue-0) 0%,
-      var(--color-gradient-blue-100) 5%,
-      var(--color-gradient-green-0) 95%,
-      var(--color-gradient-green-100) 100%
-    );
-    background-size: cover;
-    background-repeat: no-repeat;
+    padding: 1em 2em;
 
-    .content {
-      flex: 0 1 150rem;
-      padding: 1em 2em;
+    gap: 2rem;
+    flex-wrap: wrap;
 
-      grid-column: 2/ -2;
+    nav {
       display: flex;
-      gap: 2rem;
-      flex-wrap: wrap;
-      nav {
-        display: flex;
-        align-items: center;
-        gap: 2em;
-        margin-left: auto;
-      }
+      align-items: center;
+      gap: 1em;
+      margin-left: auto;
+    }
+
+    &--web {
+      max-width: 150rem;
+      margin: auto;
     }
   }
 

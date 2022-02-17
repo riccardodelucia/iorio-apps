@@ -12,6 +12,8 @@ import NProgress from "nprogress";
 
 import { keycloak } from "@/authentication.js";
 
+import "tippy.js/dist/tippy.css"; // optional for styling
+
 (async function () {
   NProgress.configure({ showSpinner: false });
 

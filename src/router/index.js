@@ -22,6 +22,9 @@ const routes = [
     path: "/dashboard",
     name: "dashboard",
     component: ViewDashboard,
+    meta: {
+      layout: "web",
+    },
   },
   {
     path: "/ccr",
@@ -31,12 +34,16 @@ const routes = [
     path: "/ccr/home",
     name: "ccr-home",
     component: ViewCRISPRcleanRHome,
+    meta: {
+      layout: "web",
+    },
   },
   {
     path: "/ccr/submit",
     name: "ccr-submit",
     meta: {
       requiresAuth: true,
+      layout: "app",
     },
     component: ViewCRISPRcleanRSubmitJob,
     beforeEnter: (to, from, next) => {
@@ -56,7 +63,7 @@ const routes = [
     component: ViewCRISPRcleanRResultsList,
     meta: {
       requiresAuth: true,
-      requiresNav: true,
+      layout: "app",
     },
     props: true,
     beforeEnter(to, from, next) {
@@ -77,6 +84,7 @@ const routes = [
     component: ViewCRISPRcleanRResultsByID,
     meta: {
       requiresAuth: true,
+      layout: "app",
     },
     props: true,
     beforeEnter(to, from, next) {
@@ -88,6 +96,10 @@ const routes = [
         })
         .then((values) => {
           to.params.imageList = values;
+          return store.dispatch("ccr/fetchGeneSignatures", to.params.id);
+        })
+        .then((result) => {
+          to.params.genesSignatures = result;
           next();
         })
         .catch((error) => {
@@ -113,6 +125,9 @@ const routes = [
       return;
     },
     props: true,
+    meta: {
+      layout: "msg",
+    },
   },
   {
     path: "/:catchAll(.*)",
@@ -124,6 +139,9 @@ const routes = [
       return;
     },
     props: true,
+    meta: {
+      layout: "msg",
+    },
   },
 ];
 

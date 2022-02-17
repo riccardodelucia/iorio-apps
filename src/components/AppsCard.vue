@@ -46,17 +46,11 @@ export default {
   grid-template-rows: min-content min-content 1fr 1fr min-content;
   grid-row-gap: 0.9em;
   grid-column-gap: 0.5em;
-  /* flex-direction: column;
-  justify-content: space-between; */
 
-  //margin: 2em 1em;
   padding: 1em 1.8em;
-  //background-color: white;
   overflow: hidden;
-  //border: 1px solid #eaeaea;
 
-  //border-radius: 8px;
-  box-shadow: var(--shadow-1);
+  box-shadow: var(--shadow-2);
 
   transition: transform 0.1s;
 
@@ -64,24 +58,11 @@ export default {
     transform: scale(1.05);
   }
 
-  /*   &__header {
-    display: flex;
-    //height: 60%;
-  } */
-
   &__logo {
-    //display: inline-block;
     height: 8rem;
     display: block;
     grid-column: 1 / 6;
     grid-row: 1 / 2;
-
-    /*     img {
-      margin: 0.4em auto;
-      max-width: 80%;
-      max-height: 100%;
-      display: block;
-    } */
   }
 
   &__title {
@@ -103,24 +84,6 @@ export default {
     grid-column: 1 / -1;
   }
 
-  /*   &__links {
-    //margin-top: 0.4em;
-    padding: 0.4em 0.8em 0.4em 0.8em;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-
-  } */
-
-  /*   &__link-container {
-    display: flex;
-    * {
-      margin-right: 0.3em;
-    }
-  } */
-
   &__link {
     grid-row: 5 / 6;
     text-decoration: none;
@@ -136,23 +99,6 @@ export default {
       height: 2rem;
       display: block;
     }
-
-    //margin-right: 0.4em;
   }
-
-  /*   &__text {
-    flex: 1;
-    //padding-top: 0.8em;
-
-    h3 {
-      margin-top: 0.6em;
-      margin-bottom: 0.3em;
-    }
-
-    p {
-      font-size: 1.4rem;
-      margin-bottom: 0.3em;
-    }
-  } */
 }
 </style>

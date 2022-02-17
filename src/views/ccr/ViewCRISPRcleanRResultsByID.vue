@@ -1,83 +1,106 @@
 <template>
-  <BaseLayoutApp>
-    <div class="layout-ccr">
-      <h2 class="u-margin-bottom-medium">Results</h2>
-      <div>
-        <h3 class="u-margin-bottom-small">Details</h3>
-        <ul>
-          <li><b>Title: </b>{{ result.title }}</li>
-          <li><b>Date: </b>{{ result.dateTime }}</li>
-          <li><b>Status: </b>{{ result.status }}</li>
-          <li><b>Input counts file: </b>{{ result.fileCountsName }}</li>
-          <li><b>Library: </b>{{ result.library }}</li>
-          <li><b>Number of controls: </b>{{ result.nControls }}</li>
-          <li>
-            <b>Minimal number of reads in the control sample: </b
-            >{{ result.normMinReads }}
-          </li>
-          <li><b>Normalization Method: </b>{{ result.method }}</li>
-          <li v-if="result.notes"><b>Notes: </b>{{ result.notes }}</li>
-        </ul>
+  <div class="layout-ccr">
+    <h2 class="u-margin-bottom-small">Results</h2>
+
+    <template v-if="result.status === 'success'">
+      <div class="ccr-results">
+        <div class="card ccr-results__downloads">
+          <h3 class="u-margin-bottom-small">Downloads</h3>
+          <div>
+            <button
+              v-for="(file, index) in fileList"
+              :key="index"
+              @click="onClick(file, id)"
+              class="button button--primary button--small"
+              type="button"
+            >
+              {{ file }}&nbsp;<span><BaseIcon name="download" /></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="card ccr-results__genes-signatures">
+          <GenesSignaturesMultichart :data="genesSignatures">
+          </GenesSignaturesMultichart>
+        </div>
+
+        <div class="card ccr-results__details">
+          <h3 class="u-margin-bottom-small">Details</h3>
+          <ul>
+            <li><b>Title: </b>{{ result.title }}</li>
+            <li><b>Date: </b>{{ result.dateTime }}</li>
+            <li><b>Status: </b>{{ result.status }}</li>
+            <li><b>Input counts file: </b>{{ result.fileCountsName }}</li>
+            <li><b>Library: </b>{{ result.library }}</li>
+            <li><b>Number of controls: </b>{{ result.nControls }}</li>
+            <li>
+              <b>Minimal number of reads in the control sample: </b
+              >{{ result.normMinReads }}
+            </li>
+            <li><b>Normalization Method: </b>{{ result.method }}</li>
+            <li v-if="result.notes"><b>Notes: </b>{{ result.notes }}</li>
+          </ul>
+        </div>
+
+        <BaseAccordion class="card card--color1 ccr-results__thumbnails">
+          <template v-slot:title>Normalization</template>
+          <template v-slot:content>
+            <div class="thumbnails__content">
+              <BaseThumbnail
+                v-for="item in normImages"
+                :key="item.filename"
+                @click="openModal(item, id)"
+                :img="item"
+              ></BaseThumbnail>
+            </div> </template
+        ></BaseAccordion>
+
+        <BaseAccordion
+          class="card card--color2 ccr-results__thumbnails"
+          height="42rem"
+        >
+          <template v-slot:title>Chromosome Charts</template>
+          <template v-slot:content>
+            <div class="thumbnails__content">
+              <BaseThumbnail
+                v-for="item in chrImages"
+                :key="item.filename"
+                @click="openModal(item, id)"
+                :img="item"
+              ></BaseThumbnail>
+            </div> </template
+        ></BaseAccordion>
+
+        <BaseAccordion class="card card--color3 ccr-results__thumbnails">
+          <template v-slot:title>QC Assessment</template>
+          <template v-slot:content>
+            <div class="thumbnails__content">
+              <BaseThumbnail
+                v-for="item in qcImages"
+                :key="item.filename"
+                @click="openModal(item, id)"
+                :img="item"
+              ></BaseThumbnail>
+            </div> </template
+        ></BaseAccordion>
       </div>
-      <template v-if="result.status === 'success'">
-        <div class="downloads-container u-margin-top-small">
-          <button
-            v-for="(file, index) in fileList"
-            :key="index"
-            @click="onClick(file, id)"
-            class="button button--primary button--small"
-            type="button"
-          >
-            {{ file }}&nbsp;<span><BaseIcon name="download" /></span>
-          </button>
-        </div>
+    </template>
+    <p class="ccr-results__msg" v-else>
+      Further content will appear here upon successful job completion...
+    </p>
 
-        <h3 class="u-margin-bottom-small">Normalization</h3>
-        <div class="results-container">
-          <BaseThumbnail
-            v-for="item in normImages"
-            :key="item.filename"
-            @click="openModal(item, id)"
-            :img="item"
-          ></BaseThumbnail>
-        </div>
-
-        <h3 class="u-margin-bottom-small">Cleaned chromosomes</h3>
-        <div class="results-container">
-          <BaseThumbnail
-            v-for="item in chrImages"
-            :key="item.filename"
-            @click="openModal(item, id)"
-            :img="item"
-          ></BaseThumbnail>
-        </div>
-
-        <h3 class="u-margin-bottom-small">QC assessment</h3>
-        <div class="results-container">
-          <BaseThumbnail
-            v-for="item in qcImages"
-            :key="item.filename"
-            @click="openModal(item, id)"
-            :img="item"
-          ></BaseThumbnail>
-        </div>
-        <BaseModal v-if="modalState != 'closed'" @modal-close="closeModal">
-          <template v-slot:header>{{ image.label }} </template>
-          <template v-slot:body>
-            <component
-              v-if="modalState === 'opened'"
-              :is="image.component"
-              :data="data"
-            />
-            <div v-else-if="modalState === 'loading'">Loading...</div>
-          </template>
-        </BaseModal>
+    <BaseModal v-if="modalState != 'closed'" @modal-close="closeModal">
+      <template v-slot:header>{{ image.label }} </template>
+      <template v-slot:body>
+        <component
+          v-if="modalState === 'opened'"
+          :is="image.component"
+          :data="data"
+        />
+        <div v-else-if="modalState === 'loading'">Loading...</div>
       </template>
-      <p v-else>
-        Further content will appear here upon successful job completion...
-      </p>
-    </div>
-  </BaseLayoutApp>
+    </BaseModal>
+  </div>
 </template>
 
 <script>
@@ -85,10 +108,10 @@ import CcrAPI from "@/api/ccr.js";
 import fileList from "@/files.json";
 
 import BoxPlotMultichart from "@/components/ccr/charts/boxplot/BoxPlotMultichart.vue";
-import ComingSoon from "@/components/ComingSoon.vue";
 import ChromosomeMultichart from "@/components/ccr/charts/chromosome/ChromosomeMultichart.vue";
 import LineChartROC from "@/components/ccr/charts/linechart/LineChartROC.vue";
 import LineChartPrRc from "@/components/ccr/charts/linechart/LineChartPrRc.vue";
+import GenesSignaturesMultichart from "@/components/ccr/charts/genes_signatures/GenesSignaturesMultichart.vue";
 
 import { download } from "@/composables/download.js";
 
@@ -133,7 +156,7 @@ export default {
     ChromosomeMultichart,
     LineChartROC,
     LineChartPrRc,
-    ComingSoon,
+    GenesSignaturesMultichart,
   },
   props: {
     id: {
@@ -147,6 +170,7 @@ export default {
       type: Object,
       required: true,
     },
+    genesSignatures: { type: Object, required: true },
   },
   setup(props) {
     const normImages = computed(() => {
@@ -182,17 +206,55 @@ export default {
 </script>
 
 <style lang="scss">
-.downloads-container {
-  margin-bottom: 1em;
-  display: flex;
-  gap: 1em;
-  flex-wrap: wrap;
-}
-
-.results-container {
+.ccr-results {
   display: grid;
-  grid-gap: 2rem;
-  grid-template-columns: repeat(auto-fit, 32rem);
+  grid-template-columns: minmax(min-content, 60rem) minmax(20rem, 60rem) 1fr;
+  grid-column-gap: 1.2em;
+  grid-row-gap: 1.5em;
   margin-bottom: 2em;
+
+  &__details {
+    grid-column: 1 / 2;
+    @media only screen and (max-width: 1300px) {
+      grid-column: 1 / -1;
+    }
+  }
+
+  &__downloads {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+
+    @media only screen and (max-width: 1300px) {
+      grid-column: 1 / -1;
+      grid-row: 3 / 4;
+    }
+
+    div {
+      margin-bottom: 1em;
+      display: flex;
+      gap: 1em;
+      flex-wrap: wrap;
+    }
+  }
+  &__genes-signatures {
+    grid-column: 2 / 3;
+    grid-row: 1 / 3;
+
+    @media only screen and (max-width: 1300px) {
+      grid-column: 1 / -1;
+      grid-row: 1 / 2;
+    }
+  }
+
+  &__thumbnails {
+    grid-column: 1/ -1;
+  }
+
+  .thumbnails__content {
+    display: grid;
+    justify-items: left;
+    gap: 1em;
+    grid-template-columns: repeat(auto-fit, minmax(min-content, 32rem));
+  }
 }
 </style>

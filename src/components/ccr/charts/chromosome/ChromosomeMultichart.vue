@@ -1,55 +1,43 @@
 <template>
-  <div>
-    <!-- Tooltip must be here on the multichart, since child components all render within the svg.
-    We cannot add a div inside an SVG document! -->
-    <Tooltip
-      v-show="tooltipShow"
-      :tooltipCoords="tooltipCoords"
-      :data="tooltipData"
-    ></Tooltip>
-    <div class="controls-container">
-      <BaseCheckbox v-model="selections.segments" label="segments" />
-      <BaseCheckbox v-model="selections.guides" label="guides" />
+  <div class="controls-container">
+    <BaseCheckbox v-model="selections.segments" label="segments" />
+    <BaseCheckbox v-model="selections.guides" label="guides" />
 
+    <div class="controls-container__normalization">
       <span>{{
         showNormalizedData ? "post correction" : "pre  correction"
       }}</span>
       <BaseToggleSwitch v-model="showNormalizedData" />
     </div>
-    <svg
-      :width="width"
-      :height="height"
-      :viewBox="[0, 0, width, height].join(' ')"
-    >
-      <g>
-        <ChromosomeChartFocus
-          :data="selectedChartData"
-          :width="width"
-          :height="chartFocusHeight"
-          :xBrush="xBrush"
-          :selections="selections"
-          @tooltipMouseover="onMouseOver"
-          @tooltipMousemove="onMouseMove"
-          @tooltipMouseleave="onMouseLeave"
-        />
-      </g>
-      <g :transform="`translate(0, ${chartFocusHeight})`">
-        <ChromosomeChartContext
-          :data="selectedChartData"
-          :width="width"
-          :height="chartContextHeight"
-          @brush="brushed"
-        />
-      </g>
-    </svg>
   </div>
+  <svg
+    preserveAspectRatio="xMinYMin meet"
+    :viewBox="[0, 0, width, height].join(' ')"
+  >
+    <g>
+      <ChromosomeChartFocus
+        :data="selectedChartData"
+        :width="width"
+        :height="chartFocusHeight"
+        :xDomain="xDomainFocus"
+        :selections="selections"
+      />
+    </g>
+    <g :transform="`translate(0, ${chartFocusHeight})`">
+      <ChromosomeChartContext
+        :data="selectedChartData"
+        :width="width"
+        :height="chartContextHeight"
+        @brush="brushed"
+        :xDomain="xDomainContext"
+      ></ChromosomeChartContext>
+    </g>
+  </svg>
 </template>
 
 <script>
 import ChromosomeChartFocus from "@/components/ccr/charts/chromosome/ChromosomeChartFocus.vue";
 import ChromosomeChartContext from "@/components/ccr/charts/chromosome/ChromosomeChartContext.vue";
-import Tooltip from "@/components/ccr/charts/Tooltip.vue";
-import { getTooltip } from "@/composables/chart.js";
 
 import { extent } from "d3";
 
@@ -82,7 +70,7 @@ const setupChart = (data) => {
 
 export default {
   name: "ChromosomeMultichart",
-  components: { ChromosomeChartFocus, ChromosomeChartContext, Tooltip },
+  components: { ChromosomeChartFocus, ChromosomeChartContext },
   props: {
     data: {
       type: Object,
@@ -90,25 +78,18 @@ export default {
     },
   },
   setup(props) {
-    const {
-      onMouseOver,
-      onMouseMove,
-      onMouseLeave,
-      tooltipCoords,
-      tooltipData,
-      tooltipShow,
-    } = getTooltip();
-
     const showNormalizedData = ref(true);
 
     const { chartDataUnnormalized, chartDataNormalized } = setupChart(
       props.data
     );
 
-    const xBrush = ref(extent([0, props.data.sgRNAArray.length]));
+    const xDomainFocus = ref(extent([0, props.data.sgRNAArray.length]));
+    const xDomainContext = xDomainFocus.value;
 
     const brushed = (extent) => {
-      xBrush.value = extent;
+      console.log(extent);
+      xDomainFocus.value = extent;
     };
 
     const selectedChartData = computed(() =>
@@ -121,16 +102,11 @@ export default {
       chartFocusHeight: 350,
       chartContextHeight: 100,
       selectedChartData,
-      xBrush,
+      xDomainFocus,
+      xDomainContext,
       selections: reactive({ segments: true, guides: true }),
       showNormalizedData,
       brushed,
-      onMouseOver,
-      onMouseMove,
-      onMouseLeave,
-      tooltipCoords,
-      tooltipData,
-      tooltipShow,
     };
   },
 };
@@ -139,13 +115,18 @@ export default {
 <style lang="scss" scoped>
 .controls-container {
   margin: 0 2em;
-  display: grid;
-  grid-template-columns: repeat(2, max-content) 1fr repeat(2, max-content);
-  grid-gap: 2em;
+  margin-bottom: 1em;
+  display: flex;
+  gap: 2em;
   align-items: center;
+  flex-wrap: wrap;
+  align-content: center;
 
-  span {
-    grid-column: 4 / 5;
+  &__normalization {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
   }
 }
 </style>

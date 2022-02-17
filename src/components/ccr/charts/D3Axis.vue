@@ -19,7 +19,7 @@ export default {
     },
     position: {
       type: String,
-      default: "x",
+      default: "bottom",
     },
   },
   setup(props) {
