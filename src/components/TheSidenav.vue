@@ -53,6 +53,8 @@ export default {
     });
     onUnmounted(() => {
       window.removeEventListener("resize", sizeListener);
+      const body = document.querySelector("body");
+      body.style.overflow = "auto";
     });
 
     const app = computed(() => {

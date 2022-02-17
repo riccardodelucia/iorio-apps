@@ -1,7 +1,7 @@
 <template>
   <div class="notification__bar" :class="notificationClass">
     <div class="notification__close" @click="onClick"></div>
-    <p>{{ notification.message }}</p>
+    <p class="notification__content">{{ notification.message }}</p>
   </div>
 </template>
 
