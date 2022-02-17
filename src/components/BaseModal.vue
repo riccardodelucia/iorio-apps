@@ -20,12 +20,21 @@
 <script>
 export default {
   name: "BaseModal",
+  mounted() {
+    const body = document.querySelector("body");
+    body.style.overflow = "hidden";
+  },
+  unmounted() {
+    console.log("unmounted");
+    const body = document.querySelector("body");
+    body.style.overflow = "auto";
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .modal {
-  overflow-x: hidden;
+  //overflow-x: hidden;
   overflow-y: auto;
   position: fixed;
   top: 0;
@@ -44,9 +53,7 @@ export default {
     max-width: 120rem;
     background-color: #ffffff;
     position: relative;
-    //width: fit-content;
     height: fit-content;
-    //margin-top: 2rem; // auto;
     border-radius: 5px;
     z-index: 2;
   }

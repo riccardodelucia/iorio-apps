@@ -1,9 +1,10 @@
 <template>
   <div v-if="collapsible" class="sidenav-controller">
-    <div class="sidenav-controller__menu" @click="showSideNav = true">
+    <div class="sidenav-controller__menu" @click="manageSidenav(true)">
       <div class="menu__item"></div>
     </div>
   </div>
+  <div v-if="showSideNav && collapsible" class="overlay"></div>
 
   <nav
     class="sidenav"
@@ -24,7 +25,11 @@
         <span class="sidenav__label">{{ link.label }}</span>
       </li>
     </ul>
-    <div v-if="collapsible" class="sidenav__close" @click="showSideNav = false">
+    <div
+      v-if="collapsible"
+      class="sidenav__close"
+      @click="manageSidenav(false)"
+    >
       <span>hide</span><BaseIcon name="chevrons-left"></BaseIcon>
     </div>
   </nav>
@@ -55,10 +60,17 @@ export default {
       return !key ? {} : { title: apps[key].title, links: apps[key].links };
     });
 
+    const manageSidenav = (value) => {
+      showSideNav.value = value;
+      const body = document.querySelector("body");
+      body.style.overflow = value ? "hidden" : "auto";
+    };
+
     return {
       collapsible,
       showSideNav,
       app,
+      manageSidenav,
     };
   },
 };
