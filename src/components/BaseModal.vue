@@ -25,7 +25,6 @@ export default {
     body.style.overflow = "hidden";
   },
   unmounted() {
-    console.log("unmounted");
     const body = document.querySelector("body");
     body.style.overflow = "auto";
   },
@@ -34,7 +33,6 @@ export default {
 
 <style lang="scss" scoped>
 .modal {
-  //overflow-x: hidden;
   overflow-y: auto;
   position: fixed;
   top: 0;

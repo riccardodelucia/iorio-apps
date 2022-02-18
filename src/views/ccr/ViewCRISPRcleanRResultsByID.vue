@@ -2,8 +2,29 @@
   <div class="layout-ccr">
     <h2 class="u-margin-bottom-small">Results</h2>
 
-    <template v-if="result.status === 'success'">
-      <div class="ccr-results">
+    <div class="ccr-results">
+      <div class="card ccr-results__details">
+        <h3 class="u-margin-bottom-small">Details</h3>
+        <ul>
+          <li><b>Title: </b>{{ result.title }}</li>
+          <li><b>Date: </b>{{ date(result.dateTime) }}</li>
+          <li><b>Status: </b>{{ result.status }}</li>
+          <li><b>Input counts file: </b>{{ result.fileCountsName }}</li>
+          <li><b>Library: </b>{{ result.library }}</li>
+          <li><b>Number of controls: </b>{{ result.nControls }}</li>
+          <li>
+            <b>Minimal number of reads in the control sample: </b
+            >{{ result.normMinReads }}
+          </li>
+          <li><b>Normalization Method: </b>{{ result.method }}</li>
+          <li v-if="result.notes"><b>Notes: </b>{{ result.notes }}</li>
+        </ul>
+      </div>
+      <template v-if="result.status === 'success'">
+        <div class="card ccr-results__genes-signatures">
+          <GenesSignaturesMultichart :data="genesSignatures">
+          </GenesSignaturesMultichart>
+        </div>
         <div class="card ccr-results__downloads">
           <h3 class="u-margin-bottom-small">Downloads</h3>
           <div>
@@ -17,29 +38,6 @@
               {{ file }}&nbsp;<span><BaseIcon name="download" /></span>
             </button>
           </div>
-        </div>
-
-        <div class="card ccr-results__genes-signatures">
-          <GenesSignaturesMultichart :data="genesSignatures">
-          </GenesSignaturesMultichart>
-        </div>
-
-        <div class="card ccr-results__details">
-          <h3 class="u-margin-bottom-small">Details</h3>
-          <ul>
-            <li><b>Title: </b>{{ result.title }}</li>
-            <li><b>Date: </b>{{ result.dateTime }}</li>
-            <li><b>Status: </b>{{ result.status }}</li>
-            <li><b>Input counts file: </b>{{ result.fileCountsName }}</li>
-            <li><b>Library: </b>{{ result.library }}</li>
-            <li><b>Number of controls: </b>{{ result.nControls }}</li>
-            <li>
-              <b>Minimal number of reads in the control sample: </b
-              >{{ result.normMinReads }}
-            </li>
-            <li><b>Normalization Method: </b>{{ result.method }}</li>
-            <li v-if="result.notes"><b>Notes: </b>{{ result.notes }}</li>
-          </ul>
         </div>
 
         <BaseAccordion class="card card--color1 ccr-results__thumbnails">
@@ -83,11 +81,11 @@
               ></BaseThumbnail>
             </div> </template
         ></BaseAccordion>
-      </div>
-    </template>
-    <p class="ccr-results__msg" v-else>
-      Further content will appear here upon successful job completion...
-    </p>
+      </template>
+      <p class="ccr-results__msg" v-else>
+        Further content appears here upon successful job completion...
+      </p>
+    </div>
 
     <BaseModal v-if="modalState != 'closed'" @modal-close="closeModal">
       <template v-slot:header>{{ image.label }} </template>
@@ -113,9 +111,9 @@ import LineChartROC from "@/components/ccr/charts/linechart/LineChartROC.vue";
 import LineChartPrRc from "@/components/ccr/charts/linechart/LineChartPrRc.vue";
 import GenesSignaturesMultichart from "@/components/ccr/charts/genes_signatures/GenesSignaturesMultichart.vue";
 
-import { download } from "@/composables/download.js";
-
 import { ref, computed } from "vue";
+
+import { date, download } from "@/composables/utilities.js";
 
 const image = ref({});
 const data = ref({});
@@ -200,6 +198,7 @@ export default {
       normImages,
       chrImages,
       qcImages,
+      date,
     };
   },
 };
@@ -213,21 +212,23 @@ export default {
   grid-row-gap: 1.5em;
   margin-bottom: 2em;
 
+  @media only screen and (max-width: 1300px) {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+  }
+
+  &__msg {
+    grid-column: 1 / 2;
+  }
+
   &__details {
     grid-column: 1 / 2;
-    @media only screen and (max-width: 1300px) {
-      grid-column: 1 / -1;
-    }
   }
 
   &__downloads {
     grid-column: 1 / 2;
     grid-row: 2 / 3;
-
-    @media only screen and (max-width: 1300px) {
-      grid-column: 1 / -1;
-      grid-row: 3 / 4;
-    }
 
     div {
       margin-bottom: 1em;
@@ -239,11 +240,6 @@ export default {
   &__genes-signatures {
     grid-column: 2 / 3;
     grid-row: 1 / 3;
-
-    @media only screen and (max-width: 1300px) {
-      grid-column: 1 / -1;
-      grid-row: 1 / 2;
-    }
   }
 
   &__thumbnails {

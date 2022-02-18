@@ -20,7 +20,7 @@
           $emit('update:modelValue', option);
         "
       >
-        {{ option }}
+        {{ format(option) }}
       </div>
     </div>
   </div>
@@ -52,10 +52,14 @@ export default {
       required: false,
       default: 0,
     },
+    format: {
+      type: Function,
+      default: (label) => label,
+    },
   },
   computed: {
     selection() {
-      return this.modelValue || this.placeholder;
+      return this.format(this.modelValue) || this.placeholder;
     },
   },
   data() {

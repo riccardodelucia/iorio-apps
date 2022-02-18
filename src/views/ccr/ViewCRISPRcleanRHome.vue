@@ -311,7 +311,7 @@
 
 <script>
 import CcrAPI from "@/api/ccr.js";
-import { download } from "@/composables/download.js";
+import { download } from "@/composables/utilities.js";
 
 export default {
   title: "CRISPRcleanR",

@@ -88,7 +88,6 @@ export default {
     const xDomainContext = xDomainFocus.value;
 
     const brushed = (extent) => {
-      console.log(extent);
       xDomainFocus.value = extent;
     };
 

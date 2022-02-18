@@ -1,3 +1,8 @@
+export const date = (dateTime) => {
+  const date = new Date(Date.parse(dateTime));
+  return date.toLocaleString();
+};
+
 export const download = function (data, filename) {
   const link = document.createElement("a");
 
