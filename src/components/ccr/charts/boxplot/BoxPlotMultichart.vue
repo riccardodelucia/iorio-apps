@@ -120,7 +120,6 @@ export default {
     });
 
     const brushed = (extent) => {
-      console.log("brushed");
       yDomainFocus.value = extent;
     };
 

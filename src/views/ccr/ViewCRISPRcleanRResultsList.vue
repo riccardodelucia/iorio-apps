@@ -3,7 +3,9 @@
     <h2 class="u-margin-bottom-medium">Results</h2>
     <BaseDatatable :columns="columns" :rows="results">
       <template v-slot:default="slotProps">
-        <td>{{ slotProps.row.dateTime }}</td>
+        <td>
+          {{ date(slotProps.row.dateTime) }}
+        </td>
         <td>{{ slotProps.row.email }}</td>
         <td>{{ slotProps.row.title }}</td>
         <td>
@@ -17,6 +19,8 @@
 </template>
 
 <script>
+import { date } from "@/composables/utilities.js";
+
 export default {
   title: "Jobs Results",
   name: "ViewCRISPRcleanRResultsList",
@@ -26,7 +30,27 @@ export default {
       type: Array,
     },
   },
-  data() {
+  setup() {
+    const pagination = {
+      lastPage: "",
+      currentPage: "",
+      total: "",
+      lastPageUrl: "",
+      nextPageUrl: "",
+      prevPageUrl: "",
+      from: "",
+      to: "",
+    };
+    const configPagination = (data) => {
+      pagination.lastPage = data.last_page;
+      pagination.currentPage = data.current_page;
+      pagination.total = data.total;
+      pagination.lastPageUrl = data.last_page_url;
+      pagination.nextPageUrl = data.next_page_url;
+      pagination.prevPageUrl = data.prev_page_url;
+      pagination.from = data.from;
+      pagination.to = data.to;
+    };
     return {
       columns: [
         {
@@ -39,30 +63,10 @@ export default {
         { width: "5%", label: "Actions", name: "actions", isSortable: false },
       ],
       perPage: ["10", "20", "30"],
-
-      pagination: {
-        lastPage: "",
-        currentPage: "",
-        total: "",
-        lastPageUrl: "",
-        nextPageUrl: "",
-        prevPageUrl: "",
-        from: "",
-        to: "",
-      },
+      pagination,
+      configPagination,
+      date,
     };
-  },
-  methods: {
-    configPagination(data) {
-      this.pagination.lastPage = data.last_page;
-      this.pagination.currentPage = data.current_page;
-      this.pagination.total = data.total;
-      this.pagination.lastPageUrl = data.last_page_url;
-      this.pagination.nextPageUrl = data.next_page_url;
-      this.pagination.prevPageUrl = data.prev_page_url;
-      this.pagination.from = data.from;
-      this.pagination.to = data.to;
-    },
   },
 };
 </script>

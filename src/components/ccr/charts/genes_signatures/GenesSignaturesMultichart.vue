@@ -2,6 +2,7 @@
   <BaseSelect
     label="Choose a Genes Set"
     :options="Object.keys(chartData.genesSets)"
+    :format="makeLabel"
     v-model="genesSet"
   >
   </BaseSelect>
@@ -31,11 +32,15 @@
 <script>
 import { extent } from "d3";
 import { ref } from "vue";
-
-import camelize from "camelize";
+import { snakeCase } from "lodash";
 
 import GenesSignaturesChartFocus from "@/components/ccr/charts/genes_signatures/GenesSignaturesChartFocus.vue";
 import GenesSignaturesChartContext from "@/components/ccr/charts/genes_signatures/GenesSignaturesChartContext.vue";
+
+const makeLabel = (label) => {
+  const snakeCaseLabel = snakeCase(label);
+  return snakeCaseLabel.replace(/_/g, " ");
+};
 
 const setupChart = (data) => {
   const genes = data.curve
@@ -48,7 +53,7 @@ const setupChart = (data) => {
 
   const xDomain = extent(genes.map((item) => item.x));
   const xInterval = xDomain[0] - xDomain[1];
-  const xThreshold = data.metrics[0].threshod * xInterval; // typo from the files
+  const xThreshold = data.metrics[0].threshold * xInterval;
   const { idx: thresholdCandidateIdx } = genes
     .map((item, idx) => ({
       dist: Math.abs(item.x - xThreshold),
@@ -58,18 +63,11 @@ const setupChart = (data) => {
 
   const threshold = genes[thresholdCandidateIdx].y;
 
-  const genesSets = data.geneSetArray;
-  const genesSetsScores = data.geneSetScoreArray.reduce((acc, item) => {
-    const key = camelize(item.geneSet);
-    acc[key] = item.score;
-    return acc;
-  }, {});
-
-  const genesSetsWithScore = Object.entries(genesSets).reduce(
+  const genesSets = Object.entries(data.geneSetArray).reduce(
     (acc, [key, value]) => {
       acc[key] = {
-        set: value,
-        score: genesSetsScores[key],
+        set: value.genes,
+        score: value.score[0],
       };
       return acc;
     },
@@ -79,8 +77,8 @@ const setupChart = (data) => {
   return {
     genes,
     threshold,
-    thresholdLabel: `FDR: ${data.metrics[0].threshod * 100}%`,
-    genesSets: genesSetsWithScore,
+    thresholdLabel: `FDR: ${data.metrics[0].threshold * 100}%`,
+    genesSets,
   };
 };
 export default {
@@ -119,6 +117,7 @@ export default {
       yDomainContext,
       brushed,
       genesSet,
+      makeLabel,
     };
   },
 };

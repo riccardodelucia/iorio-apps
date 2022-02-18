@@ -92,6 +92,9 @@ const routes = [
         .dispatch("ccr/fetchResultByID", to.params.id)
         .then((result) => {
           to.params.result = result;
+          if (result.status !== "success") {
+            next();
+          }
           return store.dispatch("ccr/fetchImages", to.params.id);
         })
         .then((values) => {

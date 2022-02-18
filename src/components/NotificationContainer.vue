@@ -24,16 +24,16 @@ export default {
   position: fixed;
   top: 0;
   right: 0;
-  max-width: 100vw;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  overflow-wrap: anywhere;
 
-  &__content {
-    overflow: scroll;
-  }
+  padding: 1em;
 
   &__bar {
     padding: 1em 2em;
-    min-width: 30vw;
-    margin: 1em;
+    //flex: 1 1 20rem;
     position: relative;
 
     &--success {
@@ -91,7 +91,6 @@ export default {
       content: " ";
       height: 12px;
       width: 2px;
-      //background-color: black;
       opacity: 0.7;
     }
     &:before {

@@ -128,9 +128,10 @@ export default {
 
     const selectedGene = ref(null);
 
-    const selectedGenesSetRecall = computed(
-      () => props.data.genesSets[props.genesSet].score
-    );
+    const selectedGenesSetRecall = computed(() => {
+      const recall = props.data.genesSets[props.genesSet].score * 100;
+      return `${recall.toFixed(2)}%`;
+    });
 
     const filteredData = computed(() => {
       const genes = props.data.genes.filter(

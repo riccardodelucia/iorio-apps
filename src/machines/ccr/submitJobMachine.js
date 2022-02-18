@@ -16,8 +16,6 @@ const resetContext = assign({
 });
 
 const sendErrorNotification = (context, event) => {
-  console.log("sendErrorNotification: ", context);
-
   sendNotification({
     type: "error",
     message: "Error during form submission: " + event.data.message,
