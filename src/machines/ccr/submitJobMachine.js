@@ -1,84 +1,69 @@
 import { createMachine, assign } from "xstate";
 import CcrAPI from "@/api/ccr.js";
-import { sendNotification } from "@/composables/notification.js";
+import store from "@/store";
 
-const assignSubmittedJob = assign({
-  submittedJob: (context, event) => {
-    return event.data.data;
+export const submitJobMachine = createMachine({
+  id: "submitJob",
+  context: {
+    submittedJob: {},
   },
-  resultsUrl: (context, event) => {
-    return `${document.location.origin}/ccr/results/${event.data.data.id}`;
-  },
-});
-
-const resetContext = assign({
-  submittedJob: () => ({}),
-});
-
-const sendErrorNotification = (context, event) => {
-  sendNotification({
-    type: "error",
-    message: "Error during form submission: " + event.data.message,
-    timeout: 5,
-  });
-};
-
-const sendSuccessNotification = (context) => {
-  sendNotification({
-    type: "success",
-    message: `Job Submitted! Please find your results here: ${context.resultsUrl}`,
-  });
-};
-
-export const submitJobMachine = createMachine(
-  {
-    id: "submitJob",
-    context: {
-      submittedJob: {},
-      resultsUrl: "",
+  initial: "idle",
+  states: {
+    idle: {
+      //entry: "resetContext", // if enabled, send success notification reads an undefined id...
+      on: { SUBMIT: { target: "submitting", cond: "confirmSubmission" } },
     },
-    initial: "idle",
-    states: {
-      idle: {
-        //entry: "resetContext", // if enabled, send success notification reads an undefined id...
-        on: { SUBMIT: { target: "submitting", cond: "confirmSubmission" } },
-      },
-      submitting: {
-        invoke: {
-          src: (context, payload) => {
-            return CcrAPI.submitJob(payload);
-          },
-          // resolved promise
-          onDone: {
-            target: "success",
-            actions: "assignSubmittedJob",
-          },
-          // rejected promise
-          onError: {
-            target: "error",
-          },
+    submitting: {
+      invoke: {
+        src: (context, payload) => {
+          return CcrAPI.submitJob(payload);
+        },
+        // resolved promise
+        onDone: {
+          target: "success",
+          actions: "assignSubmittedJob",
+        },
+        // rejected promise
+        onError: {
+          target: "error",
         },
       },
-      success: {
-        entry: "sendSuccessNotification",
-        always: { target: "idle" },
-      },
-      error: {
-        entry: "sendErrorNotification",
-        always: { target: "idle" },
-      },
+    },
+    success: {
+      entry: "sendSuccessNotification",
+      always: { target: "idle" },
+    },
+    error: {
+      entry: "sendErrorNotification",
+      always: { target: "idle" },
     },
   },
-  {
-    guards: {
-      confirmSubmission: () =>
-        window.confirm("Do you want to submit this job?"),
+}).withConfig({
+  actions: {
+    assignSubmittedJob: assign({
+      submittedJob: (context, event) => {
+        return event.data.data;
+      },
+    }),
+    resetContext: assign({
+      submittedJob: () => ({}),
+    }),
+    sendErrorNotification: (context, event) => {
+      store.dispatch("notification/add", {
+        type: "error",
+        title: "Submission Error",
+        message: event.data.message,
+      });
     },
-    actions: {
-      assignSubmittedJob,
-      resetContext,
-      sendErrorNotification,
-      sendSuccessNotification,
+    sendSuccessNotification: (context) => {
+      store.dispatch("notification/add", {
+        type: "success",
+        title: "Job Submitted",
+        message: `Job ID: ${context.submittedJob.id}`,
+      });
     },
-  }
-);
+  },
+  guards: {
+    confirmSubmission: () => window.confirm("Do you want to submit your job?"),
+  },
+});

@@ -16,12 +16,13 @@
 
   --color-text-dark-blue: #102d51;
 
-  --color-grey-lighter: #fbfbfb;
-  --color-grey-light: #eeeeee;
-  --color-grey-medium: #d6d6d6;
-  --color-grey-dark: #afafaf;
-  --color-grey-darker: #505050;
-  --color-grey-text: #777777;
+  --color-grey-background: #fcfcfc;
+  --color-grey-lighter: #f0f0f0;
+  --color-grey-light: #e0e0e0;
+  --color-grey-medium: #a0a0a0;
+  --color-grey-dark: #707070;
+  --color-grey-darker: #585858;
+  --color-grey-text: #484848;
 
   --color-orange: rgb(255, 115, 0);
   --color-orange-dark: rgb(216, 97, 0);
@@ -96,7 +97,7 @@ body {
       grid-row: 1 / 2;
       grid-column: 2 / -1;
 
-      @media only screen and (max-width: 700px) {
+      @media only screen and (max-width: 600px) {
         grid-row: 2 / 3;
         grid-column: 1 / -1;
       }
@@ -108,7 +109,7 @@ body {
       grid-column: 1 / 2;
     }
     .sidenav-controller {
-      @media only screen and (max-width: 700px) {
+      @media only screen and (max-width: 600px) {
         grid-row: 1 / 2;
         grid-column: 1 / -1;
       }
@@ -116,9 +117,9 @@ body {
     .content {
       grid-column: 2 / -1;
       grid-row: 2 / -1;
-      background-color: var(--color-grey-lighter);
+      background-color: var(--color-grey-background);
 
-      @media only screen and (max-width: 700px) {
+      @media only screen and (max-width: 600px) {
         grid-row: 3 / 4;
         grid-column: 1 / -1;
       }

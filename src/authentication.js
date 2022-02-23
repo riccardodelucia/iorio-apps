@@ -1,7 +1,7 @@
 import Keycloak from "keycloak-js";
 import getEnv from "@/utils/env";
 import store from "./store";
-import { sendNotification } from "@/composables/notification.js";
+//import { sendNotification } from "@/composables/notification.js";
 
 const authServerURL = `${getEnv("VUE_APP_AUTH_SERVER_URL")}`;
 
@@ -20,17 +20,13 @@ keycloak.onAuthSuccess = function () {
     .loadUserProfile()
     .then((profile) => {
       store.commit("user/SET_USER", profile);
-      /* sendNotification({
-        type: "success",
-        message: "You've successfully logged in!",
-        timeout: 3,
-      }); */
     })
     .catch((error) => {
       store.commit("user/SET_USER", {});
-      sendNotification({
+      store.dispatch("notification/add", {
         type: "error",
-        message: "Unable to log in: " + error.message,
+        title: "Unable to log in",
+        message: error.message,
         timeout: 5,
       });
     });
