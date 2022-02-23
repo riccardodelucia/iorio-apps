@@ -10,6 +10,8 @@
             </td>
             <td v-if="!isMobile">{{ slotProps.row.email }}</td>
             <td>{{ slotProps.row.title }}</td>
+            <td>{{ slotProps.row.status }}</td>
+
             <td>
               <button
                 class="button button--ghost button--large"
@@ -55,15 +57,17 @@ export default {
             name: "dateTime",
             type: "date",
           },
-          { width: "35%", label: "Email", name: "email", type: "string" },
+          { width: "30%", label: "Email", name: "email", type: "string" },
 
-          { width: "35%", label: "Title", name: "title", type: "string" },
+          { width: "20%", label: "Title", name: "title", type: "string" },
+          { width: "20%", label: "Status", name: "status", type: "string" },
+
           { width: "5%", label: "Actions", name: "actions", isSortable: false },
         ];
       } else {
         columns.value = [
-          { width: "70%", label: "Title", name: "title" },
-
+          { width: "50%", label: "Title", name: "title" },
+          { width: "20%", label: "Status", name: "status" },
           {
             width: "30%",
             label: "Actions",
