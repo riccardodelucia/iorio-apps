@@ -20,6 +20,7 @@
 <script>
 export default {
   name: "BaseModal",
+  props: { width: { type: String, default: "100rem" } },
   mounted() {
     const body = document.querySelector("body");
     body.style.overflow = "hidden";
@@ -47,8 +48,15 @@ export default {
   padding: 2em 1em;
 
   &__dialog {
-    flex: 1 1 120rem;
-    max-width: 120rem;
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: v-bind(width);
+
+    //flex: 1 1 120rem;
+    margin-left: auto;
+    margin-right: auto;
+    //margin-top: 2em;
+    //max-width: 120rem;
     background-color: #ffffff;
     position: relative;
     height: fit-content;

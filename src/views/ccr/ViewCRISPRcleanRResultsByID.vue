@@ -87,7 +87,11 @@
       </p>
     </div>
 
-    <BaseModal v-if="modalState != 'closed'" @modal-close="closeModal">
+    <BaseModal
+      v-if="modalState != 'closed'"
+      @modal-close="closeModal"
+      :width="image.width"
+    >
       <template v-slot:header>{{ image.label }} </template>
       <template v-slot:body>
         <component
@@ -207,12 +211,13 @@ export default {
 <style lang="scss">
 .ccr-results {
   display: grid;
-  grid-template-columns: minmax(min-content, 60rem) minmax(20rem, 60rem) 1fr;
+  grid-template-columns: minmax(min-content, 60rem) 60rem 1fr;
   grid-column-gap: 1.2em;
   grid-row-gap: 1.5em;
   margin-bottom: 2em;
+  grid-auto-flow: row dense;
 
-  @media only screen and (max-width: 1300px) {
+  @media only screen and (max-width: 800px) {
     display: flex;
     flex-direction: column;
     gap: 1.5em;
@@ -224,11 +229,14 @@ export default {
 
   &__details {
     grid-column: 1 / 2;
+
+    @media only screen and (max-width: 1300px) {
+      grid-column: 1 / -1;
+    }
   }
 
   &__downloads {
     grid-column: 1 / 2;
-    grid-row: 2 / 3;
 
     div {
       margin-bottom: 1em;
@@ -239,7 +247,9 @@ export default {
   }
   &__genes-signatures {
     grid-column: 2 / 3;
-    grid-row: 1 / 3;
+    @media only screen and (max-width: 800px) {
+      max-width: 60rem;
+    }
   }
 
   &__thumbnails {

@@ -1,11 +1,6 @@
 <template>
   <div class="search">
-    <input
-      class="search__input"
-      placeholder="Search..."
-      :value="value"
-      @input="updateValue"
-    />
+    <BaseInput @input="updateValue"></BaseInput>
     <BaseIcon name="search" class="search__icon"></BaseIcon>
   </div>
 </template>
@@ -26,24 +21,17 @@ export default {
 
 <style lang="scss">
 .search {
-  display: flex;
-  justify-content: left;
-  align-items: center;
+  position: relative;
 
-  &__input {
-    margin-right: -3.25rem;
-    background-color: var(--color-grey-light);
-    border: 1px solid var(--color-grey-medium);
-    border-radius: 8px;
-    padding: 0.2em 0.3em;
-
-    &:focus {
-      outline: none;
-    }
+  input {
+    padding-left: 5rem;
   }
 
   &__icon {
     color: var(--color-grey-dark);
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
   }
 }
 </style>

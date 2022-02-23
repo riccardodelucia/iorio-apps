@@ -12,8 +12,9 @@
 </template>
 
 <script>
-import { ref, computed, onMounted, onUnmounted, inject } from "vue";
+import { ref, computed, inject } from "vue";
 import { useStore } from "vuex";
+import { resizeListener } from "@/composables/utilities.js";
 
 export default {
   name: "User",
@@ -24,14 +25,7 @@ export default {
     const logoutRedirectUri = `${window.location.protocol}//${window.location.host}/`;
     const useIcon = ref(false);
 
-    const sizeListener = () => (useIcon.value = window.innerWidth < 500);
-
-    onMounted(() => {
-      window.addEventListener("resize", sizeListener);
-    });
-    onUnmounted(() => {
-      window.removeEventListener("resize", sizeListener);
-    });
+    resizeListener(() => (useIcon.value = window.innerWidth < 500));
 
     const onClickOutside = () => {
       open.value = false;

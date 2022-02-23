@@ -5,7 +5,7 @@
       src="@/assets/logos/ccr-logo.svg"
       alt="CRISPRcleanR logo"
     />
-    <h1 class="ccr-hero__title">Welcome to CRISPRcleanR Web App</h1>
+    <h1 class="ccr-hero__title">Welcome to CRISPRcleanR Web App (Beta)</h1>
     <p class="ccr-hero__text">
       CRISPRcleanR is a tool for the unsupervised correction of gene-independent
       effects in CRISPR knockout screens encompassing pre-processing and
@@ -82,19 +82,12 @@
     <div class="disclaimer">
       <p>
         <b style="color: red">Disclaimer:</b><br />
-        While the CRISPRcleanR Web App manuscript is under review, the
-        authentication/secure-login system is bound to 3 pre-existing test
-        accounts, which can be used to evaluate analytical capabilities and
-        data/results protection level. A fully functional user registration
-        system will be incorporated in the publicly disclosed version of
-        CRISPRcleanR Web App.
+        If you're a reviewer of the <i>CRISPRcleanR Web</i> manuscript, you will
+        find your access credentials in the cover letter of our submission. If
+        you're not a reviewer of the manuscript but still interested in
+        beta-testing the app, contact us at
+        <a href="mailto: info_ioriolab@fht.org">Iorio Lab</a>
       </p>
-      <p>List of available test users:</p>
-      <ul>
-        <li><mark>test1@test.com | pwd: 1234</mark></li>
-        <li><mark>test2@test.com | pwd: 1234</mark></li>
-        <li><mark>test3@test.com | pwd: 1234</mark></li>
-      </ul>
     </div>
   </section>
   <section class="ccr-section section-howitworks">
@@ -297,11 +290,7 @@
           </p>
 
           <video controls class="ccr-section__video">
-            <source src="@/assets/videos/boxplot_chart.mp4" type="video/mp4" />
-          </video>
-
-          <video controls class="ccr-section__video">
-            <source src="@/assets/videos/chr_chart.mp4" type="video/mp4" />
+            <source src="@/assets/videos/charts.mp4" type="video/mp4" />
           </video>
         </div>
       </template>

@@ -34,4 +34,11 @@ export const actions = {
   remove({ commit }, notificationToRemove) {
     commit("DELETE", notificationToRemove);
   },
+  sendNotification: (
+    { dispatch },
+    { type = "success", title = "", message = "", timeout = 0 }
+  ) => {
+    const notification = { type, title, message, timeout: timeout * 1000 };
+    dispatch("add", notification);
+  },
 };

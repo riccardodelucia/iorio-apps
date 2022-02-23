@@ -31,11 +31,7 @@ export default {
       })
       .start();
   },
-  computed: {
-    jobResultsUrl() {
-      return `${this.context.resultsUrl}${this.context.submittedJob.id}`;
-    },
-  },
+
   data() {
     return {
       submitJobService: interpret(submitJobMachine),

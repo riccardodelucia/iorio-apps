@@ -4,7 +4,11 @@
       <div class="menu__item"></div>
     </div>
   </div>
-  <div v-if="showSideNav && collapsible" class="overlay"></div>
+  <div
+    v-if="showSideNav && collapsible"
+    class="overlay"
+    @click="manageSidenav(false)"
+  ></div>
 
   <nav
     class="sidenav"
@@ -19,7 +23,7 @@
         v-for="link in app.links"
         class="sidenav__item"
         :key="link.id"
-        @click="$router.push(link.url)"
+        @click="linkClick(link.url)"
         :class="{ 'sidenav__item--active': $route.path.includes(link.url) }"
       >
         <span class="sidenav__label">{{ link.label }}</span>
@@ -37,25 +41,20 @@
 
 <script>
 import apps from "@/sidenav_apps.json";
-import { ref, computed, onMounted, onUnmounted } from "vue";
-import { useRoute } from "vue-router";
+import { ref, computed } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { resizeListener } from "@/composables/utilities.js";
 
 export default {
   name: "TheSidenav",
   setup() {
     const route = useRoute();
+    const router = useRouter();
+
     const collapsible = ref(false);
     const showSideNav = ref(false);
-    const sizeListener = () => (collapsible.value = window.innerWidth < 1000);
 
-    onMounted(() => {
-      window.addEventListener("resize", sizeListener);
-    });
-    onUnmounted(() => {
-      window.removeEventListener("resize", sizeListener);
-      const body = document.querySelector("body");
-      body.style.overflow = "auto";
-    });
+    resizeListener(() => (collapsible.value = window.innerWidth < 1100));
 
     const app = computed(() => {
       const key = Object.keys(apps).find((key) => route.path.includes(key));
@@ -68,10 +67,17 @@ export default {
       body.style.overflow = value ? "hidden" : "auto";
     };
 
+    const linkClick = (url) => {
+      if (collapsible.value) manageSidenav(false);
+
+      router.push(url);
+    };
+
     return {
       collapsible,
       showSideNav,
       app,
+      linkClick,
       manageSidenav,
     };
   },
@@ -92,7 +98,7 @@ export default {
     justify-content: center;
     margin: 2em 1em 0 1em;
 
-    @media only screen and (max-width: 700px) {
+    @media only screen and (max-width: 600px) {
       margin: 0.5em 0 0.5em 2em;
     }
 
