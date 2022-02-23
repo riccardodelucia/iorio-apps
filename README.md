@@ -71,7 +71,7 @@ Simply declare your variables in `.env` file
 
 Since production code is precompiled, variables cannot be easily changed on-the-fly. This project follows a strategy presented in https://medium.com/js-dojo/vue-js-runtime-environment-variables-807fa8f68665
 
-The idea is to use the entrypoint to lock for regular expression coinciding with env vars names and substitute them with values coming from the .env file.
+The idea is to use the entrypoint to look for regular expressions coinciding with env vars names and substitute them with values coming from the .env file.
 Each new variable needed in the project requires a new image build. For already existing variables, on the other hand, the value can be changed within `.env*` files and it is immediately reflected upon container restart.
 
 ### Customize configuration

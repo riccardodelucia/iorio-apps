@@ -1,13 +1,17 @@
 import Keycloak from "keycloak-js";
 import getEnv from "@/utils/env";
 import store from "./store";
-//import { sendNotification } from "@/composables/notification.js";
 
 const authServerURL = `${getEnv("VUE_APP_AUTH_SERVER_URL")}`;
+console.log(authServerURL)
 
 const realm = getEnv("VUE_APP_AUTH_REALM");
+console.log(realm)
+
 
 const clientId = getEnv("VUE_APP_AUTH_CLIENT_ID");
+console.log(clientId)
+
 
 export const keycloak = Keycloak({
   url: authServerURL,
