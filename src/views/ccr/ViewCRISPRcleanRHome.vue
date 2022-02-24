@@ -70,25 +70,25 @@
     </div>
   </section>
   <section class="ccr-section section-security">
-    <h2>Your data in a secure place 🔐</h2>
-    <p>
-      Your data <b>privacy</b> is very important to us. To use CRISPRcleanR Web
-      App you are required to authenticate. All the data you upload and submit,
-      and related results are <b>protected</b> and accessible to
-      <b>you only</b>.
-    </p>
-    <img src="@/assets/img/login.png" alt="login form" />
-
-    <div class="disclaimer">
+    <div class="section-security__promo">
+      <h2>Your data in a secure place 🔐</h2>
       <p>
+        Your data <b>privacy</b> is very important to us. To use CRISPRcleanR
+        Web App you are required to authenticate. All the data you upload and
+        submit, and related results are <b>protected</b> and accessible to
+        <b>you only</b>.
+      </p>
+      <p class="disclaimer">
         <b style="color: red">Disclaimer:</b><br />
-        If you're a reviewer of the <i>CRISPRcleanR Web</i> manuscript, you will
-        find your access credentials in the cover letter of our submission. If
-        you're not a reviewer of the manuscript but still interested in
-        beta-testing the app, contact us at
+        CRISPRclearR WebApp is in a beta-testing phase. If you are a reviewer of
+        the CRISPRcleanR WebApp manuscript, you will find your access
+        credentials in the cover letter of our submission. If you are not a
+        reviewer of the manuscript but you are still interested in beta-testing
+        CRISPRcleanR WebApp, contact us at
         <a href="mailto: info_ioriolab@fht.org">Iorio Lab</a>
       </p>
     </div>
+    <img src="@/assets/img/login.png" alt="login form" />
   </section>
   <section class="ccr-section section-howitworks">
     <h2>How it works ⚙️</h2>
@@ -468,16 +468,8 @@ export default {
 .section-security {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: min-content 1fr min-content;
 
-  h2 {
-    grid-column: 1 / 2;
-    @media only screen and (max-width: 700px) {
-      grid-column: 1 / -1;
-    }
-  }
-
-  p {
+  &__promo {
     grid-column: 1 / 2;
     @media only screen and (max-width: 700px) {
       grid-column: 1 / -1;
@@ -487,29 +479,16 @@ export default {
   img {
     display: block;
     width: 100%;
-    grid-row: 1 / -1;
     grid-column: 2 / 3;
     box-shadow: var(--shadow-1);
     @media only screen and (max-width: 700px) {
       grid-column: 1 / -1;
-      grid-row: -2 / -1;
     }
   }
 
   .disclaimer {
-    grid-column: 1 / 2;
-    align-self: end;
-    font-size: 1.3rem;
-    @media only screen and (max-width: 900px) {
-      grid-column: 1 / -1;
-    }
-    p {
-      line-height: 1.5;
-    }
-
-    li {
-      margin-bottom: 1em;
-    }
+    font-size: 1.5rem;
+    line-height: 1.6;
   }
 }
 

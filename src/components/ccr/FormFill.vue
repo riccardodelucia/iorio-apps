@@ -96,6 +96,8 @@
 import { computed } from "vue";
 import { useField, useForm } from "vee-validate";
 import { object, string, number, mixed } from "yup";
+import { useRouter } from "vue-router";
+
 
 export default {
   name: "FormFill",
@@ -103,6 +105,8 @@ export default {
     config: { type: Object },
   },
   setup(props, { emit }) {
+    const router = useRouter();
+
     const validationSchema = object({
       title: string().required(),
       email: string().email().nullable(),
@@ -134,6 +138,17 @@ export default {
     const { value: method } = useField("method");
     const { value: notes } = useField("notes");
 
+    const buildResultsUrl = () => {
+      const routePath = router
+        .getRoutes()
+        .find((item) => item.name === "ccr-results-id").path;
+      const staticPath = routePath.includes("/:")
+        ? routePath.split(":")[0]
+        : routePath;
+      const origin = window.location.origin;
+      return origin.concat(staticPath);
+    };
+
     const submit = handleSubmit(() => {
       emit("nav", {
         event: "SUBMIT",
@@ -147,6 +162,7 @@ export default {
           method: method.value,
           fileCounts: fileCounts.value,
           notes: notes.value,
+          resultsUrl: buildResultsUrl(),
         },
       });
     });
