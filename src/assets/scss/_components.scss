@@ -275,13 +275,11 @@
 // NOTIFICATIONS
 .notification {
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
+  right: 1em;
+  bottom: 1em;
   display: flex;
   flex-direction: column-reverse;
   gap: 1em;
-  padding: 1em;
 
   &__content {
     overflow: scroll;

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="linechart-container">
     <LineChart
       :data="chartData"
       :xDomain="xDomain"
@@ -77,6 +77,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.linechart-container {
+  display: flex;
+  gap: 1em;
+}
 .metrics__list {
   list-style: none;
 }
