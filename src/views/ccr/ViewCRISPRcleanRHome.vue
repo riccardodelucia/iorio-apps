@@ -489,6 +489,8 @@ export default {
   .disclaimer {
     font-size: 1.5rem;
     line-height: 1.6;
+    border: 2px solid red;
+    padding: 0.5em;
   }
 }
 
