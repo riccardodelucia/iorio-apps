@@ -110,7 +110,7 @@ export default {
         const startArray = Array.from(Array(delta - 1).keys());
 
         const endArray = Array.from(Array(props.numberOfPages).keys()).slice(
-          -this.delta + 1
+          -delta + 1
         );
 
         const deltaArray = Array.from(Array(props.numberOfPages).keys()).slice(
