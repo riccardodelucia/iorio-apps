@@ -92,16 +92,17 @@ const routes = [
         .dispatch("ccr/fetchResultByID", to.params.id)
         .then((result) => {
           to.params.result = result;
-          if (result.status !== "success") {
+          next();
+          /*   if (result.status !== "success") {
             next();
-          }
-          return store.dispatch("ccr/fetchImages", to.params.id);
+          } */
+          //return store.dispatch("ccr/fetchImages", to.params.id);
         })
-        .then((values) => {
+        /*         .then((values) => {
           to.params.imageList = values;
           next();
           //return store.dispatch("ccr/fetchGeneSignatures", to.params.id);
-        })
+        }) */
         /*         .then((result) => {
           to.params.genesSignatures = result;
           next();

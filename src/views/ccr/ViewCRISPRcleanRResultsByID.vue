@@ -1,7 +1,6 @@
 <template>
   <div class="layout-ccr">
     <h2 class="u-margin-bottom-small">Results</h2>
-
     <div class="ccr-results">
       <div class="card ccr-results__details">
         <h3 class="u-margin-bottom-small">Details</h3>
@@ -22,7 +21,7 @@
       </div>
       <template v-if="result.status === 'success'">
         <div class="card ccr-results__genes-signatures">
-          <ContentLoader viewBox="0 0 520 700">
+          <ContentLoader v-if="!genesSignatures" viewBox="0 0 520 700">
             <rect x="20" y="5" rx="0" ry="0" width="2" height="700" />
             <rect x="20" y="699" rx="0" ry="0" width="520" height="2" />
             <rect x="40" y="75" rx="0" ry="0" width="80" height="630" />
@@ -31,8 +30,8 @@
             <rect x="340" y="35" rx="0" ry="0" width="80" height="670" />
             <rect x="440" y="55" rx="0" ry="0" width="80" height="650" /> -->
           </ContentLoader>
-          <!--           <GenesSignaturesMultichart :data="genesSignatures">
-          </GenesSignaturesMultichart> -->
+          <GenesSignaturesMultichart v-else :data="genesSignatures">
+          </GenesSignaturesMultichart>
         </div>
         <div class="card ccr-results__downloads">
           <h3 class="u-margin-bottom-small">Downloads</h3>
@@ -54,7 +53,7 @@
           <template v-slot:content>
             <div class="thumbnails__content">
               <BaseThumbnail
-                v-for="item in normImages"
+                v-for="item in imageList.normImages"
                 :key="item.filename"
                 @click="openModal(item, id)"
                 :img="item"
@@ -70,7 +69,7 @@
           <template v-slot:content>
             <div class="thumbnails__content">
               <BaseThumbnail
-                v-for="item in chrImages"
+                v-for="item in imageList.chrImages"
                 :key="item.filename"
                 @click="openModal(item, id)"
                 :img="item"
@@ -83,7 +82,7 @@
           <template v-slot:content>
             <div class="thumbnails__content">
               <BaseThumbnail
-                v-for="item in qcImages"
+                v-for="item in imageList.qcImages"
                 :key="item.filename"
                 @click="openModal(item, id)"
                 :img="item"
@@ -124,11 +123,13 @@ import LineChartROC from "@/components/ccr/charts/linechart/LineChartROC.vue";
 import LineChartPrRc from "@/components/ccr/charts/linechart/LineChartPrRc.vue";
 import GenesSignaturesMultichart from "@/components/ccr/charts/genes_signatures/GenesSignaturesMultichart.vue";
 
-import { ref, computed } from "vue";
+import { ref, reactive } from "vue";
 
 import { date, download } from "@/composables/utilities.js";
 
 import { ContentLoader } from "vue-content-loader";
+
+import { useStore } from "vuex";
 
 const image = ref({});
 const data = ref({});
@@ -176,31 +177,33 @@ export default {
     id: {
       type: String,
     },
-    imageList: {
-      type: Array,
-      required: true,
-    },
     result: {
       type: Object,
       required: true,
     },
-    genesSignatures: { type: Object, required: true },
   },
   setup(props) {
-    const normImages = computed(() => {
-      return props.imageList.filter((image) => image.section === "norm");
+    const imageList = reactive({ normImages: [], chrImages: [], qcImages: [] });
+    const genesSignatures = ref(null);
+    const store = useStore();
+
+    store.dispatch("ccr/fetchGeneSignatures", props.id).then((response) => {
+      genesSignatures.value = response;
     });
-    const chrImages = computed(() => {
-      return props.imageList
+
+    store.dispatch("ccr/fetchImages", props.id).then((response) => {
+      console.log(response);
+      imageList.normImages = response.filter(
+        (image) => image.section === "norm"
+      );
+      imageList.chrImages = response
         .filter((image) => image.section === "chr")
         .sort((image1, image2) => {
           const a = parseInt(image1.filename.match(/(\d+)/)[0]);
           const b = parseInt(image2.filename.match(/(\d+)/)[0]);
           return a - b;
         });
-    });
-    const qcImages = computed(() => {
-      return props.imageList.filter((image) => image.section === "qc");
+      imageList.qcImages = response.filter((image) => image.section === "qc");
     });
 
     return {
@@ -211,10 +214,9 @@ export default {
       image,
       data,
       modalState,
-      normImages,
-      chrImages,
-      qcImages,
       date,
+      genesSignatures,
+      imageList,
     };
   },
 };
