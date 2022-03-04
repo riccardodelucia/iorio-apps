@@ -74,7 +74,6 @@ export default {
     notes,
     fileCounts,
     resultsUrl,
-
   }) {
     const bodyFormData = new FormData();
     bodyFormData.append("title", title);
@@ -107,7 +106,9 @@ export default {
     });
   },
   getChart({ id, chart }) {
-    return instance.get(`files/${id}/charts/${chart}`);
+    return instance.get(`files/${id}/`, {
+      params: { file_uri: `json/${chart}.json` },
+    });
   },
   getStaticResource(resource) {
     return instance.get(`/static/${resource}`);
