@@ -22,8 +22,17 @@
       </div>
       <template v-if="result.status === 'success'">
         <div class="card ccr-results__genes-signatures">
-          <GenesSignaturesMultichart :data="genesSignatures">
-          </GenesSignaturesMultichart>
+          <ContentLoader viewBox="0 0 520 700">
+            <rect x="20" y="5" rx="0" ry="0" width="2" height="700" />
+            <rect x="20" y="699" rx="0" ry="0" width="520" height="2" />
+            <rect x="40" y="75" rx="0" ry="0" width="80" height="630" />
+            <rect x="140" y="125" rx="0" ry="0" width="80" height="580" />
+            <rect x="240" y="105" rx="0" ry="0" width="80" height="610" />
+            <rect x="340" y="35" rx="0" ry="0" width="80" height="670" />
+            <rect x="440" y="55" rx="0" ry="0" width="80" height="650" /> -->
+          </ContentLoader>
+          <!--           <GenesSignaturesMultichart :data="genesSignatures">
+          </GenesSignaturesMultichart> -->
         </div>
         <div class="card ccr-results__downloads">
           <h3 class="u-margin-bottom-small">Downloads</h3>
@@ -119,6 +128,8 @@ import { ref, computed } from "vue";
 
 import { date, download } from "@/composables/utilities.js";
 
+import { ContentLoader } from "vue-content-loader";
+
 const image = ref({});
 const data = ref({});
 const modalState = ref("closed");
@@ -159,6 +170,7 @@ export default {
     LineChartROC,
     LineChartPrRc,
     GenesSignaturesMultichart,
+    ContentLoader,
   },
   props: {
     id: {
