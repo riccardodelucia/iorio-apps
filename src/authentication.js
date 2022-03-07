@@ -8,7 +8,6 @@ const realm = getEnv("VUE_APP_AUTH_REALM");
 
 const clientId = getEnv("VUE_APP_AUTH_CLIENT_ID");
 
-
 export const keycloak = Keycloak({
   url: authServerURL,
   realm,
