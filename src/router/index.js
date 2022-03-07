@@ -11,6 +11,7 @@ import ViewMessagePage from "@/views/ViewMessagePage.vue";
 import CcrAPI from "@/api/ccr.js";
 import { keycloak, authorize } from "@/authentication.js";
 
+/*test */
 const routes = [
   {
     path: "/",
