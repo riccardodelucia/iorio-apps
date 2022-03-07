@@ -53,7 +53,7 @@
           <template v-slot:content>
             <div class="thumbnails__content">
               <BaseThumbnail
-                v-for="item in imageList.normImages"
+                v-for="item in imageListByCathegory.normImages"
                 :key="item.filename"
                 @click="openModal(item, id)"
                 :img="item"
@@ -69,7 +69,7 @@
           <template v-slot:content>
             <div class="thumbnails__content">
               <BaseThumbnail
-                v-for="item in imageList.chrImages"
+                v-for="item in imageListByCathegory.chrImages"
                 :key="item.filename"
                 @click="openModal(item, id)"
                 :img="item"
@@ -82,7 +82,7 @@
           <template v-slot:content>
             <div class="thumbnails__content">
               <BaseThumbnail
-                v-for="item in imageList.qcImages"
+                v-for="item in imageListByCathegory.qcImages"
                 :key="item.filename"
                 @click="openModal(item, id)"
                 :img="item"
@@ -129,7 +129,9 @@ import { date, download } from "@/composables/utilities.js";
 
 import { ContentLoader } from "vue-content-loader";
 
-import { useStore } from "vuex";
+import imageList from "@/images.json";
+
+//import { useStore } from "vuex";
 
 const image = ref({});
 const data = ref({});
@@ -183,27 +185,49 @@ export default {
     },
   },
   setup(props) {
-    const imageList = reactive({ normImages: [], chrImages: [], qcImages: [] });
+    const imageListByCathegory = reactive({
+      normImages: [],
+      chrImages: [],
+      qcImages: [],
+    });
     const genesSignatures = ref(null);
-    const store = useStore();
+    //const store = useStore();
 
-    store.dispatch("ccr/fetchGeneSignatures", props.id).then((response) => {
-      genesSignatures.value = response;
+    CcrAPI.getChart({ id: props.id, chart: "genes_signatures" }).then(
+      (response) => {
+        genesSignatures.value = response.data;
+      }
+    );
+
+    const imageListWithURL = imageList.map(async (image) => {
+      try {
+        const response = await CcrAPI.getFile({
+          id: props.id,
+          fileUri: image.imgUri,
+        });
+        return { ...image, src: URL.createObjectURL(response.data) };
+      } catch (error) {
+        return {
+          ...image,
+          src: require("@/assets/img/placeholder-image.png"),
+        };
+      }
     });
 
-    store.dispatch("ccr/fetchImages", props.id).then((response) => {
-      console.log(response);
-      imageList.normImages = response.filter(
+    Promise.all(imageListWithURL).then((images) => {
+      imageListByCathegory.normImages = images.filter(
         (image) => image.section === "norm"
       );
-      imageList.chrImages = response
+      imageListByCathegory.chrImages = images
         .filter((image) => image.section === "chr")
         .sort((image1, image2) => {
           const a = parseInt(image1.filename.match(/(\d+)/)[0]);
           const b = parseInt(image2.filename.match(/(\d+)/)[0]);
           return a - b;
         });
-      imageList.qcImages = response.filter((image) => image.section === "qc");
+      imageListByCathegory.qcImages = images.filter(
+        (image) => image.section === "qc"
+      );
     });
 
     return {
@@ -216,7 +240,7 @@ export default {
       modalState,
       date,
       genesSignatures,
-      imageList,
+      imageListByCathegory,
     };
   },
 };
