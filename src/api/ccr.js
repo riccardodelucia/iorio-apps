@@ -22,7 +22,7 @@ const instance = axios.create({
 
 // Interceptors are run before/ after each request. They control the NProgress bar.
 instance.interceptors.request.use(function (config) {
-  NProgress.start();
+  //NProgress.start();
   return config;
 });
 
@@ -42,7 +42,7 @@ instance.interceptors.request.use(async (config) => {
 
 instance.interceptors.response.use(
   function (response) {
-    NProgress.done();
+    //NProgress.done();
 
     // if this is a multipart file response, there is nothing to camelize
     if (response.headers["content-type"] === "application/json") {
