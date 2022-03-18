@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import store from "@/store/index.js";
-
 import ViewDashboard from "@/views/ViewDashboard.vue";
 import ViewCRISPRcleanRHome from "@/views/ccr/ViewCRISPRcleanRHome.vue";
 import ViewCRISPRcleanRSubmitJob from "@/views/ccr/ViewCRISPRcleanRSubmitJob.vue";
@@ -13,6 +11,7 @@ import ViewMessagePage from "@/views/ViewMessagePage.vue";
 import CcrAPI from "@/api/ccr.js";
 import { keycloak, authorize } from "@/authentication.js";
 
+/*test */
 const routes = [
   {
     path: "/",
@@ -67,10 +66,9 @@ const routes = [
     },
     props: true,
     beforeEnter(to, from, next) {
-      store
-        .dispatch("ccr/fetchResults")
-        .then((results) => {
-          to.params.results = results;
+      CcrAPI.getResultsList()
+        .then((response) => {
+          to.params.results = response.data;
           next();
         })
         .catch((error) => {
@@ -88,21 +86,9 @@ const routes = [
     },
     props: true,
     beforeEnter(to, from, next) {
-      store
-        .dispatch("ccr/fetchResultByID", to.params.id)
-        .then((result) => {
-          to.params.result = result;
-          if (result.status !== "success") {
-            next();
-          }
-          return store.dispatch("ccr/fetchImages", to.params.id);
-        })
-        .then((values) => {
-          to.params.imageList = values;
-          return store.dispatch("ccr/fetchGeneSignatures", to.params.id);
-        })
-        .then((result) => {
-          to.params.genesSignatures = result;
+      CcrAPI.getResultByID(to.params.id)
+        .then((response) => {
+          to.params.result = response.data;
           next();
         })
         .catch((error) => {
