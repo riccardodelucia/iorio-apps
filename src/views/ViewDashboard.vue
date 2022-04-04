@@ -36,6 +36,10 @@ export default {
               logo: "paper.png",
               url: "https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-018-4989-y",
             },
+            {
+              logo: "paper.png",
+              url: "https://www.biorxiv.org/content/10.1101/2022.03.11.483924v1.full",
+            },
           ],
         },
         {
