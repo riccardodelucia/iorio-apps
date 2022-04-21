@@ -1,27 +1,70 @@
 stages:
-  - lint
   - build
+  - test
+  - deploy
 
-variables:
-  PATH_DOCKERFILE: $CI_PROJECT_DIR
-  IMAGE_NAME: iorio_apps
 
 lint-dockerfile:
-  stage: lint
+  stage: .pre
   image: hadolint/hadolint:latest-debian
   script:
     - hadolint $PATH_DOCKERFILE/Dockerfile
 
-build-apps-frontend:
+
+build image:
   stage: build
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
+  variables:
+    PATH_DOCKERFILE: $CI_PROJECT_DIR
+    IMAGE_NAME: iorio_apps
   script:
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - cat $CI_SERVER_TLS_CA_FILE >> /kaniko/ssl/certs/ca-certificates.crt
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $PATH_DOCKERFILE/Dockerfile --destination $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_TAG --cache=false --target=prod
+    - /kaniko/executor --build-arg ARG_VERSION=${CI_COMMIT_TAG:-latest} --context $CI_PROJECT_DIR --dockerfile $PATH_DOCKERFILE/$DOCKERFILE --destination $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_TAG --target=prod --skip-unused-stages=true
+  #only:
+    #- master
+    #- tags
+
+
+.deploy to environment:
+  stage: deploy
+  image: debian:bullseye-slim
+  before_script:
+      - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+      - eval $(ssh-agent -s)
+      - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+      - mkdir -p ~/.ssh
+      - chmod 700 ~/.ssh
+      - ssh-keyscan $VM_NAME >> ~/.ssh/known_hosts
+      - chmod 644 ~/.ssh/known_hosts
+      - apt-get update -y
+      - apt-get install -y gettext
+  script:
+    - echo $VERSION
+    - envsubst < templates/$ENV_FILE > .env
+    - ssh -l riccardo.delucia -o StrictHostKeyChecking=no $VM_NAME "mkdir -p $VM_TARGET_DIR"
+    - scp deploy.sh $USER@$VM_NAME:$VM_TARGET_DIR/deploy.sh
+    - scp docker-compose.yml $USER@$VM_NAME:$VM_TARGET_DIR/docker-compose.yml
+    - scp .env $USER@$VM_NAME:$VM_TARGET_DIR/.env
+    - ssh -l $USER -o StrictHostKeyChecking=no $VM_NAME 'bash -s' < deploy.sh
+
+
+deploy to staging:
+  environment: staging
+  extends: .deploy to environment
+  variables:
+    VM_NAME: combio-dev01.fht.org
+    VM_TARGET_DIR: /home/riccardo.delucia/deploy/iorio-apps
+    ENV_FILE: staging.env
+    USER: riccardo.delucia
+    VERSION: latest
   rules:
-   - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_TAG'
+     - if: $CI_COMMIT_TAG
+       variables:
+          VERSION: "$CI_COMMIT_TAG"
+     - if: '$CI_COMMIT_BRANCH == "staging"'
+       when: always
 
