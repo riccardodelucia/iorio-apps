@@ -8,7 +8,7 @@ lint-dockerfile:
   stage: .pre
   image: hadolint/hadolint:latest-debian
   script:
-    - hadolint $PATH_DOCKERFILE/Dockerfile
+    - hadolint Dockerfile
 
 
 build image:
