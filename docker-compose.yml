@@ -4,7 +4,7 @@ services:
   iorio_apps:
     #build:
     #  context: ./
-    image: "$IMAGE_REGISTRY/iorio-apps/iorio_apps:$VERSION"
+    image: "$IMAGE_REGISTRY/iorio_apps:$VERSION"
     #container_name: iorio_apps
     ports:
       - 8080:80
