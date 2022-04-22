@@ -44,6 +44,7 @@ build image:
       - apt-get install -y gettext
   script:
     - echo $VERSION
+    - echo $CI_REGISTRY
     - envsubst < templates/$ENV_FILE > .env
     - ssh -l riccardo.delucia -o StrictHostKeyChecking=no $VM_NAME "mkdir -p $VM_TARGET_DIR"
     - scp deploy.sh $USER@$VM_NAME:$VM_TARGET_DIR/deploy.sh
