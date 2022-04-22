@@ -2,9 +2,9 @@ version: "3.8"
 
 services:
   iorio_apps:
-    build:
-      context: ./
-    image: "$IMAGE_REGISTRY/iorio_apps:$VERSION"
+    #build:
+    #  context: ./
+    image: "gitlab.fht.org:5050/riccardo.delucia/iorio-apps/iorio_apps"
     #container_name: iorio_apps
     ports:
       - 8080:80
