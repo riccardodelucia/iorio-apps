@@ -45,9 +45,9 @@ build image:
   script:
     - echo $VERSION
     - envsubst < templates/$ENV_FILE > .env
-    - envsubst < deploy.sh > deploy.sh
+    - envsubst < deploy.sh > deploy1.sh
     - ssh -l riccardo.delucia -o StrictHostKeyChecking=no $VM_NAME "mkdir -p $VM_TARGET_DIR"
-    - scp deploy.sh $USER@$VM_NAME:$VM_TARGET_DIR/deploy.sh
+    - scp deploy1.sh $USER@$VM_NAME:$VM_TARGET_DIR/deploy.sh
     - scp docker-compose.yml $USER@$VM_NAME:$VM_TARGET_DIR/docker-compose.yml
     - scp .env $USER@$VM_NAME:$VM_TARGET_DIR/.env
     - ssh -l $USER -o StrictHostKeyChecking=no $VM_NAME 'bash -s' < deploy.sh
