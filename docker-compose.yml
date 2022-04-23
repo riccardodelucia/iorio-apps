@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   iorio_apps:
-    image: "gitlab.fht.org:5050/riccardo.delucia/iorio-apps/iorio_apps"
+    image: "$IMAGE:VERSION"
     ports:
       - 8080:80
     command: nginx
