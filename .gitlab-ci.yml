@@ -30,9 +30,6 @@ build website:
   artifacts:
     paths:
       - dist
-  only:
-    - master
-    - tags
 
 
 build image:
