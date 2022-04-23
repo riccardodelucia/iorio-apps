@@ -4,8 +4,10 @@ stages:
   - test
   - deploy
 
+
 variables:
     APP_VERSION: $CI_PIPELINE_IID
+
 
 .lint-dockerfile:
   stage: .pre
