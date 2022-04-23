@@ -15,9 +15,9 @@ lint-dockerfile:
   script:
     - hadolint Dockerfile
   when: always
-  #except:
-    #- staging
-    #- production
+  except:
+    - staging
+    - production
 
 
 build website:
