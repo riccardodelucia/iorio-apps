@@ -48,7 +48,7 @@ build image:
 
 test docker image:
   stage: test
-  image: curlimages/curlimages
+  image: curlimages/curl
   services:
     - name: "gitlab.fht.org:5050/riccardo.delucia/iorio-apps/iorio_apps"
       alias: website
