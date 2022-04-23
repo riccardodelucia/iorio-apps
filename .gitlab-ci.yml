@@ -57,14 +57,22 @@ build image:
 test docker image:
   stage: test
   image: curlimages/curl
+  variables:
+    VERSION: latest
   services:
-    - name: "gitlab.fht.org:5050/riccardo.delucia/iorio-apps/iorio_apps:$CI_COMMIT_TAG"
+    - name: "gitlab.fht.org:5050/riccardo.delucia/iorio-apps/iorio_apps:$VERSION"
       alias: website
   script:
     - curl http://website/build.html | grep $BUILD_VERSION
-  only:
-    - main
-    - tags
+  rules:
+     - if: $CI_COMMIT_TAG
+       variables:
+          VERSION: "$CI_COMMIT_TAG"
+     - if: '$CI_COMMIT_BRANCH == "staging"'
+       when: never
+     - if: '$CI_COMMIT_BRANCH == "production"'
+       when: never
+     - when: always
 
 
 .deploy to environment:
