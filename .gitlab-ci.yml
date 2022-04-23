@@ -3,6 +3,22 @@ stages:
   - test
   - deploy
 
+variables:
+    APP_VERSION: $CI_PIPELINE_IID
+
+build website:
+  stage: build
+  image: node:18-alpine
+  script:
+    - npm install
+    - npm run lint
+    - npm run build
+    - echo $PP_VERSION > build/build.html
+  artifacts:
+    paths:
+      - build
+
+
 
 .lint-dockerfile:
   stage: .pre
@@ -11,7 +27,7 @@ stages:
     - hadolint Dockerfile
 
 
-build image:
+.build image:
   stage: build
   image:
     name: gcr.io/kaniko-project/executor:debug
@@ -53,7 +69,7 @@ build image:
     - ssh -l $USER -o StrictHostKeyChecking=no $VM_NAME 'bash -s' < deploy.sh
 
 
-deploy to staging:
+.deploy to staging:
   environment: staging
   extends: .deploy to environment
   variables:
