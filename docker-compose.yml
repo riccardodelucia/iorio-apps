@@ -2,14 +2,9 @@ version: "3.8"
 
 services:
   iorio_apps:
-    build:
-      context: ./
-    image: "$IMAGE_REGISTRY/iorio_apps:$VERSION"
-    #container_name: iorio_apps
+    image: "$REGISTRY_IMAGE/iorio_apps:$VERSION"
     ports:
       - 8080:80
-    volumes:
-      - $PWD/nginx/nginx.conf://etc/nginx/nginx.conf:ro
     command: nginx
     env_file:
       - .env

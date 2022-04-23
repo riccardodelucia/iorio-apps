@@ -1,7 +1,12 @@
 stages:
   - build
+  - package
   - test
   - deploy
+
+
+variables:
+    BUILD_VERSION: $CI_PIPELINE_IID
 
 
 lint-dockerfile:
@@ -9,10 +14,26 @@ lint-dockerfile:
   image: hadolint/hadolint:latest-debian
   script:
     - hadolint Dockerfile
+  when: always
+  except:
+    - staging
+    - production
+
+
+build website:
+  stage: build
+  image: node:18-alpine
+  script:
+    - npm install
+    - npm run build
+    - echo $BUILD_VERSION > dist/build.html
+  artifacts:
+    paths:
+      - dist
 
 
 build image:
-  stage: build
+  stage: package
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
@@ -20,13 +41,27 @@ build image:
     PATH_DOCKERFILE: $CI_PROJECT_DIR
     IMAGE_NAME: iorio_apps
   script:
+    - ls $CI_PROJECT_DIR/dist
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - cat $CI_SERVER_TLS_CA_FILE >> /kaniko/ssl/certs/ca-certificates.crt
-    - /kaniko/executor --build-arg ARG_VERSION=${CI_COMMIT_TAG:-latest} --context $CI_PROJECT_DIR --destination $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_TAG --target=prod
-  #only:
-    #- master
-    #- tags
+    - /kaniko/executor --context $CI_PROJECT_DIR --destination $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_TAG
+  only:
+    - master
+    - tags
+
+
+test docker image:
+  stage: test
+  image: curlimages/curl
+  services:
+    - name: "gitlab.fht.org:5050/riccardo.delucia/iorio-apps/iorio_apps"
+      alias: website
+  script:
+    - curl http://website/build.html | grep $BUILD_VERSION
+  only:
+    - master
+    - tags
 
 
 .deploy to environment:
@@ -44,6 +79,7 @@ build image:
       - apt-get install -y gettext
   script:
     - echo $VERSION
+    - echo $CI_REGISTRY_IMAGE
     - envsubst < templates/$ENV_FILE > .env
     - ssh -l riccardo.delucia -o StrictHostKeyChecking=no $VM_NAME "mkdir -p $VM_TARGET_DIR"
     - scp deploy.sh $USER@$VM_NAME:$VM_TARGET_DIR/deploy.sh
