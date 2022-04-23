@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   iorio_apps:
-    image: "$IMAGE:$VERSION"
+    image: "$REGISTRY_IMAGE/iorio_apps:$VERSION"
     ports:
       - 8080:80
     command: nginx
