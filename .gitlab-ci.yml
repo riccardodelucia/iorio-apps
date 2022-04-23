@@ -26,7 +26,7 @@ build website:
       - dist
 
 
-.build image:
+build image:
   stage: build
   image:
     name: gcr.io/kaniko-project/executor:debug
@@ -38,10 +38,10 @@ build website:
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - cat $CI_SERVER_TLS_CA_FILE >> /kaniko/ssl/certs/ca-certificates.crt
-    - /kaniko/executor --context $CI_PROJECT_DIR --destination $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_TAG --target=prod
-  only:
-    - master
-    - tags
+    - /kaniko/executor --context $CI_PROJECT_DIR --destination $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_TAG
+  #only:
+    #- master
+    #- tags
 
 
 .deploy to environment:
@@ -68,7 +68,7 @@ build website:
     - ssh -l $USER -o StrictHostKeyChecking=no $VM_NAME 'bash -s' < deploy.sh
 
 
-.deploy to staging:
+deploy to staging:
   environment: staging
   extends: .deploy to environment
   variables:
