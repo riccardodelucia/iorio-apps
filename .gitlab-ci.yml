@@ -12,7 +12,7 @@ build website:
   script:
     - npm install
     - npm run build
-    - echo $PP_VERSION > build/build.html
+    - echo $PP_VERSION > dist/build.html
   artifacts:
     paths:
       - build
