@@ -37,7 +37,7 @@ build image:
     PATH_DOCKERFILE: $CI_PROJECT_DIR
     IMAGE_NAME: iorio_apps
   script:
-    - ls $CI_PROJECT_DIR
+    - ls $CI_PROJECT_DIR/dist
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - cat $CI_SERVER_TLS_CA_FILE >> /kaniko/ssl/certs/ca-certificates.crt
