@@ -6,7 +6,7 @@ stages:
 
 
 variables:
-    APP_VERSION: $CI_PIPELINE_IID
+    BUILD_VERSION: $CI_PIPELINE_IID
 
 
 .lint-dockerfile:
@@ -22,7 +22,7 @@ build website:
   script:
     - npm install
     - npm run build
-    - echo $APP_VERSION > dist/build.html
+    - echo $BUILD_VERSION > dist/build.html
   artifacts:
     paths:
       - dist
@@ -53,7 +53,7 @@ test docker image:
     - name: "gitlab.fht.org:5050/riccardo.delucia/iorio-apps/iorio_apps"
       alias: website
   script:
-    - curl http://website/build.html | grep $APP_VERSION
+    - curl http://website/build.html | grep $BUILD_VERSION
 
 
 .deploy to environment:
