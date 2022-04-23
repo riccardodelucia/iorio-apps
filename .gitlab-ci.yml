@@ -46,6 +46,15 @@ build image:
     #- master
     #- tags
 
+test docker image:
+  stage: test
+  image: curlimages/curlimages
+  services:
+    - name: $CI_REGISTRY_IMAGE:$APP_VERSION
+      alias: website
+  script:
+    - curl http://website/build.html | grep $APP_VERSION
+
 
 .deploy to environment:
   stage: deploy
