@@ -58,7 +58,7 @@ test docker image:
   stage: test
   image: curlimages/curl
   services:
-    - name: "gitlab.fht.org:5050/riccardo.delucia/iorio-apps/iorio_apps"
+    - name: "gitlab.fht.org:5050/riccardo.delucia/iorio-apps/iorio_apps:$CI_COMMIT_TAG"
       alias: website
   script:
     - curl http://website/build.html | grep $BUILD_VERSION
