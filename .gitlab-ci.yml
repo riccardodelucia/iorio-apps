@@ -15,6 +15,12 @@ lint-dockerfile:
   script:
     - hadolint Dockerfile
 
+print:
+  stage: .pre
+  image: alpine
+  script:
+    - echo "GitLab pipelines are stupid"
+
 
 
 build website:
