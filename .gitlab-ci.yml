@@ -62,11 +62,11 @@ build image:
     - main
     - tags
 
-print package:
-  stage: package
-  image: alpine
-  script:
-    - echo "GitLab pipelines are stupid"
+# print package:
+#   stage: package
+#   image: alpine
+#   script:
+#     - echo "GitLab pipelines are stupid"
 
 
 test docker image:
