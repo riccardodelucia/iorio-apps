@@ -37,11 +37,11 @@ build website:
     - main
     - tags
 
-print build:
-  stage: build
-  image: alpine
-  script:
-    - echo "GitLab pipelines are stupid"
+# print build:
+#   stage: build
+#   image: alpine
+#   script:
+#     - echo "GitLab pipelines are stupid"
 
 
 build image:
