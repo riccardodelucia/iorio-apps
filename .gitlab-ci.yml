@@ -87,11 +87,11 @@ test docker image:
        when: always
      - when: never
 
-print test:
-  stage: test
-  image: alpine
-  script:
-    - echo "GitLab pipelines are stupid"
+# print test:
+#   stage: test
+#   image: alpine
+#   script:
+#     - echo "GitLab pipelines are stupid"
 
 
 .deploy to environment:
