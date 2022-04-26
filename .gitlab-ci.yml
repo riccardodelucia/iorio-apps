@@ -134,8 +134,8 @@ deploy to staging:
      - if: '$CI_COMMIT_BRANCH == "staging"'
        when: always
 
-print deploy:
-  stage: deploy
-  image: alpine
-  script:
-    - echo "GitLab pipelines are stupid"
+# print deploy:
+#   stage: deploy
+#   image: alpine
+#   script:
+#     - echo "GitLab pipelines are stupid"
