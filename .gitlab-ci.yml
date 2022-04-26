@@ -15,7 +15,7 @@ lint-dockerfile:
   script:
     - hadolint Dockerfile
 
-print:
+print pre:
   stage: .pre
   image: alpine
   script:
@@ -37,6 +37,12 @@ build website:
     - main
     - tags
 
+print build:
+  stage: build
+  image: alpine
+  script:
+    - echo "GitLab pipelines are stupid"
+
 
 build image:
   stage: package
@@ -56,6 +62,12 @@ build image:
     - main
     - tags
 
+print package:
+  stage: package
+  image: alpine
+  script:
+    - echo "GitLab pipelines are stupid"
+
 
 test docker image:
   stage: test
@@ -74,6 +86,12 @@ test docker image:
      - if: '$CI_COMMIT_BRANCH == "main"'
        when: always
      - when: never
+
+print test:
+  stage: test
+  image: alpine
+  script:
+    - echo "GitLab pipelines are stupid"
 
 
 .deploy to environment:
@@ -116,3 +134,8 @@ deploy to staging:
      - if: '$CI_COMMIT_BRANCH == "staging"'
        when: always
 
+print deploy:
+  stage: deploy
+  image: alpine
+  script:
+    - echo "GitLab pipelines are stupid"
