@@ -32,7 +32,7 @@
           to="#"
           class="header__link"
           @click="login"
-          >Login</a
+          >Sign in or Register</a
         >
         <User v-else></User>
       </nav>

@@ -1,31 +1,34 @@
 <template>
   <div class="ccr-hero">
-    <img
-      class="ccr-hero__logo"
-      src="@/assets/logos/ccr-logo.svg"
-      alt="CRISPRcleanR logo"
-    />
-    <h1 class="ccr-hero__title">Welcome to CRISPRcleanR Web App (Beta)</h1>
-    <p class="ccr-hero__text">
-      CRISPRcleanR is a tool for the unsupervised correction of gene-independent
-      effects in CRISPR knockout screens encompassing pre-processing and
-      normalization of single-guide RNA counts, pre/post-correction
-      quality-control assessment and interactive visualizations.
-    </p>
-    <button
-      @click="$router.push('/ccr/submit')"
-      class="button button--primary button--large ccr-hero__btn--start"
-      type="button"
-    >
-      Start Here
-    </button>
-    <button
-      class="button button--ghost button--large ccr-hero__btn--download"
-      type="button"
-      @click="downloadSampleData"
-    >
-      Download Example Input Data
-    </button>
+    <div class="ccr-hero__container">
+      <img
+        class="ccr-hero__logo"
+        src="@/assets/logos/ccr-logo.svg"
+        alt="CRISPRcleanR logo"
+      />
+      <h1 class="ccr-hero__title">Welcome to CRISPRcleanR Web App (Beta)</h1>
+      <p class="ccr-hero__text">
+        CRISPRcleanR is a tool for the unsupervised correction of
+        gene-independent effects in CRISPR knockout screens encompassing
+        pre-processing and normalization of single-guide RNA counts,
+        pre/post-correction quality-control assessment and interactive
+        visualizations.
+      </p>
+      <button
+        @click="$router.push('/ccr/submit')"
+        class="button button--primary button--large ccr-hero__btn--start"
+        type="button"
+      >
+        Start Here
+      </button>
+      <button
+        class="button button--ghost button--large ccr-hero__btn--download"
+        type="button"
+        @click="downloadSampleData"
+      >
+        Download Example Input Data
+      </button>
+    </div>
   </div>
   <section class="ccr-section section-cards">
     <div class="card-step">
@@ -331,71 +334,68 @@ export default {
     url("../../assets/img/dna-unsplash.jpg");
   background-size: cover;
 
-  display: grid;
-  grid-template-rows: min-content 1fr min-content;
-  grid-template-columns:
-    minmax(5rem, 1fr) repeat(8, minmax(min-content, 15rem))
-    minmax(5rem, 1fr);
-  column-gap: 3rem;
-  row-gap: 2rem;
+  &__container {
+    max-width: 150rem;
+    padding: 5rem;
+    margin: auto;
+    display: grid;
+    grid-template-columns: minmax(20rem, 1fr) repeat(3, 1fr);
+    grid-template-rows: min-content 1fr min-content;
+    column-gap: 3rem;
+    row-gap: 2rem;
+  }
 
   &__logo {
     filter: brightness(0) invert(1);
-    grid-column: 2 / 5;
-    grid-row: 1/-1;
-    @media only screen and (max-width: 700px) {
-      grid-column: 2 / 5;
-      grid-row: 1 / 2;
-    }
-    @media only screen and (max-width: 500px) {
-      grid-column: 2 / -2;
-      height: 20rem;
+    grid-column: 1 / 2;
+    grid-row: 1/ -1;
+
+    @media only screen and (max-width: 800px) {
+      grid-column: 1 / -1;
       justify-self: center;
+      height: 20rem;
     }
   }
 
   &__title {
     color: #fff;
-    grid-column: 5 / 10;
+    grid-column: 2 / 5;
     font-size: 6rem;
     line-height: 1;
 
-    @media only screen and (max-width: 700px) {
-      grid-column: 5 / -2;
+    @media only screen and (max-width: 800px) {
+      grid-column: 1 / -1;
       font-size: 4rem;
-    }
-    @media only screen and (max-width: 500px) {
-      grid-column: 2 / -2;
     }
   }
 
   &__text {
-    grid-column: 5 / 10;
+    grid-column: 2 / 5;
     line-height: 2.5;
-    @media only screen and (max-width: 700px) {
-      grid-column: 2 / -2;
+    @media only screen and (max-width: 800px) {
+      grid-column: 1 / -1;
     }
   }
 
   &__btn {
     &--start {
-      grid-column: 5 / 7;
+      grid-column: 2 / 3;
 
-      @media only screen and (max-width: 700px) {
-        grid-column: 2 / 7;
+      @media only screen and (max-width: 800px) {
+        grid-column: 1 / 3;
       }
-      @media only screen and (max-width: 500px) {
-        grid-column: 2 / -2;
+      @media only screen and (max-width: 600px) {
+        grid-column: 1 / -1;
       }
     }
     &--download {
-      grid-column: 7 / 9;
+      grid-column: 3 / 5;
 
-      @media only screen and (max-width: 700px) {
-        grid-column: 7 / -2;
+      @media only screen and (max-width: 800px) {
+        grid-column: 3 / 5;
       }
-      @media only screen and (max-width: 500px) {
-        grid-column: 2 / -2;
+      @media only screen and (max-width: 600px) {
+        grid-column: 1 / -1;
       }
     }
   }
