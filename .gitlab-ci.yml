@@ -15,12 +15,12 @@ lint-dockerfile:
   script:
     - hadolint Dockerfile
 
+
 print pre:
   stage: .pre
   image: alpine
   script:
-    - echo "GitLab pipelines are stupid"
-
+    - echo "Placeholder job"
 
 
 build website:
@@ -37,11 +37,12 @@ build website:
     - main
     - tags
 
+
 print build:
   stage: build
   image: alpine
   script:
-    - echo "GitLab pipelines are stupid"
+    - echo "Placeholder job"
 
 
 build image:
