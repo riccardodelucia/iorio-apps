@@ -11,8 +11,8 @@
 
 <script>
 export default {
-  title: "Network Error",
-  name: "ViewNetworkError",
+  title: "Message Page",
+  name: "ViewMessagePage",
   props: {
     title: { type: String, default: "" },
     message: {

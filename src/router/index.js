@@ -5,6 +5,8 @@ import ViewCRISPRcleanRHome from "@/views/ccr/ViewCRISPRcleanRHome.vue";
 import ViewCRISPRcleanRSubmitJob from "@/views/ccr/ViewCRISPRcleanRSubmitJob.vue";
 import ViewCRISPRcleanRResultsList from "@/views/ccr/ViewCRISPRcleanRResultsList.vue";
 import ViewCRISPRcleanRResultsByID from "@/views/ccr/ViewCRISPRcleanRResultsByID.vue";
+import ViewCRISPRcleanRTermsAndConditions from "@/views/ccr/ViewCRISPRcleanRTermsAndConditions.vue";
+import ViewCRISPRcleanRTermsDataProcessing from "@/views/ccr/ViewCRISPRcleanRTermsDataProcessing.vue";
 
 import ViewMessagePage from "@/views/ViewMessagePage.vue";
 
@@ -28,6 +30,22 @@ const routes = [
   {
     path: "/ccr",
     redirect: { name: "ccr-home" },
+  },
+  {
+    path: "/ccr/terms-and-conditions",
+    name: "termsAndConditions",
+    component: ViewCRISPRcleanRTermsAndConditions,
+    meta: {
+      layout: "msg",
+    },
+  },
+  {
+    path: "/ccr/terms-data-processing",
+    name: "termsDataProcessing",
+    component: ViewCRISPRcleanRTermsDataProcessing,
+    meta: {
+      layout: "msg",
+    },
   },
   {
     path: "/ccr/home",
